@@ -17,7 +17,7 @@ import {
 // ============================================================
 const STORAGE_KEY = "lol_master_tracker_v1";
 
-// Mastery thresholds (minimum kilku gier skupionych na jednym zadaniu)
+// Mastery thresholds for long-term skill tracking
 const MASTERY = {
   MIN_GAMES_FOR_INITIAL: 3,        // wstępnie opanowane od kilku prób
   COMPLIANCE_FOR_INITIAL: 66,      // przynajmniej 2/3 zaliczone
@@ -267,7 +267,12 @@ const GOALS = {
         "Wind-down zostaje skancelowana, możesz od razu rzucić kolejne AA gdy CD się odnowi."
       ],
       when: "Każda walka z ranged ADC, każdy kite, kiting w teamfightach.",
-      success: "Stoisz na 'A klik' wyłącznie podczas wind-up, między AA się ruszasz. Trudno cię złapać + wyższy DPS."
+      success: "Stoisz na 'A klik' wyłącznie podczas wind-up, między AA się ruszasz. Trudno cię złapać + wyższy DPS.",
+      mistakes: [
+        "Ruch przed wystrzałem pocisku — cancelujesz własny autoatak.",
+        "Stanie do końca animacji po AA.",
+        "Kancelacja bez planu ruchu, przez co wchodzisz w zasięg enemy."
+      ]
     }
   },
   animation_lock: {
@@ -368,7 +373,12 @@ const GOALS = {
         "Wyjście z bazy = już jesteś przygotowany."
       ],
       when: "Każdy recall.",
-      success: "Auto-nawyk — nigdy nie czekasz w środku fontanny."
+      success: "Auto-nawyk — nigdy nie czekasz w środku fontanny.",
+      mistakes: [
+        "Kupowanie itemów stojąc w centrum fontanny.",
+        "Kliknięcie dopiero po zamknięciu sklepu.",
+        "Zły kierunek wyjścia z bazy po zakupach."
+      ]
     }
   },
   recall_under_tower: {
@@ -383,7 +393,13 @@ const GOALS = {
         "Recall pod tower (bezpieczeństwo i krótsza ścieżka po powrocie do mid)."
       ],
       when: "Standardowy recall gdy nikogo nie widać w pobliżu.",
-      whenNot: "Enemy mid zniknął z mini ostatnio — krzak bezpieczniej (tower nie pomoże przeciwko surprise gank)."
+      whenNot: "Enemy mid zniknął z mini ostatnio — krzak bezpieczniej (tower nie pomoże przeciwko surprise gank).",
+      success: "Recall jest krótszy drogą powrotną i nie giniesz przez losowy facecheck krzaka.",
+      mistakes: [
+        "Recall w krzaku bez informacji o enemy.",
+        "Recall za daleko od linii, gdy tower był bezpieczny.",
+        "Recall bez wcześniejszego sprawdzenia minimapy."
+      ]
     }
   },
   burn_pre_recall: {
@@ -397,7 +413,13 @@ const GOALS = {
         "Harass enemy jeśli wraca (lub czeka pod towerem).",
         "Trade HP — nie ma sensu wracać z pełnym HP gdy i tak recall za 5s."
       ],
-      when: "Tuż przed planowanym recallem."
+      when: "Tuż przed planowanym recallem.",
+      success: "Wracasz do bazy po realnym wykorzystaniu many/HP, nie po pustym staniu na zasobach.",
+      mistakes: [
+        "Recall z pełną maną, gdy fala mogła być dopchnięta.",
+        "Wymuszanie trade'u bez sensu, gdy enemy może ci przerwać recall.",
+        "Spalenie zasobów, ale zostawienie fali w złym stanie."
+      ]
     }
   },
   zero_plus: {
@@ -435,7 +457,12 @@ const GOALS = {
         "Bez flash carry = łatwy gank dla twojego jg = ping smite ikon."
       ],
       when: "Cały czas. Aktualizujesz w głowie.",
-      success: "Ping flash enemy = gank jg = kill. Bez ping = jg nie wie, gra obronnie."
+      success: "Ping flash enemy = gank jg = kill. Bez ping = jg nie wie, gra obronnie.",
+      mistakes: [
+        "Zapamiętanie flasha tylko na 20 sekund i potem brak aktualizacji.",
+        "Ping bez numeru/roli, przez co informacja jest nieczytelna.",
+        "Brak wykorzystania okna bez flasha do ganku, dive'u albo presji."
+      ]
     }
   },
 
@@ -881,7 +908,12 @@ const GOALS = {
         "Jeśli nie da się resetować — koniec sesji. Następna gra będzie gorsza."
       ],
       when: "Po każdej śmierci / przegranej walce / 'głupim' move teamu.",
-      success: "Rozpoznajesz tilt w 30s od wystąpienia, podejmujesz decyzję (reset / koniec)."
+      success: "Rozpoznajesz tilt w 30s od wystąpienia, podejmujesz decyzję (reset / koniec).",
+      mistakes: [
+        "Queue od razu po emocjonalnej grze.",
+        "Szukanie winy w teamie zamiast decyzji, którą możesz poprawić.",
+        "Granie agresywniej tylko po to, żeby 'odrobić' poprzedni błąd."
+      ]
     }
   },
   mute_all: {
@@ -897,7 +929,12 @@ const GOALS = {
         "Jeśli widzisz 'głupi' move — ZAREJESTRUJ jako fakt, NIE oceniaj."
       ],
       when: "Każda gra. Bez wyjątków.",
-      success: "Po grze nie pamiętasz emocji związanych z teamem — pamiętasz tylko swoje akcje."
+      success: "Po grze nie pamiętasz emocji związanych z teamem — pamiętasz tylko swoje akcje.",
+      mistakes: [
+        "Odpisywanie nawet wtedy, gdy masz rację.",
+        "Pingowanie z frustracji zamiast informacyjnie.",
+        "Analiza gry przez pryzmat teamu, a nie własnych decyzji."
+      ]
     }
   },
   break_after_loss: {
@@ -913,7 +950,12 @@ const GOALS = {
         "Po 3 przegranych z rzędu — koniec na dziś."
       ],
       when: "Każda przegrana.",
-      success: "Następna gra nie jest gorsza emocjonalnie niż przegrana."
+      success: "Następna gra nie jest gorsza emocjonalnie niż przegrana.",
+      mistakes: [
+        "Instant queue po porażce.",
+        "Scrollowanie statystyk i nakręcanie złości zamiast resetu.",
+        "Traktowanie przerwy jako kary, a nie elementu jakości sesji."
+      ]
     }
   },
   remembered_game: {
@@ -929,7 +971,12 @@ const GOALS = {
         "Brak odpowiedzi = koniec sesji."
       ],
       when: "Po każdej grze.",
-      success: "Wszystkie gry sesji są dla ciebie 'pamiętalne' i analyzowalne."
+      success: "Wszystkie gry sesji są dla ciebie 'pamiętalne' i analyzowalne.",
+      mistakes: [
+        "Zapisywanie refleksji ogólnikiem bez konkretnej sytuacji.",
+        "Granie dalej mimo autopilota.",
+        "Mylenie wyniku gry z jakością decyzji."
+      ]
     }
   }
 };
@@ -1802,7 +1849,7 @@ function PostGameView({ state, setState, onClose }) {
       <div>
         <Label style={{ color: c.success, fontSize: "11px" }}>1 / WYKONANIE TRENOWANYCH ZADAŃ</Label>
         <Text dim style={{ fontSize: "11px", display: "block", marginBottom: 10 }}>
-          Czy zrealizowałeś każde zadanie minimum 3x w grze? Klikaj <BookOpen size={11} style={{ display: "inline", verticalAlign: "text-bottom" }} /> aby zobaczyć kryterium.
+          Czy wykonałeś trenowane zadania świadomie w kluczowych momentach? Klikaj <BookOpen size={11} style={{ display: "inline", verticalAlign: "text-bottom" }} /> aby zobaczyć kryterium.
         </Text>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {focusGoals.map(g => (
@@ -2376,7 +2423,7 @@ function SettingsView({ state, setState }) {
           <Text dim style={{ fontSize: "12px", lineHeight: 1.6, display: "block" }}>
             Aplikacja stworzona na podstawie własnych notatek (Macro, Mid, Micro) i metodologii nauki.
             Kluczowa zasada: <strong style={{ color: c.success }}>refleksja niezależna od wyniku gry</strong>.
-            Każde zadanie wymaga minimum 3-4 gier żeby być wstępnie opanowane.
+            Zadania warto trenować seriami, aż wykonanie stanie się świadome i powtarzalne.
           </Text>
         </Box>
       </div>
@@ -2643,7 +2690,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
               "Skup się na sobie. Brak narzekania na team.",
               "Po przegranej — minimum 5 min od kompa",
               "Nie pamiętasz właśnie zagranej gry → koniec sesji",
-              "Każde zadanie wymaga 3-4 gier żeby być wstępnie opanowane"
+              "Trenuj jeden główny temat sesji, aż wykonanie stanie się powtarzalne"
             ].map((rule, i) => (
               <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                 <span style={{ color: c.accent, fontFamily: fMono, fontSize: "11px", fontWeight: 800, minWidth: 16 }}>0{i + 1}</span>
