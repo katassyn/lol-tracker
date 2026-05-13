@@ -1036,21 +1036,21 @@ function minutesSince(ts) {
 // Compute mastery progression for goal
 function getMastery(gamesCount, complianceCount) {
   if (gamesCount === 0) {
-    return { label: "NIE ROZPOCZĘTE", color: "#525252", level: 0, progress: 0, nextThreshold: MASTERY.MIN_GAMES_FOR_INITIAL };
+    return { label: "NIE ROZPOCZĘTE", color: c.textMute, level: 0, progress: 0, nextThreshold: MASTERY.MIN_GAMES_FOR_INITIAL };
   }
   const rate = gamesCount > 0 ? Math.round((complianceCount / gamesCount) * 100) : 0;
 
   if (gamesCount >= MASTERY.WARN_MIN_GAMES && rate < MASTERY.WARN_COMPLIANCE) {
-    return { label: "WYMAGA POPRAWY", color: "#ef4444", level: -1, progress: rate, isWarning: true };
+    return { label: "WYMAGA POPRAWY", color: c.accent, level: -1, progress: rate, isWarning: true };
   }
 
   if (gamesCount >= MASTERY.MIN_GAMES_FOR_MASTERED && rate >= MASTERY.COMPLIANCE_FOR_MASTERED) {
-    return { label: "OPANOWANE", color: "#22c55e", level: 3, progress: 100 };
+    return { label: "OPANOWANE", color: c.success, level: 3, progress: 100 };
   }
   if (gamesCount >= MASTERY.MIN_GAMES_FOR_CONSOLIDATED && rate >= MASTERY.COMPLIANCE_FOR_CONSOLIDATED) {
     return {
       label: "UTRWALONE",
-      color: "#fbbf24",
+      color: c.amber,
       level: 2,
       progress: Math.round((gamesCount / MASTERY.MIN_GAMES_FOR_MASTERED) * 100),
       nextThreshold: MASTERY.MIN_GAMES_FOR_MASTERED,
@@ -1060,7 +1060,7 @@ function getMastery(gamesCount, complianceCount) {
   if (gamesCount >= MASTERY.MIN_GAMES_FOR_INITIAL && rate >= MASTERY.COMPLIANCE_FOR_INITIAL) {
     return {
       label: "WSTĘPNIE OPANOWANE",
-      color: "#94a3b8",
+      color: c.textDim,
       level: 1,
       progress: Math.round((gamesCount / MASTERY.MIN_GAMES_FOR_CONSOLIDATED) * 100),
       nextThreshold: MASTERY.MIN_GAMES_FOR_CONSOLIDATED,
@@ -1070,7 +1070,7 @@ function getMastery(gamesCount, complianceCount) {
   // In progress, less than 3 games OR low compliance
   return {
     label: "W TRENINGU",
-    color: "#f59e0b",
+    color: c.warning,
     level: 0,
     progress: Math.round((gamesCount / MASTERY.MIN_GAMES_FOR_INITIAL) * 100),
     nextThreshold: MASTERY.MIN_GAMES_FOR_INITIAL,
@@ -1086,6 +1086,13 @@ const c = {
   bg: "#0a0a0a",
   card: "#141414",
   cardHi: "#1c1c1c",
+  panel: "#0e0e0e",
+  inset: "#0a0a0a",
+  activeBg: "#0c1810",
+  dangerBg: "#1a0808",
+  warningBg: "#1a1408",
+  progressBg: "#1a1a1a",
+  overlay: "rgba(0,0,0,0.85)",
   border: "#2a2a2a",
   borderHi: "#3a3a3a",
   text: "#f5f5f5",
@@ -1094,13 +1101,22 @@ const c = {
   accent: "#ef4444",
   success: "#22c55e",
   warning: "#f59e0b",
-  amber: "#fbbf24"
+  amber: "#fbbf24",
+  onAccent: "#fff",
+  onSuccess: "#000"
 };
 
 const LIGHT_THEME = {
   bg: "#f5f1e8",
   card: "#fffaf0",
   cardHi: "#f0e7d8",
+  panel: "#fffdf7",
+  inset: "#f8f1e7",
+  activeBg: "#eaf7ee",
+  dangerBg: "#fff1f2",
+  warningBg: "#fff7ed",
+  progressBg: "#e7dac9",
+  overlay: "rgba(24,20,15,0.45)",
   border: "#d7c8b5",
   borderHi: "#bda98f",
   text: "#18140f",
@@ -1109,7 +1125,9 @@ const LIGHT_THEME = {
   accent: "#dc2626",
   success: "#15803d",
   warning: "#b45309",
-  amber: "#92400e"
+  amber: "#92400e",
+  onAccent: "#fff",
+  onSuccess: "#fff"
 };
 
 function applyTheme(theme) {
@@ -1117,6 +1135,13 @@ function applyTheme(theme) {
     bg: "#0a0a0a",
     card: "#141414",
     cardHi: "#1c1c1c",
+    panel: "#0e0e0e",
+    inset: "#0a0a0a",
+    activeBg: "#0c1810",
+    dangerBg: "#1a0808",
+    warningBg: "#1a1408",
+    progressBg: "#1a1a1a",
+    overlay: "rgba(0,0,0,0.85)",
     border: "#2a2a2a",
     borderHi: "#3a3a3a",
     text: "#f5f5f5",
@@ -1125,7 +1150,9 @@ function applyTheme(theme) {
     accent: "#ef4444",
     success: "#22c55e",
     warning: "#f59e0b",
-    amber: "#fbbf24"
+    amber: "#fbbf24",
+    onAccent: "#fff",
+    onSuccess: "#000"
   });
 }
 
@@ -1137,12 +1164,12 @@ const fDisplay = "'Archivo Black', sans-serif";
 // ============================================================
 function Btn({ children, onClick, variant = "default", disabled, style, fullWidth }) {
   const variants = {
-    default: { bg: c.cardHi, border: c.border, color: c.text, hover: "#252525" },
-    primary: { bg: c.accent, border: c.accent, color: "#fff", hover: "#dc2626" },
-    success: { bg: c.success, border: c.success, color: "#000", hover: "#16a34a" },
-    danger: { bg: "#1a0808", border: c.accent, color: c.accent, hover: "#2a0a0a" },
+    default: { bg: c.cardHi, border: c.border, color: c.text, hover: c.border },
+    primary: { bg: c.accent, border: c.accent, color: c.onAccent, hover: c.accent },
+    success: { bg: c.success, border: c.success, color: c.onSuccess, hover: c.success },
+    danger: { bg: c.dangerBg, border: c.accent, color: c.accent, hover: c.dangerBg },
     ghost: { bg: "transparent", border: c.border, color: c.textDim, hover: c.cardHi },
-    amber: { bg: "#1a1408", border: c.warning, color: c.warning, hover: "#2a200a" }
+    amber: { bg: c.warningBg, border: c.warning, color: c.warning, hover: c.warningBg }
   };
   const v = variants[variant];
   const [hover, setHover] = useState(false);
@@ -1151,7 +1178,7 @@ function Btn({ children, onClick, variant = "default", disabled, style, fullWidt
       onClick={onClick} disabled={disabled}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
       style={{
-        background: disabled ? "#1a1a1a" : (hover ? v.hover : v.bg),
+        background: disabled ? c.progressBg : (hover ? v.hover : v.bg),
         border: `1px solid ${disabled ? c.border : v.border}`,
         color: disabled ? c.textMute : v.color,
         fontFamily: fMono, fontWeight: 700, fontSize: "13px",
@@ -1212,7 +1239,7 @@ function Box({ children, style, onClick }) {
 
 function ProgressBar({ value, color, height = 6 }) {
   return (
-    <div style={{ height, background: "#1a1a1a", borderRadius: 0 }}>
+    <div style={{ height, background: c.progressBg, borderRadius: 0 }}>
       <div style={{
         height: "100%", width: `${Math.min(100, Math.max(0, value))}%`,
         background: color, transition: "width 0.3s"
@@ -1233,7 +1260,7 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
 
   return (
     <div style={{
-      background: isActive ? "#0c1810" : c.card,
+      background: isActive ? c.activeBg : c.card,
       border: `1px solid ${isActive ? c.success : c.border}`,
       transition: "all 0.15s"
     }}>
@@ -1245,9 +1272,9 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
             <H2 style={{ fontSize: "14px" }}>{goal.label}</H2>
-            {isActive && <Pill color={c.success} bg="#0c1810">AKTYWNY</Pill>}
+            {isActive && <Pill color={c.success} bg={c.activeBg}>AKTYWNY</Pill>}
             {mastery.level > 0 && <Pill color={mastery.color}>{mastery.label}</Pill>}
-            {mastery.isWarning && <Pill color={c.accent} bg="#1a0808">{mastery.label}</Pill>}
+            {mastery.isWarning && <Pill color={c.accent} bg={c.dangerBg}>{mastery.label}</Pill>}
           </div>
           <Text dim style={{ fontSize: "12px", lineHeight: 1.4, display: "block" }}>{goal.short}</Text>
 
@@ -1341,7 +1368,7 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
           )}
           {d.notes && (
             <div style={{
-              background: "#1a1408", border: `1px solid ${c.warning}`,
+              background: c.warningBg, border: `1px solid ${c.warning}`,
               padding: "10px 12px", display: "flex", gap: 10, alignItems: "flex-start"
             }}>
               <AlertCircle size={14} color={c.warning} style={{ marginTop: 2, flexShrink: 0 }} />
@@ -1352,7 +1379,7 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
           {/* STATS RECAP */}
           {stats && stats.gamesWithGoal > 0 && (
             <div style={{
-              background: "#0e0e0e", padding: "12px 14px",
+              background: c.panel, padding: "12px 14px",
               border: `1px solid ${c.border}`,
               display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12
             }}>
@@ -1395,7 +1422,7 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
 function CheckRow({ checked, onToggle, label, desc, goalId, showDetail, onToggleDetail }) {
   return (
     <div style={{
-      background: checked ? "#0c1810" : c.card,
+      background: checked ? c.activeBg : c.card,
       border: `1px solid ${checked ? c.success : c.border}`,
       transition: "all 0.15s"
     }}>
@@ -1407,7 +1434,7 @@ function CheckRow({ checked, onToggle, label, desc, goalId, showDetail, onToggle
           display: "flex", alignItems: "center", justifyContent: "center",
           marginTop: 1, cursor: "pointer"
         }}>
-          {checked && <Check size={14} color="#000" strokeWidth={4} />}
+          {checked && <Check size={14} color={c.onSuccess} strokeWidth={4} />}
         </div>
         <div style={{ flex: 1, cursor: "pointer" }} onClick={onToggle}>
           <div style={{
@@ -1431,7 +1458,7 @@ function CheckRow({ checked, onToggle, label, desc, goalId, showDetail, onToggle
       {showDetail && goalId && GOALS[goalId] && (
         <div style={{
           borderTop: `1px solid ${c.border}`,
-          padding: "12px 14px", background: "#0a0a0a",
+          padding: "12px 14px", background: c.inset,
           display: "flex", flexDirection: "column", gap: 10
         }}>
           {GOALS[goalId].details.success && (
@@ -1471,7 +1498,7 @@ function MoodPicker({ value, onChange }) {
         return (
           <div key={o.v} onClick={() => onChange(o.v)} style={{
             padding: "14px 8px",
-            background: active ? "#1a0a0a" : c.card,
+            background: active ? c.dangerBg : c.card,
             border: `2px solid ${active ? o.c : c.border}`,
             cursor: "pointer", display: "flex",
             flexDirection: "column", alignItems: "center", gap: 6,
@@ -1523,7 +1550,7 @@ function WeaknessSuggestions({ suggestions, onUseSuggestion }) {
   if (suggestions.length === 0) return null;
 
   return (
-    <Box style={{ padding: "14px 16px", background: "#1a1408", borderColor: c.warning }}>
+    <Box style={{ padding: "14px 16px", background: c.warningBg, borderColor: c.warning }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
         <Lightbulb size={15} color={c.warning} />
         <H2 style={{ fontSize: "15px", color: c.warning }}>SUGESTIE NA NASTĘPNE GRY</H2>
@@ -1569,7 +1596,7 @@ function SessionPlanPanel({ state, setState, recentMistakes, suggestions, compac
   };
 
   return (
-    <Box style={{ padding: compact ? "12px 14px" : "16px", background: "#0e0e0e" }}>
+    <Box style={{ padding: compact ? "12px 14px" : "16px", background: c.panel }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 12 }}>
         <div>
           <Label style={{ color: c.success }}>PLAN SESJI</Label>
@@ -1685,7 +1712,7 @@ function PreGameView({ state, setState, onClose }) {
         {mood === "tilt" && (
           <div style={{
             marginTop: 10, padding: "10px 14px",
-            background: "#1a0808", border: `1px solid ${c.accent}`,
+            background: c.dangerBg, border: `1px solid ${c.accent}`,
             display: "flex", alignItems: "center", gap: 10
           }}>
             <AlertTriangle size={16} color={c.accent} />
@@ -1695,7 +1722,7 @@ function PreGameView({ state, setState, onClose }) {
         {mood === "tired" && (
           <div style={{
             marginTop: 10, padding: "10px 14px",
-            background: "#1a1408", border: `1px solid ${c.warning}`,
+            background: c.warningBg, border: `1px solid ${c.warning}`,
             display: "flex", alignItems: "center", gap: 10
           }}>
             <AlertTriangle size={16} color={c.warning} />
@@ -1815,7 +1842,7 @@ function PostGameView({ state, setState, onClose }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* MOTTO — przypomnienie że ignorujemy wynik */}
       <div style={{
-        background: "#0c1810", border: `1px solid ${c.success}`,
+        background: c.activeBg, border: `1px solid ${c.success}`,
         padding: "14px 16px", display: "flex", gap: 12, alignItems: "flex-start"
       }}>
         <Brain size={18} color={c.success} style={{ flexShrink: 0, marginTop: 2 }} />
@@ -1832,7 +1859,7 @@ function PostGameView({ state, setState, onClose }) {
 
       {/* META INFO */}
       <div style={{
-        background: "#0e0e0e", border: `1px solid ${c.border}`,
+        background: c.panel, border: `1px solid ${c.border}`,
         padding: "12px 14px", display: "flex", gap: 16,
         alignItems: "center", flexWrap: "wrap"
       }}>
@@ -1996,7 +2023,7 @@ function KnowledgeView({ state, setState }) {
       <div>
         <Text dim style={{ fontSize: "12px", display: "block", marginBottom: 12 }}>
           Każde zadanie = osobny tracker. Klikaj kartę by zobaczyć dokładną instrukcję. WŁĄCZ zadanie żeby pojawiło się w pre-game.
-          Po 3+ grach z 66%+ skutecznością otrzymuje status <strong style={{ color: "#94a3b8" }}>WSTĘPNIE OPANOWANE</strong>.
+          Po 3+ grach z 66%+ skutecznością otrzymuje status <strong style={{ color: c.textDim }}>WSTĘPNIE OPANOWANE</strong>.
         </Text>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {filters.map(f => (
@@ -2004,7 +2031,7 @@ function KnowledgeView({ state, setState }) {
               padding: "6px 12px",
               background: filter === f.id ? c.accent : c.card,
               border: `1px solid ${filter === f.id ? c.accent : c.border}`,
-              color: filter === f.id ? "#fff" : c.textDim,
+              color: filter === f.id ? c.onAccent : c.textDim,
               fontFamily: fMono, fontSize: "11px", fontWeight: 700,
               cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
             }}>{f.label}</button>
@@ -2075,7 +2102,7 @@ function HistoryView({ state }) {
                 {/* Indykator = jakość refleksji, NIE wynik */}
                 <div style={{
                   width: 40, height: 40,
-                  background: "#0e0e0e",
+                  background: c.panel,
                   border: `2px solid ${indicatorColor}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontFamily: fDisplay, fontSize: "16px",
@@ -2092,7 +2119,7 @@ function HistoryView({ state }) {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
                 <Pill color={indicatorColor}>WYKONANIE {goalRate}%</Pill>
-                {!g.remembered && <Pill color={c.accent} bg="#1a0808">NIE PAMIĘTAŁ</Pill>}
+                {!g.remembered && <Pill color={c.accent} bg={c.dangerBg}>NIE PAMIĘTAŁ</Pill>}
               </div>
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
@@ -2100,7 +2127,7 @@ function HistoryView({ state }) {
                 const goal = GOALS[gid];
                 const ok = g.goalCompliance[gid];
                 return goal ? (
-                  <Pill key={gid} color={ok ? c.success : c.accent} bg={ok ? "#0c1810" : "#1a0808"}>
+                  <Pill key={gid} color={ok ? c.success : c.accent} bg={ok ? c.activeBg : c.dangerBg}>
                     {ok ? "✓" : "✗"} {goal.label}
                   </Pill>
                 ) : null;
@@ -2248,7 +2275,7 @@ function StatsView({ state }) {
 
         {masteryGroups.initial.length > 0 && (
           <div style={{ marginBottom: 16 }}>
-            <Label style={{ color: "#94a3b8" }}>WSTĘPNIE OPANOWANE ({masteryGroups.initial.length})</Label>
+            <Label style={{ color: c.textDim }}>WSTĘPNIE OPANOWANE ({masteryGroups.initial.length})</Label>
             <Box style={{ padding: "14px 16px" }}>
               {masteryGroups.initial.map((g, i, arr) => (
                 <GoalProgressRow key={g.id} goal={GOALS[g.id]} stat={g} isLast={i === arr.length - 1} />
@@ -2492,7 +2519,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {state.sessionLocked && (
         <div style={{
-          background: "#1a0808", border: `2px solid ${c.accent}`,
+          background: c.dangerBg, border: `2px solid ${c.accent}`,
           padding: "20px", display: "flex", gap: 14, alignItems: "flex-start"
         }}>
           <AlertTriangle size={24} color={c.accent} style={{ flexShrink: 0, marginTop: 2 }} />
@@ -2546,7 +2573,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
           <>
             {cooldownActive && (
               <div style={{
-                background: "#1a1408", border: `1px solid ${c.warning}`,
+                background: c.warningBg, border: `1px solid ${c.warning}`,
                 padding: "14px", display: "flex", alignItems: "center", gap: 12, marginBottom: 12
               }}>
                 <Clock size={18} color={c.warning} />
@@ -2557,7 +2584,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
             )}
             {state.activeGoals.length === 0 && (
               <div style={{
-                background: "#1a1408", border: `1px solid ${c.warning}`,
+                background: c.warningBg, border: `1px solid ${c.warning}`,
                 padding: "14px", display: "flex", alignItems: "center", gap: 12, marginBottom: 12
               }}>
                 <AlertCircle size={18} color={c.warning} />
@@ -2580,7 +2607,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
         )}
         {inGame && (
           <>
-            <Box style={{ padding: "16px 18px", marginBottom: 12, background: "#0c1810", borderColor: c.success }}>
+            <Box style={{ padding: "16px 18px", marginBottom: 12, background: c.activeBg, borderColor: c.success }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                 <div>
                   <Label style={{ color: c.success }}>W TRAKCIE GRY</Label>
@@ -2590,7 +2617,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
                   Start: {new Date(state.preGameSnapshot.startedAt).toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" })}
                 </Text>
               </div>
-              <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid #1a3a1a` }}>
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
                 <Label style={{ marginBottom: 8 }}>SKUPIASZ SIĘ NA:</Label>
                 {state.preGameSnapshot.focusGoals.map(gid => {
                   const goal = GOALS[gid];
@@ -2658,7 +2685,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
                 <Box key={g.id} style={{ padding: "10px 12px", display: "flex", gap: 12, alignItems: "center" }}>
                   <div style={{
                     width: 32, height: 32,
-                    background: "#0e0e0e",
+                    background: c.panel,
                     border: `1px solid ${ind}`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontFamily: fDisplay, fontSize: "11px",
@@ -2824,7 +2851,7 @@ export default function App() {
       {modal && (
         <div style={{
           position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-          background: "rgba(0,0,0,0.85)", zIndex: 100,
+          background: c.overlay, zIndex: 100,
           overflowY: "auto", padding: "40px 16px"
         }} onClick={(e) => { if (e.target === e.currentTarget) setModal(null); }}>
           <div style={{
