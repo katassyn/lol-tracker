@@ -11,9 +11,9 @@ import {
 // ============================================================
 const STORAGE_KEY = "lol_master_tracker_v1";
 
-// Mastery thresholds (Twoja zasada: 3-4 gier minimum per zadanie)
+// Mastery thresholds (minimum kilku gier skupionych na jednym zadaniu)
 const MASTERY = {
-  MIN_GAMES_FOR_INITIAL: 3,        // wstępnie opanowane od 3 gier
+  MIN_GAMES_FOR_INITIAL: 3,        // wstępnie opanowane od kilku prób
   COMPLIANCE_FOR_INITIAL: 66,      // przynajmniej 2/3 zaliczone
   MIN_GAMES_FOR_CONSOLIDATED: 8,
   COMPLIANCE_FOR_CONSOLIDATED: 75,
@@ -110,6 +110,28 @@ const GOALS = {
       ]
     }
   },
+  hard_push: {
+    label: "Hard push",
+    category: "wave",
+    short: "Szybko czyścisz falę, żeby mieć czas na mapę albo bezpieczny reset.",
+    details: {
+      what: "Hard push to szybkie przepchnięcie pełnej fali. Daje natychmiastowe prio, pozwala dołączyć do junglera, ukarać roam przeciwnika albo wymusić jego powrót pod tower.",
+      how: [
+        "Użyj AA i spelli tak, żeby fala jak najszybciej weszła pod tower enemy.",
+        "Jeśli enemy znika z mida i nie masz informacji, pushujesz falę i dopiero potem sprawdzasz mapę.",
+        "Przed recallem czyścisz falę przed cannonem, żeby wrócić z itemami bez dużej straty CS.",
+        "Po killu lub mocnym obiciu enemy zostajesz do przepchnięcia fali, jeśli sytuacja jest bezpieczna."
+      ],
+      when: "Przed recallem, przed dołączeniem do junglera, gdy enemy roamuje, gdy potrzebujesz natychmiastowego prio pod objective.",
+      whenNot: "Nie nadużywaj hard pusha, gdy możesz zbudować slow push. Hard push bez celu tylko oddaje bounce i tempo.",
+      success: "Fala weszła pod tower, przeciwnik musi ją odebrać, a ty masz wolne okno na recall, ward, roam lub objective.",
+      mistakes: [
+        "Hard push bez planu po fali.",
+        "Zostawienie fali w połowie linii przed recallem.",
+        "Push bez wizji, gdy enemy jungle/support może cię odciąć."
+      ]
+    }
+  },
   pre_first_wave: {
     label: "Wyjście PRZED 1. falą",
     category: "early",
@@ -124,6 +146,29 @@ const GOALS = {
       when: "Każda gra. Standard.",
       success: "Pierwszy hit na minionie z dokładnym CS, możliwy lvl 2 spike przed enemy.",
       mistakes: ["Wyjście po fali — tracisz 5-10s tempa, oddajesz initiative."]
+    }
+  },
+  cs_timers: {
+    label: "CS, levele i timery",
+    category: "early",
+    short: "Cannon, level 2/3/6, objective timery i CS pod towerem.",
+    details: {
+      what: "Timery fal, leveli i objectivów pozwalają planować 1-2 minuty wcześniej. CS pod towerem i setup HP minionów to osobna mechanika, która daje darmowe zasoby.",
+      how: [
+        "Solo lane: level 2 po 7 minionach, level 3 po 14, level 4 około 24 CS.",
+        "Bot lane: level 2 po 9 minionach, level 3 około 21 CS.",
+        "Level 6 na solo zwykle po 8. fali, jeśli nie straciłeś expa.",
+        "Śledź cannon wave pod recall i objective setup.",
+        "Pod towerem kontroluj HP minionów wcześniej; jeśli kilka ma low HP naraz, nie zdążysz AA wszystkiego.",
+        "Stój bliżej miniona, gdy last hit musi wejść szybciej, bo pocisk leci krócej."
+      ],
+      when: "Laning, recall timing, plan pod smoka/heralda/grubsy, last hit pod towerem.",
+      success: "Wiesz przed falą, czy grasz pod level spike, reset, objective albo bezpieczny freeze.",
+      mistakes: [
+        "Reagowanie na objective dopiero gdy się pojawi.",
+        "Recall bez uwzględnienia cannon wave.",
+        "Dopuszczanie do wielu low HP minionów pod towerem."
+      ]
     }
   },
 
@@ -168,17 +213,39 @@ const GOALS = {
   skill_queueing: {
     label: "Kolejkowanie skilli z flashem",
     category: "micro",
-    short: "Q + flash w 1 frame. Wpisz Q tuż przed flash dla instant cast.",
+    short: "Target spell przed Flashem. Mniej czasu na reakcję enemy.",
     details: {
-      what: "Kolejkowanie skilli z flashem — wpisanie spella tuż przed użyciem flasha sprawia że spell rzuca się od razu z nowej pozycji. Daje to surprise dystans i są combosy które bez tego nie działają (Nocturne Q+flash, Syndra E+flash, Riven combosy).",
+      what: "Kolejkowanie skilli z Flashem polega na wybraniu targetu/spella zanim jesteś w zasięgu, a potem użyciu Flasha. Po wejściu w range spell odpala natychmiast, więc przeciwnik ma dużo mniej czasu na reakcję.",
       how: [
-        "Wciśnij Q (lub inny spell) → natychmiast flash → spell wystrzeli z nowej pozycji.",
-        "Działa też z innymi dashami nie tylko flashem (np. Lee Sin W → Q).",
-        "Małe okno — to feel-based. Praktyka w trybie treningu (Practice Tool)."
+        "Przy spellach targetowanych kliknij spell w enemy mimo że jest jeszcze poza zasięgiem.",
+        "Postać zacznie iść za targetem — wtedy Flashujesz w zasięg.",
+        "Spell odpala od razu po wejściu w range, zanim enemy zdąży odflashować/dashować.",
+        "Trenuj to w Practice Tool na różnych dystansach, bo timing jest feel-based."
       ],
       when: "Engage, escape, last-hit assassyna na carry, niespodziewany kill setup.",
       success: "Twój flash + spell = brak czasu na reakcję enemy. Zwykle = kill albo brak punishu.",
       mistakes: ["Flash bez spella i potem cast — dajesz 0.3s na reakcję enemy."]
+    }
+  },
+  continuous_clicking: {
+    label: "Ciągłe szybkie klikanie",
+    category: "micro",
+    short: "Klikasz często i blisko postaci. Reakcja na skillshot jest krótsza.",
+    details: {
+      what: "Szybkie, częste klikanie blisko modelu utrzymuje rękę w tempie gry. Klik daleko od postaci wydłuża ruch potrzebny do uniku; klik blisko skraca reakcję.",
+      how: [
+        "Klikaj dużo przez całą grę, nie tylko w momencie zagrożenia.",
+        "Klikaj bardzo blisko swojej postaci, szczególnie podczas laningu i teamfightów.",
+        "Practice Tool: ustaw postać między dwoma wardami i klikaj naprzemiennie tak, żeby model prawie nie ruszał się z miejsca.",
+        "Łącz to z patrzeniem na minimapę w momentach animacji last hita."
+      ],
+      when: "Cała gra: laning, dodge, spacing, kite, teamfighty.",
+      success: "Uniki są krótsze, ruch mniej paniczny, a wejście na wyższą prędkość klikania nie wymaga rozgrzewki.",
+      mistakes: [
+        "Klikanie daleko od postaci.",
+        "Przyspieszanie dopiero wtedy, gdy skill już leci.",
+        "Taniec bez celu zamiast ruchu w konkretnym momencie zagrożenia."
+      ]
     }
   },
   cancel_aa_animation: {
@@ -195,6 +262,92 @@ const GOALS = {
       ],
       when: "Każda walka z ranged ADC, każdy kite, kiting w teamfightach.",
       success: "Stoisz na 'A klik' wyłącznie podczas wind-up, między AA się ruszasz. Trudno cię złapać + wyższy DPS."
+    }
+  },
+  animation_lock: {
+    label: "Lokowanie w animacji",
+    category: "micro",
+    short: "AA, skille, tower i miniony blokują ruch. Trafiasz, gdy enemy stoi.",
+    details: {
+      what: "Po AA lub użyciu spella postać przez krótki moment stoi w miejscu. Ten sam koncept dotyczy towerów, minionów i campów. To okno wykorzystujesz do pewniejszych skillshotów i bezpiecznych trade'ów.",
+      how: [
+        "Czekaj aż przeciwnik zacznie AA, last hit albo cast spella — wtedy jego ruch jest ograniczony.",
+        "Rzucaj skillshot w momencie, gdy enemy jest zablokowany animacją, a nie losowo na max range.",
+        "Pod towerem atakuj enemy wtedy, gdy tower właśnie zaczyna animację ataku w miniona.",
+        "Gdy gonisz z CC, nie blokuj się niepotrzebnym AA, jeśli przez to stracisz range na kluczowy spell."
+      ],
+      when: "W trade'ach na linii, przy łapaniu last hitów enemy, pod towerem, przy chase'u z CC.",
+      success: "Więcej skillshotów trafia w momentach, kiedy przeciwnik realnie nie może odskoczyć.",
+      mistakes: [
+        "Rzucanie spelli bez triggera animacji.",
+        "AA podczas chase'u, które oddala cię od zasięgu CC.",
+        "Ignorowanie animacji towera przy krótkich trade'ach pod nim."
+      ]
+    }
+  },
+  spacing_ranges: {
+    label: "Spacing i tworzenie przestrzeni",
+    category: "micro",
+    short: "Wyobrażasz sobie zasięgi jako okręgi i grasz na ich granicy.",
+    details: {
+      what: "Spacing to balansowanie na granicy zasięgu swojego i przeciwnika. Tworzenie przestrzeni to wejście pozycją tak, żeby przeciwnik musiał się cofnąć, dzięki czemu sojusznik może farmić, bić lub przejść.",
+      how: [
+        "Wyobrażaj sobie okręgi zasięgu: twoje AA/spelle, enemy engage, enemy poke.",
+        "Stój na granicy, gdzie ty możesz grozić akcją, a enemy nie ma łatwego wejścia.",
+        "Support z CC może wejść do krzaka i kupić ADC przestrzeń do farmienia.",
+        "Tank wejściem w enemy team kupuje przestrzeń dla carry; assassin flanką zmusza enemy do ochrony backline'u.",
+        "Teren, tower, miniony i niewidoczni sojusznicy też tworzą przestrzeń."
+      ],
+      when: "Laning, bot trade'y, ustawianie pod objective, front-to-back, flanki.",
+      success: "Przeciwnik oddaje pozycję lub CS bez konieczności natychmiastowej walki.",
+      mistakes: [
+        "Wejście w zasięg enemy bez powodu.",
+        "Oddawanie krzaków i przestrzeni za darmo.",
+        "Brak świadomości, kto realnie może ci przerwać zagranie."
+      ]
+    }
+  },
+  skillshot_angles: {
+    label: "Trafianie skillshotów",
+    category: "micro",
+    short: "Celuj w nogi, rzucaj z boku i z fog'a, czekaj na trigger.",
+    details: {
+      what: "Skillshoty trafiają częściej, gdy rzucasz je w moment ograniczonego ruchu enemy, z kąta trudniejszego do odczytania albo spoza wizji. Celowanie w nogi modelu zwykle lepiej odpowiada hitboxowi.",
+      how: [
+        "Celuj w nogi/postawę modelu, nie w głowę ani górę animacji.",
+        "Rzucaj pod kątem z boku — przeciwnik ma mniej oczywistą oś uniku.",
+        "Używaj fog of war i pozycji poza ekranem enemy.",
+        "Patrz na kierunek twarzy/modelu: często zdradza ruch lub cast.",
+        "Baituj skillshoty enemy ruchem do przodu i krótką zmianą kierunku w ostatnim momencie."
+      ],
+      when: "Laning, setup ganków, poke przed objective, chase/escape.",
+      success: "Nie spamujesz skillshotów; czekasz na moment, w którym enemy ma najmniej dobrych uników.",
+      mistakes: [
+        "Rzucanie zawsze frontalnie z tej samej linii.",
+        "Rzucanie bez wizji i bez informacji, gdzie enemy może iść.",
+        "Losowy taniec zamiast konkretnego baitowania w momencie zagrożenia."
+      ]
+    }
+  },
+  value_spells: {
+    label: "Value spelli",
+    category: "micro",
+    short: "Spell ma realizować cel: trade, wave, oba naraz albo bait enemy.",
+    details: {
+      what: "Ten sam spell może mieć różną wartość: trafić tylko gracza, gracza i falę, samą falę albo wymusić złą odpowiedź enemy. Celem jest używać spelli zgodnie z planem fali i trade'u.",
+      how: [
+        "Przed castem zdecyduj: chcę pushować, trafić gracza, utrzymać wave czy baitować spell enemy?",
+        "Jeśli możesz, ustaw spell tak, żeby trafił enemy i część wave'a.",
+        "Baituj enemy do użycia spella w wave, jeśli dzięki temu fala pójdzie do ciebie.",
+        "Nie pal defensywnego spella, jeśli enemy może od razu wymusić ważniejszy trade."
+      ],
+      when: "Każdy lane trade, wave clear, poke i przygotowanie recalla.",
+      success: "Spell daje konkretną wartość mapową lub lane'ową, nie tylko 'bo cooldown był dostępny'.",
+      mistakes: [
+        "Pushowanie fali przypadkowym poke'iem.",
+        "Heal/tarcza użyte za wcześnie, ponad realne value.",
+        "Spell użyty bez związku z planem wave'a."
+      ]
     }
   },
   fountain_end: {
@@ -241,6 +394,28 @@ const GOALS = {
       when: "Tuż przed planowanym recallem."
     }
   },
+  zero_plus: {
+    label: "Koncepcja 0+ / 0-",
+    category: "max",
+    short: "Darmowe akcje, które zwykle są neutralne, ale czasem wygrywają grę.",
+    details: {
+      what: "0+ to akcja, która prawie nic nie kosztuje, zwykle nie daje natychmiastowej nagrody, ale czasem przynosi duży zysk. 0- to pozornie mały błąd, który zwykle nie karze, ale raz na jakiś czas przegrywa sytuację.",
+      how: [
+        "Sprawdź kamerą side lane podczas bezpiecznej animacji.",
+        "Pingnij missing lub summoner, jeśli informacja może komuś pomóc.",
+        "Wejdź na chwilę w fog, gdy nic nie tracisz, żeby przeciwnik musiał respektować presję.",
+        "Nie trzymaj dwóch stacków wardów bez użycia — to darmowa utrata informacji.",
+        "Nie facecheckuj 'bo pewnie nikogo nie ma' — to klasyczne 0-."
+      ],
+      when: "Cała gra; szczególnie między falami, po pushu i przed objective.",
+      success: "Budujesz wiele małych darmowych przewag bez ryzykowania tempa, HP ani fali.",
+      mistakes: [
+        "Ignorowanie małych akcji, bo pojedynczo wyglądają nieważnie.",
+        "Robienie 0+ wtedy, gdy jednak kosztuje falę, tempo albo pozycję.",
+        "Akceptowanie 0- na autopilocie."
+      ]
+    }
+  },
   track_flashes: {
     label: "Track flashy enemy",
     category: "vision",
@@ -284,6 +459,51 @@ const GOALS = {
         "Ignorowanie ? na minimapie (enemy roamuje, zaraz będzie problem)."
       ],
       notes: "Jeśli mini jest za daleko na monitorze — zmniejsz HUD albo przesuń mini. Setup ma znaczenie."
+    }
+  },
+  info_collection: {
+    label: "Zbieranie informacji",
+    category: "vision",
+    short: "Minimapa, F-keye, TAB, CS junglera i dedukcja z fog'a.",
+    details: {
+      what: "Dobra decyzja macro zaczyna się od informacji. Zbierasz ją z minimapy, kamery, TAB-a, licznika CS junglera, zniknięć z mapy i drobnych sygnałów typu mana/HP/summonery.",
+      how: [
+        "Minimapa co kilka sekund, najlepiej po last hicie albo podczas własnej animacji.",
+        "F1-F4 na sojuszników, spacja na siebie. Locked camera ogranicza czytanie mapy.",
+        "TAB: patrz na level, itemy, kluczowe defensywy i '?' przy przeciwnikach.",
+        "Jungle tracking: jeden camp = 4 CS, więc licznik CS mówi, co mogło być zrobione i co zaraz wstaje.",
+        "Fog tracking: gdy ktoś znika, dolicz recall, regen i czas dojścia; wyobrażaj sobie rosnący zasięg, gdzie może być."
+      ],
+      when: "Cała gra, szczególnie przed pushem, roamem, wejściem do rzeki i objective.",
+      success: "Podejmujesz decyzję na podstawie prawdopodobnego położenia enemy, a nie dopiero gdy zobaczysz ich na ekranie.",
+      mistakes: [
+        "Patrzenie na KDA zamiast itemów i leveli.",
+        "Brak liczenia CS junglera.",
+        "Zakładanie, że zniknięty support na pewno cofa, zamiast rozważyć roam."
+      ]
+    }
+  },
+  game_settings: {
+    label: "Ustawienia pod naukę",
+    category: "micro",
+    short: "Smartcasty, F-keye, dźwięki skilli, mały HUD, auto-AA off.",
+    details: {
+      what: "Ustawienia mają usuwać opóźnienia i poprawiać czytelność gry. Nie są celem same w sobie, ale złe ustawienia blokują mechanikę i świadomość mapy.",
+      how: [
+        "Smartcasty bez wskaźnika jako standard, bo indicator spowalnia wykonanie.",
+        "F1-F4 na sojuszników, spacja do centrowania na sobie.",
+        "Champion target only jako toggle, nie trzymany przycisk.",
+        "Postacie i efekty skilli czytelne, teren może być niżej, żeby mniej rozpraszał.",
+        "Dźwięki skilli zostają; muzyka off, jeśli zabiera uwagę.",
+        "HUD możliwie mały, ale nadal wygodny. Auto-ataki off."
+      ],
+      when: "Konfiguracja przed sesją i korekta, gdy coś realnie utrudnia grę.",
+      success: "Nie walczysz z interfejsem; szybciej wykonujesz akcje i szybciej czytasz ekran.",
+      mistakes: [
+        "Zmienianie ustawień co chwilę zamiast trenowania stabilnych nawyków.",
+        "Za duży HUD zasłaniający minimapę i przestrzeń gry.",
+        "Muzyka lub chat zabierające uwagę od informacji."
+      ]
     }
   },
   rotation_t1: {
@@ -332,6 +552,29 @@ const GOALS = {
         "Wymuszanie smoka gdy enemy ma pełną wave pod twoim T1.",
         "Branie smoka gdy team comp przegrywa walkę (oddajesz darmową walkę).",
         "Drugi herald dla golda — bezsens, jeśli nie ma czego pushować."
+      ]
+    }
+  },
+  prio_tempo: {
+    label: "Prio i tempo",
+    category: "macro",
+    short: "Prio = fala przed enemy. Tempo = przewaga czasu.",
+    details: {
+      what: "Prio to przepchnięcie fali przed przeciwnikiem. Tempo to przewaga czasu: możesz coś zrobić przed nim. Nie da się mieć tempa cały czas, więc ważne jest kiedy je wydajesz, oddajesz albo matchujesz.",
+      how: [
+        "Podstawowy łańcuch: wave → objective → wave → objective.",
+        "Tempo indywidualne: recall przed lane opponentem albo szybszy powrót na mapę.",
+        "Tempo drużynowe: twoja drużyna jest już na mapie, a enemy dopiero resetuje.",
+        "Gdy enemy ma małą przewagę tempa, graj cross-map po drugiej stronie.",
+        "Gdy jesteś mocno do tyłu w tempie, matchuj enemy: obrona, odbicie wizji, reset kontroli."
+      ],
+      when: "Każda decyzja macro: recall, objective, roam, split, obrona.",
+      whenNot: "Nie bierz prio automatycznie, jeśli jesteś weak side, bez wizji, albo freeze daje większy pressure point.",
+      success: "Wiesz, czy masz czas działać pierwszy, czy musisz wymienić mapę albo bronić.",
+      mistakes: [
+        "Pushowanie każdej fali bez celu.",
+        "Oddanie fali i objective naraz.",
+        "Próba contestu, gdy enemy ma tempo, wizję i pozycję."
       ]
     }
   },
@@ -406,6 +649,52 @@ const GOALS = {
       notes: "Twoje własne słowa z notatek: jesteś source of damage. Nie masz prawa flipować walki gdy nie zebrałeś zasobów."
     }
   },
+  splitpush_structures: {
+    label: "Splitpush 4-1 i 1-3-1",
+    category: "macro",
+    short: "Naciskasz 2-3 linie naraz. Splitpusher ma ściągnąć minimum dwóch.",
+    details: {
+      what: "4-1 i 1-3-1 to struktury presji na kilku liniach. Nie oznaczają dosłownie stania czterech osób na jednej fali; chodzi o kontrolę przestrzeni, wizji i synchronizację fal.",
+      how: [
+        "4-1: jedna osoba na side, reszta kontroluje mid/jungle między liniami.",
+        "Splitpusher musi samodzielnie wymuszać zejście co najmniej dwóch enemy albo grozić towerem.",
+        "Jeśli enemy wysyła wielu na side, reszta drużyny bierze mid/objective.",
+        "Jeśli enemy zostawia jednego na side, support/jungle mogą zejść i zrobić 3v1.",
+        "1-3-1 wymaga dwóch silnych side'ów i dużej przewagi; bez tego jest ryzykowne.",
+        "Synchronizuj fale, żeby enemy musiał odpowiadać na kilka miejsc naraz."
+      ],
+      when: "Po T1, przy grze o T2, z dobrą wizją i splitpusherem zdolnym utrzymać presję.",
+      whenNot: "Bez wizji w enemy jungle, bez side threatu, gdy team nie może bezpiecznie stać na midzie.",
+      success: "Enemy traci tower, objective albo musi oddać zasoby na jednej z linii.",
+      mistakes: [
+        "Pięć osób na jednej linii bez dużego tempa.",
+        "Splitpusher pushuje bez informacji i ginie 1v3.",
+        "Brak synchronizacji fal — enemy czyści jedną po drugiej."
+      ]
+    }
+  },
+  map_sync: {
+    label: "Synchronizacja mapy",
+    category: "macro",
+    short: "Fale, objective, item spike, jungler i pozycja teamu muszą się zgadzać.",
+    details: {
+      what: "Synchronizacja mapy to ustawienie fal i ruchu graczy tak, żeby przeciwnik musiał wybierać między stratami. Dobra akcja makro dzieje się w tym samym czasie co presja na fali lub objective.",
+      how: [
+        "Synchronizuj fale, żeby weszły naraz albo jedna po drugiej.",
+        "Pushuj w timing, w którym enemy nie może odpowiedzieć jednocześnie na falę i smoka.",
+        "Opóźnij push, jeśli brakuje ci golda do ważnego item spike'a i nadal zdążysz na cel.",
+        "Jeśli twój jungler chce grać akcję, fala ma tworzyć punkt presji w innym miejscu.",
+        "Rysuj w głowie linię po sojusznikach: nie bądź ani za głęboko, ani bezużytecznie za daleko."
+      ],
+      when: "Mid/late game, objective setup, splitpush, obrona przed presją.",
+      success: "Twoje ruchy są spójne z falami i teamem, więc enemy reaguje na presję zamiast grać proaktywnie.",
+      mistakes: [
+        "Samotny push bez linii sojuszników.",
+        "Przyjście na objective bez przygotowanej fali.",
+        "Stanie w miejscu i czekanie na wave, gdy możesz wejść w fog i kupić presję."
+      ]
+    }
+  },
 
   // ===== VISION =====
   proactive_vision: {
@@ -433,6 +722,28 @@ const GOALS = {
       ]
     }
   },
+  river_bush_control: {
+    label: "Kontrola krzaków i rzeki",
+    category: "vision",
+    short: "Krzaki przy rzece blokują rotacje i dają carry bezpieczny spot.",
+    details: {
+      what: "Kontrola kluczowych krzaków wokół mida, rzeki i wejść do jungli decyduje, czy enemy może podejść po prio. Czasem samo stanie w obszarze jest tak samo ważne jak ward.",
+      how: [
+        "Przejmuj obszar między krzakiem mida a rzeką przed smokiem/heraldem.",
+        "Jeśli enemy stoi już w obszarze objective, często nie może bezpiecznie podejść na mida po prio.",
+        "Krzak przy river/ścianie daje niemobilnemu carry bezpieczny spot do zadawania obrażeń.",
+        "Ten sam krzak może być punktem flanki dla championa szukającego wejścia od boku.",
+        "Odbijanie wizji zaczynaj od krzaków, które odcinają przejście na side."
+      ],
+      when: "Przed objective, przy obronie/pushu T2, gdy chcesz zablokować rotacje enemy.",
+      success: "Enemy musi iść dookoła, traci tempo i nie może łatwo zabrać mid prio.",
+      mistakes: [
+        "Ward bez kontroli pozycyjnej.",
+        "Oddanie krzaka, który otwiera flankę na twoje carry.",
+        "Wchodzenie po wizję bez prio i bez ludzi w pobliżu."
+      ]
+    }
+  },
 
   // ===== TEAMFIGHT =====
   comp_awareness: {
@@ -455,6 +766,50 @@ const GOALS = {
         "Brak świadomości team compu (gra na zasadzie 'co się stanie to się stanie').",
         "Granie pod swój pick zamiast pod team.",
         "Ignorowanie disengage enemy (próba engage gdy nie zadziała)."
+      ]
+    }
+  },
+  front_to_back_flank: {
+    label: "Front-to-back i flanka",
+    category: "teamfight",
+    short: "Silne carry grają za frontem. Flanka łamie tę strukturę.",
+    details: {
+      what: "Front-to-back oznacza walkę przez najbliższy cel: tank/front chroni carry, carry bije to, co może. Flanka to wejście z boku lub tyłu, które odcina carry i rozbija strukturę front-to-back.",
+      how: [
+        "Jeśli masz silniejsze carry, broń ich struktury i odcinaj flanki enemy.",
+        "Jeśli enemy ma lepszy front-to-back, szukaj flanki albo wejścia z fog'a.",
+        "Przed walką ustal, kto może flankować i z której strony.",
+        "Nie stój jako carry w linii, gdzie flankujący ma darmowe wejście.",
+        "Flankujący nie musi od razu zabić — samo wymuszenie cofnięcia carry kupuje przestrzeń."
+      ],
+      when: "Walki 5v5, objective, oblężenia, obrona przed engage.",
+      success: "Albo twoje carry biją bezpiecznie zza frontu, albo twoja flanka realnie rozbija enemy backline.",
+      mistakes: [
+        "Carry wychodzi przed front.",
+        "Brak kontroli bocznych wejść przed objective.",
+        "Flanka bez synchronizacji z wejściem reszty teamu."
+      ]
+    }
+  },
+  fight_roles: {
+    label: "Role w teamfightach",
+    category: "teamfight",
+    short: "Mag bije najbliższy cel, assassin szuka carry, support zabezpiecza team.",
+    details: {
+      what: "W teamfightach nie da się liczyć wszystkiego w trakcie. Przed walką musisz znać swoją rolę, największe zagrożenie i warunek wygranej obu drużyn.",
+      how: [
+        "Mag/control mage najczęściej bije front-lane i kontroluje przestrzeń.",
+        "Assassin omija front, szuka kąta na fed carry i działa z fog'a/flanki.",
+        "Support/enchanter stoi z tyłu, zabezpiecza carry i przerywa wejście enemy.",
+        "Przed walką nazwij największe zagrożenie enemy i sposób uniknięcia jego kluczowego spella.",
+        "Walka ma mieć jeden wspólny plan: poke, engage, disengage albo front-to-back."
+      ],
+      when: "Przed każdą większą walką, szczególnie 20+ minuta i objective.",
+      success: "Wchodzisz w walkę z gotową odpowiedzią: gdzie stoję, kogo biję, czego unikam.",
+      mistakes: [
+        "Assassin bije tanka od frontu bez powodu.",
+        "Mage wchodzi w backline zamiast kontrolować front.",
+        "Support chase'uje kill zamiast osłaniać win condition."
       ]
     }
   },
@@ -575,21 +930,13 @@ const GOALS = {
 
 const ALWAYS_ON_RULES = [
   { id: "chat_off", label: "Czat OFF (tylko pingi)" },
-  { id: "max_3_games", label: "Max 3 gry dziennie" },
   { id: "break_after_loss", label: "Min 5 min przerwy po przegranej" },
   { id: "remembered_game", label: "Pamiętam właśnie zagraną grę" },
   { id: "no_blame", label: "Brak narzekania na team" }
 ];
 
-const DEFAULT_POOL = [
-  { name: "Syndra", role: "Pusher mida" },
-  { name: "Leblanc", role: "Side carry" },
-  { name: "Anivia", role: "Bezpieczna skala" }
-];
-
 const DEFAULT_STATE = {
   activeGoals: ["slow_push", "canon_recall"],
-  pool: DEFAULT_POOL,
   games: [],
   todayDate: null,
   gamesToday: 0,
@@ -1058,7 +1405,6 @@ function MoodPicker({ value, onChange }) {
 // PRE-GAME VIEW
 // ============================================================
 function PreGameView({ state, setState, onClose }) {
-  const [champion, setChampion] = useState(state.pool[0]?.name || "");
   const [mood, setMood] = useState("fresh");
   const [readyChecks, setReadyChecks] = useState({});
   const [focusGoals, setFocusGoals] = useState([]);
@@ -1075,12 +1421,12 @@ function PreGameView({ state, setState, onClose }) {
     .map(id => ({ id, ...GOALS[id] }))
     .filter(g => g.label);
 
-  const allReady = readyItems.every(r => readyChecks[r.id]) && focusGoals.length >= 1 && champion;
+  const allReady = readyItems.every(r => readyChecks[r.id]) && focusGoals.length >= 1;
 
   const startGame = () => {
     const snapshot = {
       startedAt: Date.now(),
-      champion, mood, focusGoals
+      mood, focusGoals
     };
     setState(s => ({ ...s, preGameSnapshot: snapshot }));
     onClose();
@@ -1114,27 +1460,7 @@ function PreGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>2 / Champion</Label>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
-          {state.pool.map(p => (
-            <div key={p.name} onClick={() => setChampion(p.name)} style={{
-              padding: "14px 10px",
-              background: champion === p.name ? "#1a0a0a" : c.card,
-              border: `2px solid ${champion === p.name ? c.accent : c.border}`,
-              cursor: "pointer"
-            }}>
-              <H2 style={{ fontSize: "14px", color: champion === p.name ? c.accent : c.text }}>{p.name}</H2>
-              <div style={{
-                fontFamily: fMono, fontSize: "10px", color: c.textDim,
-                marginTop: 4, textTransform: "uppercase", letterSpacing: "0.05em"
-              }}>{p.role}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <Label>3 / Co trenujesz w tej grze (max 2 zadania)</Label>
+        <Label>2 / Co trenujesz w tej grze (max 2 zadania)</Label>
         {activeGoals.length === 0 ? (
           <div style={{ padding: 16, background: c.card, border: `1px solid ${c.border}`, textAlign: "center" }}>
             <Text mute style={{ display: "block", marginBottom: 12 }}>
@@ -1163,7 +1489,7 @@ function PreGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>4 / Pre-game gotowość</Label>
+        <Label>3 / Pre-game gotowość</Label>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {readyItems.map(r => (
             <CheckRow
@@ -1209,7 +1535,6 @@ function PostGameView({ state, setState, onClose }) {
       id: Date.now(),
       timestamp: Date.now(),
       date: todayKey(),
-      champion: snap.champion,
       matchup,
       preMood: snap.mood,
       postMood,
@@ -1231,9 +1556,6 @@ function PostGameView({ state, setState, onClose }) {
       if (!remembered) {
         sessionLocked = true;
         sessionLockReason = "NIE PAMIĘTASZ ZAGRANEJ GRY. Zmęczony — koniec na dziś.";
-      } else if (newGamesToday >= 3) {
-        sessionLocked = true;
-        sessionLockReason = "3 GRY ZALICZONE. Limit dzienny.";
       } else if (postMood === "tilt") {
         sessionLocked = true;
         sessionLockReason = "TILT. Sam sobie szkodzisz. Przerwa min 1h.";
@@ -1275,10 +1597,6 @@ function PostGameView({ state, setState, onClose }) {
         padding: "12px 14px", display: "flex", gap: 16,
         alignItems: "center", flexWrap: "wrap"
       }}>
-        <div>
-          <Label style={{ marginBottom: 2 }}>Champion</Label>
-          <H2 style={{ fontSize: "14px" }}>{snap.champion}</H2>
-        </div>
         <div>
           <Label style={{ marginBottom: 2 }}>Czas gry</Label>
           <Text>{Math.round((Date.now() - snap.startedAt) / 60000)} min</Text>
@@ -1539,7 +1857,7 @@ function HistoryView({ state }) {
                 }}>{metGoals}<span style={{ fontSize: "10px", color: c.textMute }}>/{totalGoals}</span></div>
                 <div>
                   <H2 style={{ fontSize: "14px" }}>
-                    {g.champion}
+                    Refleksja po grze
                     {g.matchup && <span style={{ color: c.textDim, fontFamily: fMono, fontSize: "12px", fontWeight: 400 }}> · {g.matchup}</span>}
                   </H2>
                   <Text mute style={{ fontSize: "11px" }}>
@@ -1589,12 +1907,6 @@ function StatsView({ state }) {
   const stats = useMemo(() => {
     if (games.length === 0) return null;
 
-    const byChampion = {};
-    games.forEach(g => {
-      if (!byChampion[g.champion]) byChampion[g.champion] = 0;
-      byChampion[g.champion]++;
-    });
-
     const perGoal = {};
     Object.keys(GOALS).forEach(id => {
       const gamesWithGoal = games.filter(g => g.focusGoals.includes(id));
@@ -1621,7 +1933,7 @@ function StatsView({ state }) {
       };
     });
 
-    return { total: games.length, byChampion, perGoal, alwaysOnStats };
+    return { total: games.length, perGoal, alwaysOnStats };
   }, [games]);
 
   if (!stats) {
@@ -1752,23 +2064,6 @@ function StatsView({ state }) {
         </Box>
       </div>
 
-      {/* Champions */}
-      <div>
-        <H2 style={{ marginBottom: 12 }}>POSTACIE GRANE</H2>
-        <Box style={{ padding: "16px" }}>
-          {Object.entries(stats.byChampion).map(([champ, count], i, arr) => (
-            <div key={champ} style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "8px 0",
-              borderBottom: i < arr.length - 1 ? `1px solid ${c.border}` : "none"
-            }}>
-              <Text style={{ fontWeight: 700 }}>{champ}</Text>
-              <Text mute style={{ fontSize: "11px" }}>{count} gier</Text>
-            </div>
-          ))}
-        </Box>
-      </div>
-
       {/* Recent mistakes */}
       <div>
         <H2 style={{ marginBottom: 12 }}>OSTATNIE BŁĘDY</H2>
@@ -1815,45 +2110,8 @@ function GoalProgressRow({ goal, stat, isLast }) {
 // SETTINGS
 // ============================================================
 function SettingsView({ state, setState }) {
-  const [pool, setPool] = useState(state.pool);
-  const [dirty, setDirty] = useState(false);
-
-  const update = (newPool) => { setPool(newPool); setDirty(true); };
-  const save = () => { setState(s => ({ ...s, pool })); setDirty(false); };
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-      <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <H2>CHAMPION POOL</H2>
-          {dirty && <Btn variant="success" onClick={save}>ZAPISZ</Btn>}
-        </div>
-        <Text dim style={{ fontSize: "12px", display: "block", marginBottom: 12 }}>
-          Twoja zasada: max 3 postacie. Trzymaj się.
-        </Text>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {pool.map((p, i) => (
-            <div key={i} style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, padding: "10px",
-              background: c.card, border: `1px solid ${c.border}`
-            }}>
-              <input value={p.name} onChange={e => {
-                const np = [...pool]; np[i] = { ...np[i], name: e.target.value }; update(np);
-              }} placeholder="Champion" style={{
-                background: "#0a0a0a", border: `1px solid ${c.border}`, color: c.text,
-                padding: "8px 10px", fontFamily: fMono, fontSize: "13px", fontWeight: 700, outline: "none"
-              }} />
-              <input value={p.role} onChange={e => {
-                const np = [...pool]; np[i] = { ...np[i], role: e.target.value }; update(np);
-              }} placeholder="Rola / win condition" style={{
-                background: "#0a0a0a", border: `1px solid ${c.border}`, color: c.textDim,
-                padding: "8px 10px", fontFamily: fMono, fontSize: "12px", outline: "none"
-              }} />
-            </div>
-          ))}
-        </div>
-      </div>
-
       <div>
         <H2 style={{ marginBottom: 12 }}>EKSPORT / IMPORT</H2>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -1985,9 +2243,8 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
           <Label>DZIŚ</Label>
           <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
             <span style={{ fontFamily: fDisplay, fontSize: "32px", color: c.text }}>{state.gamesToday}</span>
-            <span style={{ fontFamily: fMono, fontSize: "13px", color: c.textMute, fontWeight: 700 }}>/ 3</span>
           </div>
-          <Text mute style={{ fontSize: "11px" }}>{state.gamesToday >= 3 ? "LIMIT" : "gier zagranych"}</Text>
+          <Text mute style={{ fontSize: "11px" }}>gier z refleksją</Text>
         </Box>
         <Box style={{ padding: "14px" }}>
           <Label>OSTATNIA</Label>
@@ -2033,7 +2290,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
             <Btn
               variant="primary"
               onClick={openPreGame}
-              disabled={state.sessionLocked || state.gamesToday >= 3 || cooldownActive || state.activeGoals.length === 0}
+              disabled={state.sessionLocked || cooldownActive || state.activeGoals.length === 0}
               fullWidth style={{ padding: "20px", fontSize: "16px" }}
             >
               <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
@@ -2048,7 +2305,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                 <div>
                   <Label style={{ color: c.success }}>W TRAKCIE GRY</Label>
-                  <H2 style={{ fontSize: "14px" }}>{state.preGameSnapshot.champion}</H2>
+                  <H2 style={{ fontSize: "14px" }}>Aktywna sesja treningowa</H2>
                 </div>
                 <Text dim style={{ fontSize: "12px" }}>
                   Start: {new Date(state.preGameSnapshot.startedAt).toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" })}
@@ -2129,7 +2386,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
                     color: ind, flexShrink: 0
                   }}>{metGoals}/{totalGoals}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <Text style={{ fontSize: "12px", fontWeight: 700 }}>{g.champion}</Text>
+                    <Text style={{ fontSize: "12px", fontWeight: 700 }}>Wykonanie {rate}%</Text>
                     <Text mute style={{ fontSize: "10px", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {g.mistake}
                     </Text>
@@ -2227,7 +2484,7 @@ export default function App() {
           <div>
             <H1 style={{ fontSize: "24px" }}>MASTER<span style={{ color: c.accent }}>.</span>TRACK</H1>
             <Text mute style={{ fontSize: "11px", display: "block", marginTop: 4, letterSpacing: "0.1em" }}>
-              DYSCYPLINA SOLO Q / DIA → MASTER
+              IMPROVE W LOLU / MASTER TRACK
             </Text>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

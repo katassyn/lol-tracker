@@ -10,7 +10,7 @@ Stack: **Vite + React + Tauri** (Rust). Build = ~10 MB `.exe`, zero zewnętrznyc
 - **Baza wiedzy** — wszystkie zadania do nauki z notatek, podzielone na kategorie (Wave, Micro, Macro, Vision, Teamfight, Mindset, Maksymalizacje). Każde zadanie ma akordeon z pełnym opisem: co to jest, jak wykonać krok po kroku, kiedy stosować, kiedy NIE, jak sprawdzić sukces, typowe błędy.
 - **Refleksja po grze** — TOTALNIE ignoruje W/L. Pyta tylko o wykonanie trenowanych zadań. Wymusza świadomy zapis błędu + jednej rzeczy która wyszła.
 - **Tracker postępu** — każde zadanie ma osobny licznik gier. Po 3+ grach z ≥66% wykonań zadanie zostaje **WSTĘPNIE OPANOWANE**. Dalej: UTRWALONE (8+ gier, 75%), OPANOWANE (20+ gier, 85%). Jeśli compliance <50% po 5+ grach — flagging **WYMAGA POPRAWY**.
-- **Dyscyplina sesji** — max 3 gry dziennie, 5 min cooldown po grze, lockowanie sesji przy tilt lub "nie pamiętam gry".
+- **Dyscyplina sesji** — 5 min cooldown po grze, lockowanie sesji przy tilt lub "nie pamiętam gry", bez limitu dziennej liczby gier.
 
 Wszystkie dane lokalnie w `localStorage` (przeglądarkowy WebView2). Zero internetu.
 
