@@ -5,6 +5,12 @@ import {
   Zap, BarChart3, BookOpen, XCircle, Eye, EyeOff, GraduationCap, Trash2,
   Brain, Award, TrendingUp, Lightbulb, Map, Crosshair, Swords, Wand2
 } from "lucide-react";
+import {
+  createDefaultSessionPlan,
+  getGoalTrend,
+  getRecentMistakes,
+  getWeaknessSuggestions
+} from "./learningLogic.js";
 
 // ============================================================
 // CONSTANTS
@@ -938,6 +944,8 @@ const ALWAYS_ON_RULES = [
 const DEFAULT_STATE = {
   activeGoals: ["slow_push", "canon_recall"],
   games: [],
+  sessionPlan: null,
+  theme: "dark",
   todayDate: null,
   gamesToday: 0,
   lastGameEndTime: null,
@@ -976,6 +984,7 @@ function minutesSince(ts) {
   if (!ts) return Infinity;
   return Math.floor((Date.now() - ts) / 60000);
 }
+
 
 // Compute mastery progression for goal
 function getMastery(gamesCount, complianceCount) {
@@ -1040,6 +1049,38 @@ const c = {
   warning: "#f59e0b",
   amber: "#fbbf24"
 };
+
+const LIGHT_THEME = {
+  bg: "#f5f1e8",
+  card: "#fffaf0",
+  cardHi: "#f0e7d8",
+  border: "#d7c8b5",
+  borderHi: "#bda98f",
+  text: "#18140f",
+  textDim: "#5f5245",
+  textMute: "#8a7a68",
+  accent: "#dc2626",
+  success: "#15803d",
+  warning: "#b45309",
+  amber: "#92400e"
+};
+
+function applyTheme(theme) {
+  Object.assign(c, theme === "light" ? LIGHT_THEME : {
+    bg: "#0a0a0a",
+    card: "#141414",
+    cardHi: "#1c1c1c",
+    border: "#2a2a2a",
+    borderHi: "#3a3a3a",
+    text: "#f5f5f5",
+    textDim: "#a3a3a3",
+    textMute: "#525252",
+    accent: "#ef4444",
+    success: "#22c55e",
+    warning: "#f59e0b",
+    amber: "#fbbf24"
+  });
+}
 
 const fMono = "'JetBrains Mono', monospace";
 const fDisplay = "'Archivo Black', sans-serif";
@@ -1401,32 +1442,189 @@ function MoodPicker({ value, onChange }) {
   );
 }
 
+function goalToneColor(tone) {
+  if (tone === "good") return c.success;
+  if (tone === "bad") return c.accent;
+  if (tone === "warning") return c.warning;
+  return c.textMute;
+}
+
+function ReviewQueue({ mistakes, compact = false }) {
+  if (mistakes.length === 0) return null;
+
+  return (
+    <Box style={{ padding: compact ? "12px 14px" : "14px 16px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+        <History size={14} color={c.amber} />
+        <H2 style={{ fontSize: compact ? "13px" : "15px" }}>REVIEW QUEUE</H2>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {mistakes.map((item, index) => (
+          <div key={item.id || index} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <span style={{ color: c.accent, fontFamily: fMono, fontSize: "11px", fontWeight: 800, minWidth: 18 }}>
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <Text dim style={{ fontSize: compact ? "11px" : "12px", lineHeight: 1.45 }}>{item.mistake}</Text>
+          </div>
+        ))}
+      </div>
+    </Box>
+  );
+}
+
+function WeaknessSuggestions({ suggestions, onUseSuggestion }) {
+  if (suggestions.length === 0) return null;
+
+  return (
+    <Box style={{ padding: "14px 16px", background: "#1a1408", borderColor: c.warning }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+        <Lightbulb size={15} color={c.warning} />
+        <H2 style={{ fontSize: "15px", color: c.warning }}>SUGESTIE NA NASTĘPNE GRY</H2>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {suggestions.map(item => (
+          <div key={item.id} style={{
+            display: "flex", justifyContent: "space-between", gap: 12,
+            alignItems: "center", borderTop: `1px solid ${c.border}`, paddingTop: 10
+          }}>
+            <div>
+              <Text style={{ fontSize: "12px", fontWeight: 800, display: "block" }}>{item.label}</Text>
+              <Text mute style={{ fontSize: "11px", display: "block", marginTop: 3 }}>{item.reason}</Text>
+            </div>
+            <Btn variant="amber" onClick={() => onUseSuggestion(item.id)} style={{ padding: "7px 10px", fontSize: "10px" }}>
+              UŻYJ
+            </Btn>
+          </div>
+        ))}
+      </div>
+    </Box>
+  );
+}
+
+function SessionPlanPanel({ state, setState, recentMistakes, suggestions, compact = false }) {
+  const plan = state.sessionPlan || createDefaultSessionPlan(state.activeGoals, recentMistakes);
+  const activeGoalObjects = state.activeGoals.map(id => ({ id, ...GOALS[id] })).filter(g => g.label);
+
+  const updatePlan = (patch) => {
+    setState(s => ({
+      ...s,
+      sessionPlan: {
+        ...createDefaultSessionPlan(s.activeGoals, getRecentMistakes(s.games)),
+        ...(s.sessionPlan || {}),
+        ...patch,
+        updatedAt: Date.now()
+      }
+    }));
+  };
+
+  const clearPlan = () => {
+    setState(s => ({ ...s, sessionPlan: null }));
+  };
+
+  return (
+    <Box style={{ padding: compact ? "12px 14px" : "16px", background: "#0e0e0e" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 12 }}>
+        <div>
+          <Label style={{ color: c.success }}>PLAN SESJI</Label>
+          <H2 style={{ fontSize: compact ? "14px" : "16px" }}>Jedna intencja na najbliższą grę</H2>
+        </div>
+        {state.sessionPlan && (
+          <Btn variant="ghost" onClick={clearPlan} style={{ padding: "7px 10px", fontSize: "10px" }}>
+            RESET
+          </Btn>
+        )}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: compact ? "1fr" : "1fr 1fr", gap: 10 }}>
+        <div>
+          <Label>Primary focus</Label>
+          <select
+            value={plan.primaryGoalId}
+            onChange={e => updatePlan({ primaryGoalId: e.target.value })}
+            style={{
+              width: "100%", background: c.card, border: `1px solid ${c.border}`,
+              color: c.text, padding: "10px 12px", fontFamily: fMono, fontSize: "12px", outline: "none"
+            }}
+          >
+            <option value="">Wybierz zadanie</option>
+            {activeGoalObjects.map(goal => <option key={goal.id} value={goal.id}>{goal.label}</option>)}
+          </select>
+        </div>
+        <div>
+          <Label>Secondary focus</Label>
+          <select
+            value={plan.secondaryGoalId}
+            onChange={e => updatePlan({ secondaryGoalId: e.target.value })}
+            style={{
+              width: "100%", background: c.card, border: `1px solid ${c.border}`,
+              color: c.text, padding: "10px 12px", fontFamily: fMono, fontSize: "12px", outline: "none"
+            }}
+          >
+            <option value="">Opcjonalnie</option>
+            {activeGoalObjects
+              .filter(goal => goal.id !== plan.primaryGoalId)
+              .map(goal => <option key={goal.id} value={goal.id}>{goal.label}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10 }}>
+        <Label>Nie powtórz błędu</Label>
+        <input
+          value={plan.avoidMistake}
+          onChange={e => updatePlan({ avoidMistake: e.target.value })}
+          placeholder={recentMistakes[0]?.mistake || "np. nie roamować bez pusha"}
+          style={{
+            width: "100%", background: c.card, border: `1px solid ${c.border}`,
+            color: c.text, padding: "10px 12px", fontFamily: fMono, fontSize: "12px", outline: "none"
+          }}
+        />
+      </div>
+
+      {suggestions.length > 0 && !compact && (
+        <div style={{ marginTop: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {suggestions.map(item => (
+            <Btn
+              key={item.id}
+              variant="ghost"
+              onClick={() => updatePlan({ primaryGoalId: item.id })}
+              style={{ padding: "6px 9px", fontSize: "10px" }}
+            >
+              {item.label}
+            </Btn>
+          ))}
+        </div>
+      )}
+    </Box>
+  );
+}
+
 // ============================================================
 // PRE-GAME VIEW
 // ============================================================
 function PreGameView({ state, setState, onClose }) {
   const [mood, setMood] = useState("fresh");
-  const [readyChecks, setReadyChecks] = useState({});
-  const [focusGoals, setFocusGoals] = useState([]);
   const [expandedDetails, setExpandedDetails] = useState({});
-
-  const readyItems = [
-    { id: "water", label: "Mam wodę / coś do picia" },
-    { id: "not_hungry", label: "Nie jestem głodny" },
-    { id: "chat_muted", label: "Czat wyłączony / muty gotowe" },
-    { id: "minimap_focus", label: "Wiem co trenuję w tej grze" }
-  ];
+  const recentMistakes = useMemo(() => getRecentMistakes(state.games), [state.games]);
+  const suggestions = useMemo(() => getWeaknessSuggestions(state.games, GOALS), [state.games]);
+  const plan = state.sessionPlan || createDefaultSessionPlan(state.activeGoals, recentMistakes);
+  const initialFocusGoals = [plan.primaryGoalId, plan.secondaryGoalId]
+    .filter((id, index, arr) => id && state.activeGoals.includes(id) && arr.indexOf(id) === index)
+    .slice(0, 2);
+  const [focusGoals, setFocusGoals] = useState(initialFocusGoals);
 
   const activeGoals = state.activeGoals
     .map(id => ({ id, ...GOALS[id] }))
     .filter(g => g.label);
 
-  const allReady = readyItems.every(r => readyChecks[r.id]) && focusGoals.length >= 1;
+  const allReady = focusGoals.length >= 1;
 
   const startGame = () => {
     const snapshot = {
       startedAt: Date.now(),
-      mood, focusGoals
+      mood,
+      focusGoals,
+      sessionPlan: plan
     };
     setState(s => ({ ...s, preGameSnapshot: snapshot }));
     onClose();
@@ -1459,6 +1657,16 @@ function PreGameView({ state, setState, onClose }) {
         )}
       </div>
 
+      <SessionPlanPanel
+        state={state}
+        setState={setState}
+        recentMistakes={recentMistakes}
+        suggestions={suggestions}
+        compact
+      />
+
+      <ReviewQueue mistakes={recentMistakes} compact />
+
       <div>
         <Label>2 / Co trenujesz w tej grze (max 2 zadania)</Label>
         {activeGoals.length === 0 ? (
@@ -1487,20 +1695,6 @@ function PreGameView({ state, setState, onClose }) {
           </div>
         )}
       </div>
-
-      <div>
-        <Label>3 / Pre-game gotowość</Label>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {readyItems.map(r => (
-            <CheckRow
-              key={r.id} checked={!!readyChecks[r.id]}
-              onToggle={() => setReadyChecks(s => ({ ...s, [r.id]: !s[r.id] }))}
-              label={r.label}
-            />
-          ))}
-        </div>
-      </div>
-
       <div style={{ display: "flex", gap: 12 }}>
         <Btn variant="ghost" onClick={onClose}>ANULUJ</Btn>
         <Btn variant="primary" onClick={startGame} disabled={!allReady || mood === "tilt"} fullWidth>
@@ -1522,7 +1716,6 @@ function PostGameView({ state, setState, onClose }) {
   const [alwaysOnCompliance, setAlwaysOnCompliance] = useState({});
   const [mistake, setMistake] = useState("");
   const [winThing, setWinThing] = useState("");
-  const [matchup, setMatchup] = useState("");
   const [remembered, setRemembered] = useState(null);
   const [postMood, setPostMood] = useState("ok");
   const [expandedDetails, setExpandedDetails] = useState({});
@@ -1535,7 +1728,6 @@ function PostGameView({ state, setState, onClose }) {
       id: Date.now(),
       timestamp: Date.now(),
       date: todayKey(),
-      matchup,
       preMood: snap.mood,
       postMood,
       focusGoals: snap.focusGoals,
@@ -1604,19 +1796,6 @@ function PostGameView({ state, setState, onClose }) {
         <div style={{ marginLeft: "auto", display: "flex", gap: 4, flexWrap: "wrap" }}>
           {focusGoals.map(g => <Pill key={g.id} color={c.amber}>{g.label}</Pill>)}
         </div>
-      </div>
-
-      <div>
-        <Label>Matchup (opcjonalnie)</Label>
-        <input
-          value={matchup} onChange={e => setMatchup(e.target.value)}
-          placeholder="np. Vs Yasuo / mid"
-          style={{
-            width: "100%", background: c.card, border: `1px solid ${c.border}`,
-            color: c.text, padding: "12px 14px", fontFamily: fMono,
-            fontSize: "13px", outline: "none", boxSizing: "border-box"
-          }}
-        />
       </div>
 
       {/* GŁÓWNA SEKCJA: COMPLIANCE PER GOAL */}
@@ -1858,7 +2037,6 @@ function HistoryView({ state }) {
                 <div>
                   <H2 style={{ fontSize: "14px" }}>
                     Refleksja po grze
-                    {g.matchup && <span style={{ color: c.textDim, fontFamily: fMono, fontSize: "12px", fontWeight: 400 }}> · {g.matchup}</span>}
                   </H2>
                   <Text mute style={{ fontSize: "11px" }}>
                     {new Date(g.timestamp).toLocaleString("pl-PL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })} · {g.durationMin}min
@@ -1916,7 +2094,8 @@ function StatsView({ state }) {
         compliance: compliance.length,
         complianceRate: gamesWithGoal.length > 0
           ? Math.round((compliance.length / gamesWithGoal.length) * 100) : 0,
-        mastery: getMastery(gamesWithGoal.length, compliance.length)
+        mastery: getMastery(gamesWithGoal.length, compliance.length),
+        trend: getGoalTrend(games, id)
       };
     });
 
@@ -1980,12 +2159,11 @@ function StatsView({ state }) {
           <Text mute style={{ fontSize: "11px" }}>zadań aktywnych</Text>
         </Box>
       </div>
-
       {/* MASTERY SUMMARY */}
       <div>
         <H2 style={{ marginBottom: 12 }}>POSTĘP NAUKI ZADAŃ</H2>
         <Text dim style={{ fontSize: "12px", display: "block", marginBottom: 12 }}>
-          Każde zadanie ma własny licznik gier. Po <strong>3+ grach z minimum 66% wykonań</strong> zadanie zostaje "WSTĘPNIE OPANOWANE". Dalsze poziomy: UTRWALONE (8+ gier, 75%), OPANOWANE (20+ gier, 85%).
+          Każde zadanie ma własny licznik gier. Trend pokazuje ostatnie 5 prób danego skilla. Po <strong>3+ grach z minimum 66% wykonań</strong> zadanie zostaje "WSTĘPNIE OPANOWANE".
         </Text>
 
         {masteryGroups.warning.length > 0 && (
@@ -2089,6 +2267,7 @@ function StatsView({ state }) {
 }
 
 function GoalProgressRow({ goal, stat, isLast }) {
+  const trendColor = goalToneColor(stat.trend?.tone);
   return (
     <div style={{
       paddingTop: 10, paddingBottom: 10,
@@ -2097,6 +2276,11 @@ function GoalProgressRow({ goal, stat, isLast }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6, flexWrap: "wrap", gap: 4 }}>
         <Text style={{ fontSize: "13px", fontWeight: 700 }}>{goal.label}</Text>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          {stat.trend && stat.trend.rate !== null && (
+            <Pill color={trendColor}>
+              {stat.trend.label} {stat.trend.passed}/{stat.trend.attempts}
+            </Pill>
+          )}
           <Text mute style={{ fontSize: "10px" }}>{stat.gamesWithGoal} gier · {stat.compliance} zaliczone</Text>
           <Text style={{ fontSize: "12px", color: stat.mastery.color, fontWeight: 700 }}>{stat.complianceRate}%</Text>
         </div>
@@ -2112,6 +2296,26 @@ function GoalProgressRow({ goal, stat, isLast }) {
 function SettingsView({ state, setState }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+      <div>
+        <H2 style={{ marginBottom: 12 }}>WYGLĄD</H2>
+        <Box style={{ padding: "16px" }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {[
+              { id: "dark", label: "DARK" },
+              { id: "light", label: "LIGHT" }
+            ].map(option => (
+              <Btn
+                key={option.id}
+                variant={(state.theme || "dark") === option.id ? "primary" : "default"}
+                onClick={() => setState(s => ({ ...s, theme: option.id }))}
+              >
+                {option.label}
+              </Btn>
+            ))}
+          </div>
+        </Box>
+      </div>
+
       <div>
         <H2 style={{ marginBottom: 12 }}>EKSPORT / IMPORT</H2>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -2153,8 +2357,11 @@ function SettingsView({ state, setState }) {
       <div>
         <H2 style={{ marginBottom: 12, color: c.accent }}>RESET</H2>
         <Btn variant="danger" onClick={() => {
-          if (confirm("Skasować wszystkie dane (gry, ustawienia)?")) {
+          const confirmed = prompt("To skasuje wszystkie gry, ustawienia i plan sesji. Wpisz WYCZYŚĆ żeby potwierdzić.");
+          if (confirmed === "WYCZYŚĆ") {
             setState({ ...DEFAULT_STATE, todayDate: todayKey() });
+          } else if (confirmed !== null) {
+            alert("Reset anulowany — wpisany tekst nie zgadza się z WYCZYŚĆ.");
           }
         }}>
           <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -2203,6 +2410,8 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
   const cooldownRemaining = Math.max(0, cooldown - minsSinceLast);
 
   const activeGoalObjects = state.activeGoals.map(id => ({ id, ...GOALS[id] })).filter(g => g.label);
+  const recentMistakes = useMemo(() => getRecentMistakes(state.games), [state.games]);
+  const weaknessSuggestions = useMemo(() => getWeaknessSuggestions(state.games, GOALS), [state.games]);
 
   const goalStats = useMemo(() => {
     const stats = {};
@@ -2219,6 +2428,18 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
   }, [state.games]);
 
   const recentGames = state.games.slice(0, 3);
+  const useSuggestion = (goalId) => {
+    setState(s => ({
+      ...s,
+      activeGoals: s.activeGoals.includes(goalId) ? s.activeGoals : [...s.activeGoals, goalId],
+      sessionPlan: {
+        ...createDefaultSessionPlan(s.activeGoals.includes(goalId) ? s.activeGoals : [...s.activeGoals, goalId], getRecentMistakes(s.games)),
+        ...(s.sessionPlan || {}),
+        primaryGoalId: goalId,
+        updatedAt: Date.now()
+      }
+    }));
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -2261,6 +2482,17 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
           <Text mute style={{ fontSize: "11px" }}>zadań trenujesz</Text>
         </Box>
       </div>
+
+      <SessionPlanPanel
+        state={state}
+        setState={setState}
+        recentMistakes={recentMistakes}
+        suggestions={weaknessSuggestions}
+      />
+
+      <WeaknessSuggestions suggestions={weaknessSuggestions} onUseSuggestion={useSuggestion} />
+
+      <ReviewQueue mistakes={recentMistakes} />
 
       <div>
         {!inGame && (
@@ -2433,6 +2665,8 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [view, setView] = useState("dashboard");
   const [modal, setModal] = useState(null);
+
+  applyTheme(state.theme || "dark");
 
   useEffect(() => {
     let s = loadState();
