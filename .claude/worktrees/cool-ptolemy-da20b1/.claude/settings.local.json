@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($candidates = @\\(\"C:\\\\Program Files\\\\Master Track\",\"C:\\\\Program Files \\(x86\\)\\\\Master Track\",\"$env:USERPROFILE\\\\AppData\\\\Local\\\\Master Track\",\"$env:LOCALAPPDATA\\\\Programs\\\\Master Track\"\\); foreach \\($p in $candidates\\) { if \\(Test-Path $p\\) { Get-ChildItem $p -Recurse -Depth 1 | Format-Table FullName -AutoSize } else { Write-Output \"NOT EXIST: $p\" } }; Write-Output \"---\"; Get-ChildItem \"C:\\\\Users\\\\mastu\\\\Desktop\\\\lol-tracker\\\\src-tauri\\\\target\" -ErrorAction SilentlyContinue | Select-Object Name, LastWriteTime)",
+      "PowerShell(Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='Application Error'} -MaxEvents 10 -ErrorAction SilentlyContinue | Where-Object { $_.Message -match \"Master Track|msedgewebview2|webview\" } | Select-Object TimeCreated, Id, @{n='Message';e={$_.Message.Substring\\(0,[Math]::Min\\(800,$_.Message.Length\\)\\)}} | Format-List)"
+    ]
+  }
+}

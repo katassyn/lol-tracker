@@ -1,3 +1,38 @@
+export function isTrainableGoal(goal) {
+  return !!goal && goal.type !== "setup";
+}
+
+export function getTrainableActiveGoalIds(activeGoals, goals) {
+  return activeGoals.filter(goalId => isTrainableGoal(goals[goalId]));
+}
+
+export function getOrderedLearningItems(goals, learningPath) {
+  const seen = new Set();
+  const ordered = [];
+
+  learningPath.forEach((stage, stageIndex) => {
+    stage.goalIds.forEach((id, positionInStage) => {
+      if (!goals[id] || seen.has(id)) return;
+      seen.add(id);
+      ordered.push({
+        id,
+        ...goals[id],
+        stageIndex,
+        positionInStage,
+        stageTitle: stage.title,
+        stageDesc: stage.desc || ""
+      });
+    });
+  });
+
+  Object.entries(goals).forEach(([id, goal]) => {
+    if (!goal || seen.has(id)) return;
+    ordered.push({ id, ...goal, stageIndex: learningPath.length, positionInStage: 0, stageTitle: "Pozostałe", stageDesc: "" });
+  });
+
+  return ordered;
+}
+
 export function getRecentMistakes(games, limit = 3) {
   return games
     .filter(game => typeof game.mistake === "string" && game.mistake.trim())
@@ -35,6 +70,7 @@ export function getGoalTrend(games, goalId, recentLimit = 5) {
 
 export function getWeaknessSuggestions(games, goals, limit = 3) {
   return Object.entries(goals)
+    .filter(([, goal]) => isTrainableGoal(goal))
     .map(([id, goal]) => {
       const trend = getGoalTrend(games, id, 5);
       const category = goal.category;
@@ -42,7 +78,7 @@ export function getWeaknessSuggestions(games, goals, limit = 3) {
         .filter(game => Array.isArray(game.focusGoals))
         .slice(0, 10)
         .flatMap(game => game.focusGoals)
-        .filter(goalId => goals[goalId]?.category === category).length;
+        .filter(goalId => isTrainableGoal(goals[goalId]) && goals[goalId]?.category === category).length;
 
       const score =
         trend.attempts >= 3 && trend.rate !== null

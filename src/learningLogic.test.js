@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import {
   createDefaultSessionPlan,
   getGoalTrend,
+  getOrderedLearningItems,
   getRecentMistakes,
+  getTrainableActiveGoalIds,
   getWeaknessSuggestions
 } from "./learningLogic.js";
 
@@ -55,6 +57,22 @@ test("getWeaknessSuggestions prioritizes recently failed skills", () => {
   assert.equal(suggestions[0].reason, "1/3 wykonane w ostatnich próbach");
 });
 
+test("getWeaknessSuggestions ignores one-time setup goals", () => {
+  const suggestions = getWeaknessSuggestions([
+    { focusGoals: ["game_settings"], goalCompliance: { game_settings: false } },
+    { focusGoals: ["game_settings"], goalCompliance: { game_settings: false } },
+    { focusGoals: ["game_settings"], goalCompliance: { game_settings: false } },
+    { focusGoals: ["minimap_3s"], goalCompliance: { minimap_3s: false } },
+    { focusGoals: ["minimap_3s"], goalCompliance: { minimap_3s: false } },
+    { focusGoals: ["minimap_3s"], goalCompliance: { minimap_3s: false } }
+  ], {
+    ...goals,
+    game_settings: { label: "Ustawienia pod naukę", category: "setup", type: "setup" }
+  });
+
+  assert.deepEqual(suggestions.map(item => item.id), ["minimap_3s"]);
+});
+
 test("createDefaultSessionPlan uses active goals and latest mistake", () => {
   const plan = createDefaultSessionPlan(
     ["freeze", "minimap_3s"],
@@ -67,4 +85,38 @@ test("createDefaultSessionPlan uses active goals and latest mistake", () => {
     avoidMistake: "nie patrzyłem na mapę",
     note: ""
   });
+});
+
+test("getTrainableActiveGoalIds excludes one-time setup goals from game focus", () => {
+  const availableGoals = {
+    game_settings: { label: "Ustawienia pod naukę", type: "setup" },
+    slow_push: { label: "Slow push", category: "wave" },
+    missing_goal: null
+  };
+
+  assert.deepEqual(
+    getTrainableActiveGoalIds(["game_settings", "slow_push", "missing_goal"], availableGoals),
+    ["slow_push"]
+  );
+});
+
+test("getOrderedLearningItems follows the learning path and appends leftovers", () => {
+  const availableGoals = {
+    slow_push: { label: "Slow push", category: "wave" },
+    game_settings: { label: "Ustawienia pod naukę", type: "setup" },
+    skillshot_angles: { label: "Trafianie skillshotów", category: "micro" }
+  };
+  const path = [
+    { title: "Setup", goalIds: ["game_settings"] },
+    { title: "Lane", goalIds: ["slow_push"] }
+  ];
+
+  assert.deepEqual(
+    getOrderedLearningItems(availableGoals, path).map(item => [item.id, item.stageTitle]),
+    [
+      ["game_settings", "Setup"],
+      ["slow_push", "Lane"],
+      ["skillshot_angles", "Pozostałe"]
+    ]
+  );
 });
