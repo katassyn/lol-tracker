@@ -3,16 +3,24 @@ import {
   Play, Square, Check, X, Clock, AlertTriangle, ChevronDown, ChevronUp,
   Save, History, Settings, AlertCircle, Target, Activity, Flame, Coffee,
   Zap, BarChart3, BookOpen, XCircle, Eye, EyeOff, GraduationCap, Trash2,
-  Brain, Award, TrendingUp, Lightbulb, Map, Crosshair, Swords, Wand2
+  Brain, Lightbulb, Map, Crosshair, Swords, Wand2,
+  Calendar, FileText, Search
 } from "lucide-react";
 import {
   createDefaultSessionPlan,
   getGoalTrend,
-  getOrderedLearningItems,
   getRecentMistakes,
-  getTrainableActiveGoalIds,
-  getWeaknessSuggestions
+  getWeaknessSuggestions,
+  getPhaseProgress,
+  getSuggestedNextGoal,
+  getCurrentUserPhase,
+  getChampionStats,
+  getReflectionStreak,
+  getTopMistakeCategories
 } from "./learningLogic.js";
+import {
+  GOALS, CATEGORIES, ALWAYS_ON_RULES, PHASES, LANES
+} from "./goals.js";
 
 // ============================================================
 // CONSTANTS
@@ -31,1008 +39,11 @@ const MASTERY = {
   WARN_COMPLIANCE: 50
 };
 
+// KNOWLEDGE BASE — wiedza z notatek importowana z goals.js
 // ============================================================
-// KNOWLEDGE BASE — wiedza z notatek, każde zadanie ma pełną sekcję
-// ============================================================
-const CATEGORIES = {
-  early: { name: "EARLY GAME", subtitle: "Lvl 1-6, lane phase", icon: Crosshair },
-  wave: { name: "WAVE MANAGEMENT", subtitle: "Fundament wszystkiego", icon: Activity },
-  setup: { name: "SETUP", subtitle: "Jednorazowa konfiguracja", icon: Settings },
-  micro: { name: "MICRO & MECHANIKI", subtitle: "Combo, cancel AA, smartcasty", icon: Wand2 },
-  macro: { name: "MACRO MID/LATE", subtitle: "Rotacje, objective, mapa", icon: Map },
-  vision: { name: "WIZJA", subtitle: "Wardy, info, kontrola", icon: Eye },
-  teamfight: { name: "WALKI DRUŻYNOWE", subtitle: "Pozycja, focus, mindset", icon: Swords },
-  mindset: { name: "MINDSET & NAWYKI", subtitle: "Mental, dyscyplina", icon: Brain },
-  max: { name: "MAKSYMALIZACJE", subtitle: "Mini-nawyki, mikro-przewagi", icon: Lightbulb }
-};
-
-const GOALS = {
-  // ===== WAVE MANAGEMENT =====
-  slow_push: {
-    label: "Slow push",
-    category: "wave",
-    short: "Wyjdź wcześnie, ustaw HP minionów i doprowadź 3. falę pod enemy tower.",
-    details: {
-      what: "Jak najwolniejsze pushowanie fali — przeciwnik zbiera coraz większy stack minionów pod swoim towerem. Trzecia fala uderza w jego tower, a ty dostajesz okno czasowe na akcję poza linią. Slow push to główne narzędzie tworzenia tempa na mapie.",
-      how: [
-        "Dobijaj CS tylko ostatnim hitem. Nie autoatakuj miniona z pełnym HP bez powodu.",
-        "W matchupie range vs melee wyjdź wcześnie przed falę przeciwnika i ustaw slow push jeszcze przed spotkaniem fal.",
-        "To szczególnie wartościowe przeciw mobilnym carry typu Tristana/Yone: miniony mają różne HP, więc przeciwnik zwykle dobije maksymalnie 1-2 CS jednym spellem.",
-        "Przed crashowaniem fali zonuj enemy mida, żeby nie mógł złapać expa za darmo.",
-        "Po 3 stackach powinieneś mieć przewagę levela i około 15 CS przewagi."
-      ],
-      when: "Pod objective (smok, herald), dive bota, deep ward w enemy jungle, roam albo harass przeciwnika pod towerem.",
-      whenNot: "Gdy przegrywasz matchup mechanicznie i jesteś duszony na linii — wtedy maksymalizuj CS, trać jak najmniej HP i komunikuj, że nie możesz zejść z linii.",
-      success: "Trzecia fala stoi pod enemy towerem. Masz minimum 4 opcje: zejście top, zejście bot, pomoc junglerowi albo harass pod towerem. Wybierasz najsilniejszą.",
-      mistakes: [
-        "Hard push zamiast slow pusha, przez co oddajesz tempo i bounce przeciwnikowi.",
-        "Schodzenie z linii w trakcie slow pusha, zanim fala się rozbije.",
-        "Brak akcji po stworzeniu okna, czyli slow push bez celu.",
-        "Stackowanie 5 fal zamiast 3: overkill, strata tempa i większe ryzyko."
-      ],
-      notes: "Po slow pushu zawsze następuje bounce wave — fala wraca do ciebie. Jeśli zabiłeś na roamie, od razu cofaj albo wracaj na bounce."
-    }
-  },
-  canon_recall: {
-    label: "Recall przed cannon wave",
-    category: "wave",
-    short: "Hard push fali przed cannonem -> recall. Maksymalne tempo na mapie.",
-    details: {
-      what: "Hard push fali bezpośrednio przed cannon minionem -> natychmiastowy recall. Przeciwnik nie zatrzyma cannon wave łatwo sam, bo cannon ma dużo HP i długo tankuje tower. Wracasz z itemami i minimalizujesz stratę CS.",
-      how: [
-        "Identyfikuj cannon wave — co trzecia fala ma 6 zwykłych minionów i 1 cannon miniona.",
-        "Falę bezpośrednio przed cannonem hard pushujesz wszystkim, co masz, do enemy towera.",
-        "Recall robisz po crashu tej fali, zanim cannon wave dojdzie z bazy.",
-        "Po powrocie cannon wave zwykle bouncuje do ciebie albo stoi pod twoim towerem — bez dużej straty CS."
-      ],
-      when: "Każdy standardowy recall w early/mid game, gdy masz około 500-800 golda na komponent itemu.",
-      whenNot: "Cheat recall przez TP po lvl 1, reset po killu, albo 3-4 smok przy soul poincie, gdy objective jest ważniejsze.",
-      success: "Wracasz z itemami, a twoja fala pushuje się sama. Nie tracisz istotnego CS, a przeciwnik musi zająć się własną falą.",
-      mistakes: [
-        "Recall na cannon wave — przeciwnik może ją zatrzymać ręcznie, a ty tracisz CS pod towerem.",
-        "Recall na środku zwykłej fali — tracisz prio i oddajesz bounce przeciwnikowi.",
-        "Zbyt późny recall za mało golda — kupujesz niewiele i tracisz tempo."
-      ]
-    }
-  },
-  freeze: {
-    label: "Freeze fali",
-    category: "wave",
-    short: "Trzymaj 3+ caster miniony przewagi dla przeciwnika. Nie schodzisz z linii.",
-    details: {
-      what: "Zatrzymanie fali blisko twojego towera. Przeciwnik musi podejść daleko po CS, wystawia się na gank junglera, a ty bezpiecznie farmisz lub wymuszasz jego reset/utratę zasobów.",
-      how: [
-        "Trigger: bounce wave wraca do ciebie po slow pushu przeciwnika albo po przegranej wymianie fali.",
-        "Trzymaj po stronie przeciwnika 3+ caster miniony więcej niż po swojej stronie (2 = niestabilne, 1 = freeze pęka).",
-        "Zabijaj miniony przeciwnika dopiero po śmierci swoich — tylko wyrównujesz licznik.",
-        "Tankuj jednego miniona przeciwnika postacią, żeby fala nie przesunęła się za daleko.",
-        "CS tylko ostatnim hitem — bez harass z ręki (psujesz balans)."
-      ],
-      when: "Przegrywasz matchup, przeciwnik ma summonery a ty nie, czekasz na powerspike albo enemy mid roamuje i chcesz go ukarać utratą fali.",
-      whenNot: "Smok/herald jest aktywny, musisz odpushować pod TP/zejście, enemy jungler jest blisko albo masz powerspike i powinieneś szukać all-ina.",
-      success: "Przeciwnik musi przejść większość linii po CS, wystawia się na gank, a ty utrzymujesz HP/manę i wymuszasz utratę CS albo reset.",
-      mistakes: [
-        "Schodzenie na freezie (tracisz exp/gold — cały sens freeza umiera).",
-        "Freeze, gdy aktywny jest smok/herald i musisz walczyć o mapę.",
-        "Trzymanie tylko 1-2 więcej minionów (freeze pęka pod pierwszym pushem enemy).",
-        "Bicie z ręki w czasie freeze (psujesz balans, freeze drift)."
-      ]
-    }
-  },
-  hard_push: {
-    label: "Hard push",
-    category: "wave",
-    short: "Szybko czyścisz falę, żeby mieć czas na mapę albo bezpieczny reset.",
-    details: {
-      what: "Hard push to szybkie przepchnięcie pełnej fali. Daje natychmiastowe prio, pozwala dołączyć do junglera, ukarać roam przeciwnika albo wymusić jego powrót pod tower.",
-      how: [
-        "Użyj AA i spelli tak, żeby fala jak najszybciej weszła pod enemy tower.",
-        "Jeśli enemy mid znika i nie masz informacji, najpierw pushujesz falę, a dopiero potem sprawdzasz mapę.",
-        "Przed recallem czyścisz falę przed cannonem, żeby wrócić z itemami bez dużej straty CS.",
-        "Po killu lub mocnym obiciu przeciwnika zostajesz do przepchnięcia fali, jeśli sytuacja jest bezpieczna."
-      ],
-      when: "Przed recallem, przed dołączeniem do junglera, gdy enemy roamuje, gdy potrzebujesz natychmiastowego prio pod objective.",
-      whenNot: "Nie nadużywaj hard pusha, gdy możesz zbudować slow push. Hard push bez celu tylko oddaje bounce i tempo.",
-      success: "Fala weszła pod tower, przeciwnik musi ją odebrać, a ty masz wolne okno na recall, ward, roam lub objective.",
-      mistakes: [
-        "Hard push bez planu po fali.",
-        "Zostawienie fali w połowie linii przed recallem.",
-        "Push bez wizji, gdy enemy jungle/support może cię odciąć."
-      ]
-    }
-  },
-  pre_first_wave: {
-    label: "Wyjście PRZED 1. falą",
-    category: "early",
-    short: "Pierwsza fala ma słabe agro. Wyjdź z bazy 0:25, stań przed minionami.",
-    details: {
-      what: "Wychodzisz z bazy PRZED pierwszą falą. Pierwsza fala ma osłabione agro — możesz stać przed nią, zabrać aktywności (invade, line ward, lvl 1 walka, scouting).",
-      how: [
-        "Wyjście z bazy o 0:25-0:30 (nie po fali, przed).",
-        "Pozycja w buszu przed minionami lub na trójkącie.",
-        "Możesz wziąć: cheese invade z jg, line ward na rzece, lvl 1 walka, scouting enemy jg startu."
-      ],
-      when: "Każda gra. Standard.",
-      success: "Pierwszy hit na minionie z dokładnym CS, możliwy lvl 2 spike przed enemy.",
-      mistakes: ["Wyjście po fali — tracisz 5-10 sekund tempa i oddajesz inicjatywę."]
-    }
-  },
-  cs_timers: {
-    label: "CS, levele i timery",
-    category: "early",
-    short: "Cannon wave, level 2/3/6, timery objective i CS pod towerem.",
-    details: {
-      what: "Timery fal, leveli i objective pozwalają planować 1-2 minuty wcześniej. CS pod towerem i wcześniejsze ustawianie HP minionów to osobna mechanika, która daje darmowe zasoby.",
-      how: [
-        "Solo lane: level 2 po 7 minionach, level 3 po 14, level 4 około 24 CS.",
-        "Bot lane: level 2 po 9 minionach, level 3 około 21 CS.",
-        "Level 6 na solo zwykle po 8. fali, jeśli nie straciłeś expa.",
-        "Śledź cannon wave pod recall i objective setup.",
-        "Pod towerem kontroluj HP minionów wcześniej; jeśli kilka ma niskie HP naraz, nie zdążysz dobić wszystkiego AA.",
-        "Stój bliżej miniona, gdy last hit musi wejść szybciej, bo pocisk leci krócej."
-      ],
-      when: "Laning, recall timing, plan pod smoka/heralda/grubsy i last hit pod towerem.",
-      success: "Wiesz przed falą, czy grasz pod level spike, reset, objective albo bezpieczny freeze.",
-      mistakes: [
-        "Reagowanie na objective dopiero gdy się pojawi.",
-        "Recall bez uwzględnienia cannon wave.",
-        "Dopuszczanie do wielu minionów z niskim HP pod towerem."
-      ]
-    }
-  },
-
-  // ===== MICRO =====
-  smartcast_dash: {
-    label: "Smartcast dash w powrocie",
-    category: "micro",
-    short: "Każdy dash kiedy CD up, w drodze na linię. Smartcasty bez wskaźnika.",
-    details: {
-      what: "Spelle dające dash/MS używaj w powrocie na linię, nie tylko w walce. Każdy szybszy powrót to kilka-kilkanaście sekund oszczędności, które kumulują się przez całą grę.",
-      how: [
-        "Ustawienie: smartcasty bez wskaźnika (twoja standardowa konfiguracja).",
-        "Pierwszy dash zaraz po wyjściu z bazy (jeśli masz).",
-        "Każdy kolejny dash gdy CD się odnawia podczas powrotu.",
-        "Trzymanie spella tylko 'na walkę' oznacza stratę tempa po każdym recallu."
-      ],
-      when: "Powrót na linię, między akcjami w jg, każde przemieszczenie >5s.",
-      success: "Wracasz na linię szybciej, masz więcej CS, jesteś częściej dostępny dla teamu.",
-      mistakes: ["Trzymanie dasha 'na wszelki wypadek' — kończy się że i tak go nie używasz przed kolejnym recallem."]
-    }
-  },
-  attack_move: {
-    label: "Attack-move + kancelacja AA",
-    category: "micro",
-    short: "A+klik zamiast right-click. Kancelacja animacji ruchem po wystrzale pocisku.",
-    details: {
-      what: "Attack-move (A+klik) zamiast samego right-clicka pomaga atakować najbliższy cel. Połącz to z cancelowaniem animacji AA ruchem zaraz po wystrzale pocisku. Przy poprawnym kitingu zwiększasz realny DPS i trudniej cię złapać.",
-      how: [
-        "Bind 'attack move' na np. A (nie na shift — shift to inny modyfikator).",
-        "Wciskasz A → klik na ziemi → postać atakuje najbliższy dostępny cel.",
-        "Kanceluj animację AA klikiem ruchu (tuż po wystrzale pocisku, nie wcześniej).",
-        "Praktykuj w trybie treningu — feel jest specyficzny."
-      ],
-      when: "Każda walka, każdy kite, każdy CS w niewygodnej pozycji.",
-      success: "Oddajesz więcej AA w tym samym czasie i rzadziej klikasz przypadkowo miniona zamiast championa.",
-      mistakes: [
-        "Right-click w walce → klikasz w minion zamiast champa.",
-        "Brak kancelacji → animacja kończy się sama, tracisz tempo."
-      ]
-    }
-  },
-  skill_queueing: {
-    label: "Kolejkowanie skilli z flashem",
-    category: "micro",
-    short: "Wybierz spell przed Flashem. Przeciwnik ma mniej czasu na reakcję.",
-    details: {
-      what: "Kolejkowanie spella z Flashem polega na wybraniu celu zanim jesteś w zasięgu, a potem użyciu Flasha. Po wejściu w range spell odpala natychmiast, więc przeciwnik ma dużo mniej czasu na reakcję.",
-      how: [
-        "Przy spellach targetowanych kliknij spell w przeciwnika, mimo że jest jeszcze poza zasięgiem.",
-        "Postać zacznie iść za targetem — wtedy Flashujesz w zasięg.",
-        "Spell odpala od razu po wejściu w range, zanim przeciwnik zdąży użyć Flasha albo dasha.",
-        "Trenuj to w Practice Tool na różnych dystansach, bo timing jest feel-based."
-      ],
-      when: "Engage, escape, last-hit assassyna na carry, niespodziewany kill setup.",
-      success: "Flash + spell zabiera przeciwnikowi czas na reakcję. Zwykle oznacza kill albo uniknięcie punishu.",
-      mistakes: ["Flash bez zakolejkowanego spella i dopiero potem cast — dajesz przeciwnikowi czas na reakcję."]
-    }
-  },
-  continuous_clicking: {
-    label: "Ciągłe szybkie klikanie",
-    category: "micro",
-    short: "Klikasz często i blisko postaci. Reakcja na skillshot jest krótsza.",
-    details: {
-      what: "Szybkie, częste klikanie blisko modelu utrzymuje rękę w tempie gry. Klik daleko od postaci wydłuża ruch potrzebny do uniku; klik blisko skraca reakcję.",
-      how: [
-        "Klikaj dużo przez całą grę, nie tylko w momencie zagrożenia.",
-        "Klikaj bardzo blisko swojej postaci, szczególnie podczas laningu i teamfightów.",
-        "Practice Tool: ustaw postać między dwoma wardami i klikaj naprzemiennie tak, żeby model prawie nie ruszał się z miejsca.",
-        "Łącz to z patrzeniem na minimapę w momentach animacji last hita."
-      ],
-      when: "Cała gra: laning, dodge, spacing, kite, teamfighty.",
-      success: "Uniki są krótsze, ruch mniej paniczny, a wejście na wyższą prędkość klikania nie wymaga rozgrzewki.",
-      mistakes: [
-        "Klikanie daleko od postaci.",
-        "Przyspieszanie dopiero wtedy, gdy skill już leci.",
-        "Taniec bez celu zamiast ruchu w konkretnym momencie zagrożenia."
-      ]
-    }
-  },
-  cancel_aa_animation: {
-    label: "Kancelacja animacji AA ruchem",
-    category: "micro",
-    short: "Po wystrzale pocisku — od razu ruch. Animacja po nie ma znaczenia.",
-    details: {
-      what: "Animacja AA składa się z dwóch części: WIND-UP (przygotowanie + wystrzał pocisku) i WIND-DOWN (animacja po). Wind-down nie wpływa na DPS — pocisk już leci. Możesz ją skancelować ruchem dla wyższego efektywnego DPS.",
-      how: [
-        "Wciśnij AA (lub atak target).",
-        "OBSERWUJ moment wystrzału pocisku (champion robi gest, pocisk wylatuje).",
-        "ZARAZ po wystrzale — ruch (klik na ziemi).",
-        "Wind-down zostaje skancelowana, możesz od razu rzucić kolejne AA gdy CD się odnowi."
-      ],
-      when: "Każda walka z ranged ADC, każdy kite, kiting w teamfightach.",
-      success: "Stoisz na 'A klik' wyłącznie podczas wind-up, między AA się ruszasz. Trudno cię złapać + wyższy DPS.",
-      mistakes: [
-        "Ruch przed wystrzałem pocisku — cancelujesz własny autoatak.",
-        "Stanie do końca animacji po AA.",
-        "Kancelacja bez planu ruchu, przez co wchodzisz w zasięg enemy."
-      ]
-    }
-  },
-  animation_lock: {
-    label: "Blokada animacji",
-    category: "micro",
-    short: "AA, spelle, tower i miniony blokują ruch. Trafiasz, gdy przeciwnik stoi.",
-    details: {
-      what: "Po AA lub użyciu spella postać przez krótki moment stoi w miejscu. Ten sam koncept dotyczy towerów, minionów i campów. To okno wykorzystujesz do pewniejszych skillshotów i bezpiecznych wymian.",
-      how: [
-        "Czekaj, aż przeciwnik zacznie AA, last hit albo cast spella — wtedy jego ruch jest ograniczony.",
-        "Rzucaj skillshot w momencie, gdy przeciwnik jest zablokowany animacją, a nie losowo na max range.",
-        "Pod towerem atakuj przeciwnika wtedy, gdy tower właśnie zaczyna animację ataku w miniona.",
-        "Gdy gonisz z CC, nie blokuj się niepotrzebnym AA, jeśli przez to stracisz range na kluczowy spell."
-      ],
-      when: "W wymianach na linii, przy łapaniu last hitów przeciwnika, pod towerem i przy chase'u z CC.",
-      success: "Więcej skillshotów trafia w momentach, kiedy przeciwnik realnie nie może odskoczyć.",
-      mistakes: [
-        "Rzucanie spelli bez wykorzystania animacji przeciwnika.",
-        "AA podczas chase'u, które oddala cię od zasięgu CC.",
-        "Ignorowanie animacji towera przy krótkich trade'ach pod nim."
-      ]
-    }
-  },
-  spacing_ranges: {
-    label: "Spacing i tworzenie przestrzeni",
-    category: "micro",
-    short: "Wyobrażasz sobie zasięgi jako okręgi i grasz na ich granicy.",
-    details: {
-      what: "Spacing to balansowanie na granicy zasięgu swojego i przeciwnika. Tworzenie przestrzeni to wejście pozycją tak, żeby przeciwnik musiał się cofnąć, dzięki czemu sojusznik może farmić, bić lub przejść.",
-      how: [
-        "Wyobrażaj sobie okręgi zasięgu: twoje AA/spelle, enemy engage, enemy poke.",
-        "Stój na granicy, gdzie ty możesz grozić akcją, a enemy nie ma łatwego wejścia.",
-        "Support z CC może wejść do krzaka i kupić ADC przestrzeń do farmienia.",
-        "Tank wejściem w enemy team kupuje przestrzeń dla carry; assassin flanką zmusza enemy do ochrony backline'u.",
-        "Teren, tower, miniony i niewidoczni sojusznicy też tworzą przestrzeń."
-      ],
-      when: "Laning, bot trade'y, ustawianie pod objective, front-to-back, flanki.",
-      success: "Przeciwnik oddaje pozycję lub CS bez konieczności natychmiastowej walki.",
-      mistakes: [
-        "Wejście w zasięg enemy bez powodu.",
-        "Oddawanie krzaków i przestrzeni za darmo.",
-        "Brak świadomości, kto realnie może ci przerwać zagranie."
-      ]
-    }
-  },
-  skillshot_angles: {
-    label: "Trafianie skillshotów",
-    category: "micro",
-    short: "Celuj w nogi, rzucaj z boku i z fog'a, czekaj na trigger.",
-    details: {
-      what: "Skillshoty trafiają częściej, gdy rzucasz je w moment ograniczonego ruchu enemy, z kąta trudniejszego do odczytania albo spoza wizji. Celowanie w nogi modelu zwykle lepiej odpowiada hitboxowi.",
-      how: [
-        "Celuj w nogi/postawę modelu, nie w głowę ani górę animacji.",
-        "Rzucaj pod kątem z boku — przeciwnik ma mniej oczywistą oś uniku.",
-        "Używaj fog of war i pozycji poza ekranem enemy.",
-        "Patrz na kierunek twarzy/modelu: często zdradza ruch lub cast.",
-        "Baituj skillshoty enemy ruchem do przodu i krótką zmianą kierunku w ostatnim momencie."
-      ],
-      when: "Laning, setup ganków, poke przed objective, chase/escape.",
-      success: "Nie spamujesz skillshotów; czekasz na moment, w którym enemy ma najmniej dobrych uników.",
-      mistakes: [
-        "Rzucanie zawsze frontalnie z tej samej linii.",
-        "Rzucanie bez wizji i bez informacji, gdzie enemy może iść.",
-        "Losowy taniec zamiast konkretnego baitowania w momencie zagrożenia."
-      ]
-    }
-  },
-  value_spells: {
-    label: "Wartość spelli",
-    category: "micro",
-    short: "Spell ma realizować cel: wymiana, fala, oba naraz albo bait przeciwnika.",
-    details: {
-      what: "Ten sam spell może mieć różną wartość: trafić tylko gracza, gracza i falę, samą falę albo wymusić złą odpowiedź przeciwnika. Celem jest używać spelli zgodnie z planem fali i wymiany.",
-      how: [
-        "Przed castem zdecyduj: chcę pushować, trafić gracza, utrzymać wave czy baitować spell przeciwnika?",
-        "Jeśli możesz, ustaw spell tak, żeby trafił przeciwnika i część wave'a.",
-        "Baituj przeciwnika do użycia spella w wave, jeśli dzięki temu fala pójdzie do ciebie.",
-        "Nie pal defensywnego spella, jeśli przeciwnik może od razu wymusić ważniejszą wymianę."
-      ],
-      when: "Każdy lane trade, wave clear, poke i przygotowanie recalla.",
-      success: "Spell daje konkretną wartość mapową lub lane'ową, nie tylko 'bo cooldown był dostępny'.",
-      mistakes: [
-        "Pushowanie fali przypadkowym poke'iem.",
-        "Heal/tarcza użyte za wcześnie, ponad realne value.",
-        "Spell użyty bez związku z planem wave'a."
-      ]
-    }
-  },
-  fountain_end: {
-    label: "Regen na końcu fontanny",
-    category: "max",
-    short: "Po recallu od razu na koniec fontanny — bliżej wyjścia.",
-    details: {
-      what: "Po recallu nie stoisz w środku fontanny — przesuwasz się od razu do końca, bliżej wyjścia z bazy. Mała oszczędność ~1-2s na każdy recall × 8-12 recalli w grze = 15-25s.",
-      how: [
-        "Po pojawieniu się w bazie → klik na koniec fontanny (najbardziej wysunięty punkt w stronę linii).",
-        "Sklep otwiera się przez P niezależnie od pozycji.",
-        "Wyjście z bazy = już jesteś przygotowany."
-      ],
-      when: "Każdy recall.",
-      success: "Auto-nawyk — nigdy nie czekasz w środku fontanny.",
-      mistakes: [
-        "Kupowanie itemów stojąc w centrum fontanny.",
-        "Kliknięcie dopiero po zamknięciu sklepu.",
-        "Zły kierunek wyjścia z bazy po zakupach."
-      ]
-    }
-  },
-  recall_under_tower: {
-    label: "Recall pod towerem",
-    category: "max",
-    short: "Gdy nikogo nie ma w pobliżu — recall pod towerem, nie w krzaku.",
-    details: {
-      what: "Recall pod towerem (na pierwszym lub drugim tier) jest BEZPIECZNIEJSZY niż w krzaku gdy nikogo nie widać. Tower daje tarczę, krzak daje cover ale możesz dostać reveal.",
-      how: [
-        "Sprawdź minimap (ostatnie 3s — gdzie są wszyscy enemy).",
-        "TAB — sprawdź czy enemy mid widoczny na linii.",
-        "Recall pod tower (bezpieczeństwo i krótsza ścieżka po powrocie do mid)."
-      ],
-      when: "Standardowy recall gdy nikogo nie widać w pobliżu.",
-      whenNot: "Enemy mid zniknął z mini ostatnio — krzak bezpieczniej (tower nie pomoże przeciwko surprise gank).",
-      success: "Recall jest krótszy drogą powrotną i nie giniesz przez losowy facecheck krzaka.",
-      mistakes: [
-        "Recall w krzaku bez informacji o enemy.",
-        "Recall za daleko od linii, gdy tower był bezpieczny.",
-        "Recall bez wcześniejszego sprawdzenia minimapy."
-      ]
-    }
-  },
-  burn_pre_recall: {
-    label: "Spal manę/HP przed recallem",
-    category: "max",
-    short: "Wave clear do max, harass, dive — zaraz i tak recall.",
-    details: {
-      what: "Spal manę i HP tuż przed recallem. Jeśli i tak wracasz do bazy — manę odzyskasz, HP też. Każda mana niewykorzystana = strata wartości.",
-      how: [
-        "Wave clear do max (jeśli mana zostaje).",
-        "Harass enemy jeśli wraca (lub czeka pod towerem).",
-        "Trade HP — nie ma sensu wracać z pełnym HP gdy i tak recall za 5s."
-      ],
-      when: "Tuż przed planowanym recallem.",
-      success: "Wracasz do bazy po realnym wykorzystaniu many/HP, nie po pustym staniu na zasobach.",
-      mistakes: [
-        "Recall z pełną maną, gdy fala mogła być dopchnięta.",
-        "Wymuszanie trade'u bez sensu, gdy enemy może ci przerwać recall.",
-        "Spalenie zasobów, ale zostawienie fali w złym stanie."
-      ]
-    }
-  },
-  zero_plus: {
-    label: "Koncepcja 0+ / 0-",
-    category: "max",
-    short: "Darmowe akcje, które zwykle są neutralne, ale czasem wygrywają grę.",
-    details: {
-      what: "0+ to akcja, która prawie nic nie kosztuje, zwykle nie daje natychmiastowej nagrody, ale czasem przynosi duży zysk. 0- to pozornie mały błąd, który zwykle nie karze, ale raz na jakiś czas przegrywa sytuację.",
-      how: [
-        "Sprawdź kamerą side lane podczas bezpiecznej animacji.",
-        "Pingnij missing lub summoner, jeśli informacja może komuś pomóc.",
-        "Wejdź na chwilę w fog, gdy nic nie tracisz, żeby przeciwnik musiał respektować presję.",
-        "Nie trzymaj dwóch stacków wardów bez użycia — to darmowa utrata informacji.",
-        "Nie facecheckuj 'bo pewnie nikogo nie ma' — to klasyczne 0-."
-      ],
-      when: "Cała gra; szczególnie między falami, po pushu i przed objective.",
-      success: "Budujesz wiele małych darmowych przewag bez ryzykowania tempa, HP ani fali.",
-      mistakes: [
-        "Ignorowanie małych akcji, bo pojedynczo wyglądają nieważnie.",
-        "Robienie 0+ wtedy, gdy jednak kosztuje falę, tempo albo pozycję.",
-        "Akceptowanie 0- na autopilocie."
-      ]
-    }
-  },
-  track_flashes: {
-    label: "Śledzenie Flashy przeciwników",
-    category: "vision",
-    short: "Pinguj Flash na chacie cyfrą 1-5 (top/jg/mid/adc/sup). Brak Flasha = łatwiejszy gank.",
-    details: {
-      what: "Świadomość Flash up/down dla każdego przeciwnika. Champion bez Flasha jest dużo łatwiejszy do zgankowania, więc pinguj informację dla teamu.",
-      how: [
-        "Po użyciu Flasha przez przeciwnika pinguj cyfrę na chacie (1=top, 2=jg, 3=mid, 4=adc, 5=sup).",
-        "Pamiętaj flash CD = 5 min (300s) bez ulta, 4 min (240s) z ultem.",
-        "Świadomość Flash up/down dla każdego przeciwnika.",
-        "Carry bez Flasha = łatwiejszy gank dla twojego junglera."
-      ],
-      when: "Cały czas. Aktualizujesz w głowie.",
-      success: "Spingowany Flash przeciwnika daje junglerowi jasne okno na gank. Bez pingu często nikt tego nie wykorzysta.",
-      mistakes: [
-        "Zapamiętanie flasha tylko na 20 sekund i potem brak aktualizacji.",
-        "Ping bez numeru/roli, przez co informacja jest nieczytelna.",
-        "Brak wykorzystania okna bez flasha do ganku, dive'u albo presji."
-      ]
-    }
-  },
-
-  // ===== MACRO =====
-  minimap_3s: {
-    label: "Minimapa co 3 sekundy",
-    category: "macro",
-    short: "Po każdym CS — spojrzenie na mini. Nawyk ma być automatem.",
-    details: {
-      what: "Nawyk patrzenia na minimapę co maksymalnie 3 sekundy. To NIE jest opcja, to fundament zbierania informacji. Bez tego nie ma macro.",
-      how: [
-        "Trigger 1: każde dobicie CS (look PO ostatnim hicie, w bezruchu animacji).",
-        "Trigger 2: każdy cast spela (look PO cd, gdy bezpiecznie).",
-        "Trigger 3: każde wyjście z bazy / TP.",
-        "Pierwsze 2 tygodnie — świadomie sprawdzaj zegar, później automat.",
-        "Locked camera utrudnia czytanie mapy. Kamera stale wycentrowana zwykle pogarsza macro.",
-        "F1-F4 dla teammates w akcji, spacja dla siebie.",
-        "TAB co 30s — sprawdzasz ITEMY enemy, nie CS/KDA."
-      ],
-      when: "Zawsze. Cała gra. Bez wyjątków.",
-      whenNot: "Nigdy.",
-      success: "Wiesz gdzie są wszyscy 5 enemy lub świadomie nie wiesz i przewidujesz przez dedukcję (cofnął 15s temu, regen 5s, ruch 10s — może być w X).",
-      mistakes: [
-        "Tunnel vision na CS w 1v1.",
-        "Patrzenie tylko jak coś się dzieje (za późno).",
-        "Locked camera ze wstydu że misclickujesz na rogach.",
-        "Ignorowanie ? na minimapie (enemy roamuje, zaraz będzie problem)."
-      ],
-      notes: "Jeśli mini jest za daleko na monitorze — zmniejsz HUD albo przesuń mini. Setup ma znaczenie."
-    }
-  },
-  info_collection: {
-    label: "Zbieranie informacji",
-    category: "vision",
-    short: "Minimapa, F-keye, TAB, CS junglera i dedukcja z fog'a.",
-    details: {
-      what: "Dobra decyzja macro zaczyna się od informacji. Zbierasz ją z minimapy, kamery, TAB-a, licznika CS junglera, zniknięć z mapy i drobnych sygnałów typu mana/HP/summonery.",
-      how: [
-        "Minimapa co kilka sekund, najlepiej po last hicie albo podczas własnej animacji.",
-        "F1-F4 na sojuszników, spacja na siebie. Locked camera ogranicza czytanie mapy.",
-        "TAB: patrz na level, itemy, kluczowe defensywy i '?' przy przeciwnikach.",
-        "Jungle tracking: jeden camp = 4 CS, więc licznik CS mówi, co mogło być zrobione i co zaraz wstaje.",
-        "Fog tracking: gdy ktoś znika, dolicz recall, regen i czas dojścia; wyobrażaj sobie rosnący zasięg, gdzie może być."
-      ],
-      when: "Cała gra, szczególnie przed pushem, roamem, wejściem do rzeki i objective.",
-      success: "Podejmujesz decyzję na podstawie prawdopodobnego położenia enemy, a nie dopiero gdy zobaczysz ich na ekranie.",
-      mistakes: [
-        "Patrzenie na KDA zamiast itemów i leveli.",
-        "Brak liczenia CS junglera.",
-        "Zakładanie, że zniknięty support na pewno cofa, zamiast rozważyć roam."
-      ]
-    }
-  },
-  game_settings: {
-    label: "Ustawienia pod naukę",
-    category: "setup",
-    type: "setup",
-    short: "Jednorazowy setup: smartcasty, F-keye, dźwięki spellów, mały HUD, auto-AA off.",
-    details: {
-      what: "Ustawienia ustawiasz raz i później tylko utrzymujesz. To nie jest skill do trenowania przez gry; to checklista, która usuwa opóźnienia i poprawia czytelność gry.",
-      how: [
-        "Smartcasty bez wskaźnika jako standard, bo indicator spowalnia wykonanie.",
-        "F1-F4 na sojuszników, spacja do centrowania na sobie.",
-        "Champion target only jako toggle, nie trzymany przycisk.",
-        "Postacie i efekty skilli czytelne, teren może być niżej, żeby mniej rozpraszał.",
-        "Dźwięki skilli zostają; muzyka off, jeśli zabiera uwagę.",
-        "HUD możliwie mały, ale nadal wygodny. Auto-ataki off."
-      ],
-      when: "Konfiguracja przed sesją i korekta, gdy coś realnie utrudnia grę.",
-      success: "Możesz to odhaczyć od razu po ustawieniu klienta i rozegraniu krótkiej próby w Practice Tool.",
-      mistakes: [
-        "Zmienianie ustawień co chwilę zamiast trenowania stabilnych nawyków.",
-        "Za duży HUD zasłaniający minimapę i przestrzeń gry.",
-        "Muzyka lub chat zabierające uwagę od informacji."
-      ]
-    }
-  },
-  rotation_t1: {
-    label: "Rotacja po pierwszym T1",
-    category: "macro",
-    short: "Mid T1 → swap/jg. Bot T1 → mid. Top T1 → top zostaje.",
-    details: {
-      what: "Pierwszy zniszczony T1 to start mid game. Otwiera mapę. Twoja rotacja po pierwszym T1 decyduje czy ten tower był wart, czy stracony.",
-      how: [
-        "Po BOT T1 → ADC pushuje głęboko, ty rotujesz na mida (lub na topa jak ADC ma mały range).",
-        "Po MID T1 → odpushuj mida, rotacja na strong side ALBO kradzież enemy jg.",
-        "Po TOP T1 → top zostaje gdzie jest (mały range, niemobilny zostawiony = łatwy cel).",
-        "Jeśli enemy zniszczył T1 → analogicznie matchuj jego rotację.",
-        "Wybór strong side (bot vs top) zależy od: czyje carry tam jest, kto pushuje, gdzie smok."
-      ],
-      when: "Natychmiast po upadku pierwszego T1 w grze.",
-      whenNot: "Jeśli nie możesz pushować głębiej po wzięciu T1 = jakbyś jej nie zabrał. Wtedy nie rotuj — odpushuj i wracaj.",
-      success: "Po rotacji masz prio na nowej linii, a twój team kontroluje obszar kolejnego objective.",
-      mistakes: [
-        "Stanie na linii po wzięciu T1 (gain niewykorzystany).",
-        "Top rotuje na mid (mały range = traci CS).",
-        "Zostawienie ADC samego na bot po wzięciu T1 mid (łatwy cel).",
-        "Branie kolejnego towera od razu zamiast objective."
-      ]
-    }
-  },
-  objective_from_something: {
-    label: "Objektiwy Z CZEGOŚ",
-    category: "macro",
-    short: "Prio + wizja + wave PRZED smokiem. Nigdy 'bo fajnie'.",
-    details: {
-      what: "Każdy objective (smok, herald, baron) bierzesz z konkretnego powodu — nigdy tylko dlatego, że się pojawił. Czynniki: prio, tempo, siła w walce, wygrana walka, rotacja silnego championa.",
-      how: [
-        "Schemat early: WAVE → WIZJA → WAVE → SMOK.",
-        "Schemat z prio z mida i bota: pushujemy obie linie → schodzimy 4-5 na smoka, enemy oddaje fale albo smoka.",
-        "Schemat z tempa: przeciwnik znika z mapy, resetuje, ginie albo ma złą pozycję → masz okno.",
-        "Schemat po wygranej walce: przeciwnik ma 2+ osoby martwe → smok/herald jest za darmo.",
-        "Wizja pod smoka: pinki bliżej Ciebie (rzeka), wardy głębiej w jg enemy.",
-        "Im więcej czynników się sumuje, tym łatwiej i bezpieczniej zabrać."
-      ],
-      when: "Gdy masz co najmniej 2 czynniki sprzyjające. 1 = ryzyko. 0 = bardzo zły call.",
-      whenNot: "Enemy ma prio + tempo + wizję = ODDAJ smoka i graj cross-map (zabierz coś na drugiej stronie mapy).",
-      success: "Smok zabrany bez strat, lub enemy oddał za smoka coś równowartościowego (towera, falę, walkę).",
-      mistakes: [
-        "Smok bez wizji tylko dlatego, że się pojawił.",
-        "Wymuszanie smoka gdy enemy ma pełną wave pod twoim T1.",
-        "Branie smoka, gdy kompozycja twojej drużyny przegrywa bezpośrednią walkę.",
-        "Drugi herald dla golda — bezsens, jeśli nie ma czego pushować."
-      ]
-    }
-  },
-  prio_tempo: {
-    label: "Prio i tempo",
-    category: "macro",
-    short: "Prio = fala przed enemy. Tempo = przewaga czasu.",
-    details: {
-      what: "Prio to przepchnięcie fali przed przeciwnikiem. Tempo to przewaga czasu: możesz coś zrobić przed nim. Nie da się mieć tempa cały czas, więc ważne jest kiedy je wydajesz, oddajesz albo matchujesz.",
-      how: [
-        "Podstawowy łańcuch: wave → objective → wave → objective.",
-        "Tempo indywidualne: recall przed lane opponentem albo szybszy powrót na mapę.",
-        "Tempo drużynowe: twoja drużyna jest już na mapie, a enemy dopiero resetuje.",
-        "Gdy enemy ma małą przewagę tempa, graj cross-map po drugiej stronie.",
-        "Gdy jesteś mocno do tyłu w tempie, matchuj enemy: obrona, odbicie wizji, reset kontroli."
-      ],
-      when: "Każda decyzja macro: recall, objective, roam, split, obrona.",
-      whenNot: "Nie bierz prio automatycznie, jeśli jesteś weak side, bez wizji, albo freeze daje większy pressure point.",
-      success: "Wiesz, czy masz czas działać pierwszy, czy musisz wymienić mapę albo bronić.",
-      mistakes: [
-        "Pushowanie każdej fali bez celu.",
-        "Oddanie fali i objective naraz.",
-        "Próba contestu, gdy enemy ma tempo, wizję i pozycję."
-      ]
-    }
-  },
-  herald_map: {
-    label: "Herald pod otwarcie mapy",
-    category: "macro",
-    short: "Mobilny mid → bot tower. Niemobilny → mid tower. Nie pod golda.",
-    details: {
-      what: "Herald gra się POD OTWARCIE MAPY, nie pod golda. Pierwszy herald to często bot move (prio z bota → suport schodzi i wspiera).",
-      how: [
-        "Mobilny mid (Akali, Talon, Yasuo) → herald na BOT tower (mobilny mid wraca na linię z TP).",
-        "Niemobilny mid (Anivia, Veigar) → herald na MID tower (krótkie ścieżki, brak ryzyka).",
-        "TOP tower z heralda → NIE (możesz przegrać topa niszcząc swoją własną T1 = swap).",
-        "Drugi herald — niska wartość (brak platów). Ale zazwyczaj nie ma już T1 — idzie na T2."
-      ],
-      when: "Po killu w jg lub jak bot prio jest dobre — rotacja suporta na heralda + push.",
-      whenNot: "Nie puszczaj heralda solo dla golda. Bez sensu. Czekaj na okno z teamem.",
-      success: "Tower upadł, mapa otwarta na tę stronę, deep wardy na buffach enemy.",
-      mistakes: [
-        "Herald 'gdziekolwiek' bez planu.",
-        "Puszczenie heralda na T2 zamiast T1 (T2 ma mniejszą wartość mapowo).",
-        "Niezsynchronizowane z falą — herald nie ma kogo wspierać i zatrzymuje się na T1."
-      ]
-    }
-  },
-  roam_after_push: {
-    label: "Roam TYLKO po slow pushu",
-    category: "macro",
-    short: "Bez pusha mida = -200 gold + exp. Roam = push + ward + akcja.",
-    details: {
-      what: "Roamowanie jest opłacalne TYLKO gdy najpierw spushowałeś mida. Roam bez pusha = -200 gold + exp na linii.",
-      how: [
-        "Spush mida do strong side (do bota carry, do topa renekton itd.).",
-        "Pinki gotowe lub czerwona soczewka — enemy mid nie może cię widzieć schodzącego.",
-        "Roam to NIE TYLKO killy — to też deep wardy (deep ward roam dla jg/bota).",
-        "Po zabiciu: pomóż spushować linię teamowi (i dopiero potem wracaj na mida).",
-        "Idealny gank: udajesz że pushujesz fale → enemy w ciebie wbija → cyk gank jg z bocznej."
-      ],
-      when: "Po spushu, gdy mid jest pod tower, enemy mid nie ma jak natychmiast cię śledzić.",
-      whenNot: "Mid stoi na środku, enemy mid widzi cię na mini, nie ma kogo wesprzeć (np. bot 2x oddalonych od krzaka).",
-      success: "Minimum: deep ward + powrót bez utraty CS. Maks: kill + tower + 2 wardy.",
-      mistakes: [
-        "Roam bez pusha (tracisz fale, enemy wraca pełny na linię gdy ty wracasz pusty).",
-        "Roam gdy enemy mid cię widzi (free push dla niego).",
-        "Roam tylko pod killa (też wardy są wartością, nie zawsze trzeba killować).",
-        "Stanie po nieudanym roamie zamiast pomocy team push."
-      ]
-    }
-  },
-  side_resources: {
-    label: "Carry mindset — side lane",
-    category: "macro",
-    short: "Nie stoisz w 5 na midzie. Zbierasz zasoby z side lane i grasz jak win condition.",
-    details: {
-      what: "Carry mindset: jako mid często jesteś win condition. Twoja praca to zbierać zasoby (CS, exp, gold) z side lane, gdy team trzyma mid albo nie ma natychmiastowej walki. Stanie w 5 na midzie bez celu oznacza, że nie zbierasz nic.",
-      how: [
-        "Po zniszczeniu T1 mid → side lane farm (top albo bot).",
-        "Nie stoisz w 5 na midzie i nie wymuszasz losowej walki.",
-        "Mid → top lub bot na CS gdy team pushuje inną linię.",
-        "TP gotowy do zejścia do teamu jeśli zacznie się walka.",
-        "Stanie w 5 bez celu zabiera ci farmę. Ty masz zbierać zasoby i być win condition."
-      ],
-      when: "Mid game od pierwszego T1. Cała mid/late phase gdy nie ma natychmiastowych walk.",
-      whenNot: "Team potrzebuje cię natychmiast przy obronie Barona albo przeciwnik jest tak mocny, że side lane grozi darmową śmiercią.",
-      success: "Po side farm masz więcej expa, nowy item i jesteś gotowy zmienić walkę, gdy się zacznie.",
-      mistakes: [
-        "Stanie z teamem 'bo trzeba być razem'.",
-        "Side farm bez TP up (enemy zacznie walkę, ty nie zdążysz).",
-        "Brak świadomości gdzie jest enemy mid (oni też mogą cię odciąć).",
-        "Side farm w przegranej grze gdy team potrzebuje 4-1 obrony."
-      ],
-      notes: "Masz być źródłem obrażeń. Nie wymuszaj walki, zanim zbierzesz zasoby, które pozwolą ci ją wygrać."
-    }
-  },
-  splitpush_structures: {
-    label: "Splitpush 4-1 i 1-3-1",
-    category: "macro",
-    short: "Naciskasz 2-3 linie naraz. Splitpusher ma ściągnąć minimum dwóch.",
-    details: {
-      what: "4-1 i 1-3-1 to struktury presji na kilku liniach. Nie oznaczają dosłownie stania czterech osób na jednej fali; chodzi o kontrolę przestrzeni, wizji i synchronizację fal.",
-      how: [
-        "4-1: jedna osoba na side, reszta kontroluje mid/jungle między liniami.",
-        "Splitpusher musi samodzielnie wymuszać zejście co najmniej dwóch enemy albo grozić towerem.",
-        "Jeśli enemy wysyła wielu na side, reszta drużyny bierze mid/objective.",
-        "Jeśli enemy zostawia jednego na side, support/jungle mogą zejść i zrobić 3v1.",
-        "1-3-1 wymaga dwóch silnych side'ów i dużej przewagi; bez tego jest ryzykowne.",
-        "Synchronizuj fale, żeby enemy musiał odpowiadać na kilka miejsc naraz."
-      ],
-      when: "Po T1, przy grze o T2, z dobrą wizją i splitpusherem zdolnym utrzymać presję.",
-      whenNot: "Bez wizji w enemy jungle, bez side threatu, gdy team nie może bezpiecznie stać na midzie.",
-      success: "Enemy traci tower, objective albo musi oddać zasoby na jednej z linii.",
-      mistakes: [
-        "Pięć osób na jednej linii bez dużego tempa.",
-        "Splitpusher pushuje bez informacji i ginie 1v3.",
-        "Brak synchronizacji fal — enemy czyści jedną po drugiej."
-      ]
-    }
-  },
-  map_sync: {
-    label: "Synchronizacja mapy",
-    category: "macro",
-    short: "Fale, objective, item spike, jungler i pozycja teamu muszą się zgadzać.",
-    details: {
-      what: "Synchronizacja mapy to ustawienie fal i ruchu graczy tak, żeby przeciwnik musiał wybierać między stratami. Dobra akcja makro dzieje się w tym samym czasie co presja na fali lub objective.",
-      how: [
-        "Synchronizuj fale, żeby weszły naraz albo jedna po drugiej.",
-        "Pushuj w timing, w którym enemy nie może odpowiedzieć jednocześnie na falę i smoka.",
-        "Opóźnij push, jeśli brakuje ci golda do ważnego item spike'a i nadal zdążysz na cel.",
-        "Jeśli twój jungler chce grać akcję, fala ma tworzyć punkt presji w innym miejscu.",
-        "Rysuj w głowie linię po sojusznikach: nie bądź ani za głęboko, ani bezużytecznie za daleko."
-      ],
-      when: "Mid/late game, objective setup, splitpush, obrona przed presją.",
-      success: "Twoje ruchy są spójne z falami i teamem, więc enemy reaguje na presję zamiast grać proaktywnie.",
-      mistakes: [
-        "Samotny push bez linii sojuszników.",
-        "Przyjście na objective bez przygotowanej fali.",
-        "Stanie w miejscu i czekanie na wave, gdy możesz wejść w fog i kupić presję."
-      ]
-    }
-  },
-
-  // ===== VISION =====
-  proactive_vision: {
-    label: "Proaktywna wizja",
-    category: "vision",
-    short: "Pinki bliżej (do obrony), wardy głębiej (info). Raptors ward 1:15.",
-    details: {
-      what: "Wizja nie służy tylko do obrony siebie, ale przede wszystkim do informacji o przeciwniku. Control wardy bliżej, zwykłe wardy głębiej. Każdy ward ma cel: objective, carry albo konkretna akcja.",
-      how: [
-        "Raptors ward o 1:15 ALBO po 2-3 fali — wizja na pathing enemy jg.",
-        "Pinki w naszej rzece (control wardy bliżej, do obrony).",
-        "Zwykłe wardy w enemy jg (głęboka info).",
-        "Lane ward jeśli mid T1 stoi (widzimy zejścia enemy mida).",
-        "Im głębsza wizja = szybsza informacja.",
-        "Jeśli sprawdzasz wizję enemy — lepiej gdy nic nie ma (wiesz że enemy nie wie) niż gdy zniszczysz (oddajesz info że jesteś)."
-      ],
-      when: "Cały czas. Każdy ward ma cel: objective, carry albo konkretna akcja.",
-      whenNot: "Wardy bez planu i celu — strata golda.",
-      success: "Wiesz gdzie jest enemy jg w >70% gry, twoje akcje są informowane wizją.",
-      mistakes: [
-        "Wszystkie wardy bronione (basic), żaden głęboki.",
-        "Wardy w 'bezpiecznym miejscu' nie dające info.",
-        "Zapominanie o pinkach (sweeper enemy odsłania twoje akcje).",
-        "Niszczenie enemy warda zawsze (czasem lepiej wiedzieć że tam jest niż dać info że go zniszczyłeś)."
-      ]
-    }
-  },
-  river_bush_control: {
-    label: "Kontrola krzaków i rzeki",
-    category: "vision",
-    short: "Krzaki przy rzece blokują rotacje i dają carry bezpieczny spot.",
-    details: {
-      what: "Kontrola kluczowych krzaków wokół mida, rzeki i wejść do jungli decyduje, czy enemy może podejść po prio. Czasem samo stanie w obszarze jest tak samo ważne jak ward.",
-      how: [
-        "Przejmuj obszar między krzakiem mida a rzeką przed smokiem/heraldem.",
-        "Jeśli enemy stoi już w obszarze objective, często nie może bezpiecznie podejść na mida po prio.",
-        "Krzak przy river/ścianie daje niemobilnemu carry bezpieczny spot do zadawania obrażeń.",
-        "Ten sam krzak może być punktem flanki dla championa szukającego wejścia od boku.",
-        "Odbijanie wizji zaczynaj od krzaków, które odcinają przejście na side."
-      ],
-      when: "Przed objective, przy obronie/pushu T2, gdy chcesz zablokować rotacje enemy.",
-      success: "Enemy musi iść dookoła, traci tempo i nie może łatwo zabrać mid prio.",
-      mistakes: [
-        "Ward bez kontroli pozycyjnej.",
-        "Oddanie krzaka, który otwiera flankę na twoje carry.",
-        "Wchodzenie po wizję bez prio i bez ludzi w pobliżu."
-      ]
-    }
-  },
-
-  // ===== TEAMFIGHT =====
-  comp_awareness: {
-    label: "Świadomość team comp",
-    category: "teamfight",
-    short: "Engage > Poke > Disengage > Engage. Wiesz przed walką, nie w walce.",
-    details: {
-      what: "Każdy team to mix: ENGAGE / POKE / DISENGAGE. Wiesz kto jest kim, wiesz która grupa twojej walki ma przewagę. Mentalna mapka comp PRZED walką, nie w trakcie.",
-      how: [
-        "ENGAGE > POKE (mobilni wbijają na poke carry).",
-        "POKE > DISENGAGE (długi range nie da się tarczy).",
-        "DISENGAGE > ENGAGE (Galio/Braum nie dają wejść).",
-        "Przed walką: kto MOJE największe zagrożenie? Co zrobię żeby nie zginąć?",
-        "Określ win condition team compu (ich i twojego).",
-        "Pod dany comp dopasuj swoją grę: poke comp = trzymaj się tyłu, engage comp = inituj z teamem."
-      ],
-      when: "Przed każdą walką (myśl PRZED, nie w walce — w walce nie zdążysz).",
-      success: "Wiesz przed każdą walką: gdzie staję, kto mój focus, kogo się boję, jak go unikam.",
-      mistakes: [
-        "Brak świadomości team compu (gra na zasadzie 'co się stanie to się stanie').",
-        "Granie pod swój pick zamiast pod team.",
-        "Ignorowanie disengage enemy (próba engage gdy nie zadziała)."
-      ]
-    }
-  },
-  front_to_back_flank: {
-    label: "Front-to-back i flanka",
-    category: "teamfight",
-    short: "Silne carry grają za frontem. Flanka łamie tę strukturę.",
-    details: {
-      what: "Front-to-back oznacza walkę przez najbliższy cel: tank/front chroni carry, carry bije to, co może. Flanka to wejście z boku lub tyłu, które odcina carry i rozbija strukturę front-to-back.",
-      how: [
-        "Jeśli masz silniejsze carry, broń ich struktury i odcinaj flanki enemy.",
-        "Jeśli enemy ma lepszy front-to-back, szukaj flanki albo wejścia z fog'a.",
-        "Przed walką ustal, kto może flankować i z której strony.",
-        "Nie stój jako carry w linii, gdzie flankujący ma darmowe wejście.",
-        "Flankujący nie musi od razu zabić — samo wymuszenie cofnięcia carry kupuje przestrzeń."
-      ],
-      when: "Walki 5v5, objective, oblężenia, obrona przed engage.",
-      success: "Albo twoje carry biją bezpiecznie zza frontu, albo twoja flanka realnie rozbija enemy backline.",
-      mistakes: [
-        "Carry wychodzi przed front.",
-        "Brak kontroli bocznych wejść przed objective.",
-        "Flanka bez synchronizacji z wejściem reszty teamu."
-      ]
-    }
-  },
-  fight_roles: {
-    label: "Role w teamfightach",
-    category: "teamfight",
-    short: "Mag bije najbliższy cel, assassin szuka carry, support zabezpiecza team.",
-    details: {
-      what: "W teamfightach nie da się liczyć wszystkiego w trakcie. Przed walką musisz znać swoją rolę, największe zagrożenie i warunek wygranej obu drużyn.",
-      how: [
-        "Mag/control mage najczęściej bije front-lane i kontroluje przestrzeń.",
-        "Assassin omija front, szuka kąta na fed carry i działa z fog'a/flanki.",
-        "Support/enchanter stoi z tyłu, zabezpiecza carry i przerywa wejście enemy.",
-        "Przed walką nazwij największe zagrożenie enemy i sposób uniknięcia jego kluczowego spella.",
-        "Walka ma mieć jeden wspólny plan: poke, engage, disengage albo front-to-back."
-      ],
-      when: "Przed każdą większą walką, szczególnie 20+ minuta i objective.",
-      success: "Wchodzisz w walkę z gotową odpowiedzią: gdzie stoję, kogo biję, czego unikam.",
-      mistakes: [
-        "Assassin bije tanka od frontu bez powodu.",
-        "Mage wchodzi w backline zamiast kontrolować front.",
-        "Support chase'uje kill zamiast osłaniać win condition."
-      ]
-    }
-  },
-  not_fight: {
-    label: "Wiem kiedy NIE walczyć",
-    category: "teamfight",
-    short: "Enemy ma item spike, ty nie. Cross-map zamiast 5v5.",
-    details: {
-      what: "Wiedza KIEDY NIE walczyć. Cross-map > 5v5 w niekorzystnej sytuacji. Tradeoff niekorzystny = nie walcz, zabierz coś gdzie indziej.",
-      how: [
-        "Enemy mid ma ludena, ty brak 1st itemu → CROSS-MAP play (zabranie czegoś na drugiej stronie mapy).",
-        "Enemy 5 stoi pod baronem z full HP → nie inituj. Daj barona za zamianę (T2, smok).",
-        "Twój ADC daleko od teamu → nie walcz w 4. Cofnij, regroup.",
-        "Twój win-con (Vayne 6 itemów) nie ma jeszcze itemów → kupuj czas, freeze.",
-        "Po walce wygranej przez enemy → odpalaj T2 push gdy ich nie ma."
-      ],
-      when: "Gdy tradeoff jest niekorzystny: nie masz items, nie masz numbers, nie masz pozycji.",
-      whenNot: "Gdy musisz reagować na ich akcję natychmiast (baron, drażoba, soul point smok).",
-      success: "Nie oddajesz walk z deficytem. Czekasz na lepsze warunki i zabierasz objective, gdy przeciwnik angażuje zasoby gdzie indziej.",
-      mistakes: [
-        "Walka 5v5 bo 'nudzi się'.",
-        "Walka pod barona gdy ich ADC jest fed.",
-        "Forsowanie walki gdy nie ma tempa.",
-        "Brak cross-map play (wszyscy walczą zamiast pushować)."
-      ]
-    }
-  },
-  play_behind: {
-    label: "Granie z tyłu = schemat",
-    category: "teamfight",
-    short: "Push T2, sync fal, wizja, czekanie na błąd. Cheese last resort.",
-    details: {
-      what: "Granie z tyłu = SCHEMAT, nie cheese. Push T2 z synchronizacją fal, deep wardy, czekanie na błąd enemy. Cheese (backdoor, splitpush sam) tylko gdy schemat nie działa.",
-      how: [
-        "T2 push z synchronizacją fal (twoje 2 fale uderzają T2 jednocześnie).",
-        "Deep wardy w enemy jg żebyś wiedział gdzie enemy.",
-        "Wizja na backdoor możliwości.",
-        "Czekanie aż enemy zrobi błąd: za daleki push, samotny carry, niedbały recall.",
-        "Cheese (backdoor, splitpush sam, all-in) TYLKO gdy schemat nie działa po ~10 min."
-      ],
-      when: "Gdy przegrywasz: nie masz prio na żadnej linii, przeciwnik kontroluje objective, ale gra nadal trwa.",
-      whenNot: "Gdy wygrywasz — wtedy gramy schemat dominanta, nie z tyłu.",
-      success: "Złapanie błędu przeciwnika → odzyskanie walki albo objective → realna szansa na comeback.",
-      mistakes: [
-        "Panika i cheese od 5 min (gra ginie szybciej).",
-        "Brak schematu = chaos i oddawanie kolejnych okazji.",
-        "Czekanie pasywne (bez pushowania T2) = enemy zbiera mapę za darmo."
-      ]
-    }
-  },
-
-  // ===== MINDSET =====
-  no_tilt: {
-    label: "Świadomość tiltu",
-    category: "mindset",
-    short: "Tiltujesz się = sam sobie szkodzisz. Reset albo koniec.",
-    details: {
-      what: "Tilt = zmniejszona zdolność oceny sytuacji + zwiększona skłonność do ryzyka. Tilt jest zawsze twoim własnym wyborem — to mentalna decyzja. Sam sobie szkodzisz.",
-      how: [
-        "Sygnały tiltu: irytacja na team, napięcie po śmierci, chęć 'pokazania' przeciwnikowi.",
-        "Diagnoza w 5s: czy gram lepiej czy gorzej w tej chwili niż 5 min temu?",
-        "Reset: oddech (4-7-8), spacja w teamfightach (focus na pozycji), wyłącz emocje.",
-        "Jeśli nie da się resetować — koniec sesji. Następna gra będzie gorsza."
-      ],
-      when: "Po każdej śmierci / przegranej walce / 'głupim' move teamu.",
-      success: "Rozpoznajesz tilt w 30s od wystąpienia, podejmujesz decyzję (reset / koniec).",
-      mistakes: [
-        "Queue od razu po emocjonalnej grze.",
-        "Szukanie winy w teamie zamiast decyzji, którą możesz poprawić.",
-        "Granie agresywniej tylko po to, żeby 'odrobić' poprzedni błąd."
-      ]
-    }
-  },
-  mute_all: {
-    label: "Czat OFF + brak narzekania",
-    category: "mindset",
-    short: "Mute all. Tylko pingi. Brak komentarzy na team.",
-    details: {
-      what: "Komunikacja w solo q daje 90% emocjonalnych kosztów, 10% wartości. Mute na start gry, tylko pingi. Brak komentarzy na team nawet w głowie — co dasz innym, to dostaniesz.",
-      how: [
-        "Czat OFF w ustawieniach (lub mute all na lvl 1 hotkey).",
-        "Tylko pingi (smite up, missing, danger, on my way).",
-        "Mental rule: nie komentujesz teamu nawet w głowie. Skupiasz się na sobie.",
-        "Jeśli widzisz 'głupi' move — ZAREJESTRUJ jako fakt, NIE oceniaj."
-      ],
-      when: "Każda gra. Bez wyjątków.",
-      success: "Po grze nie pamiętasz emocji związanych z teamem — pamiętasz tylko swoje akcje.",
-      mistakes: [
-        "Odpisywanie nawet wtedy, gdy masz rację.",
-        "Pingowanie z frustracji zamiast informacyjnie.",
-        "Analiza gry przez pryzmat teamu, a nie własnych decyzji."
-      ]
-    }
-  },
-  break_after_loss: {
-    label: "Przerwa po przegranej",
-    category: "mindset",
-    short: "Min 5 min od kompa po przegranej. Następna gra zawsze gorzej.",
-    details: {
-      what: "Po przegranej gra następuje rezydualny tilt + zmęczenie. Statystycznie następna gra jest gorsza. Przerwa minimum 5 min — wstać od kompa, woda, oddech.",
-      how: [
-        "Po przegranej: NIE next game od razu.",
-        "Wstać, oddech, woda, krótki spacer.",
-        "Minimum 5 min od kompa.",
-        "Po 3 przegranych z rzędu — koniec na dziś."
-      ],
-      when: "Każda przegrana.",
-      success: "Następna gra nie jest gorsza emocjonalnie niż przegrana.",
-      mistakes: [
-        "Instant queue po porażce.",
-        "Scrollowanie statystyk i nakręcanie złości zamiast resetu.",
-        "Traktowanie przerwy jako kary, a nie elementu jakości sesji."
-      ]
-    }
-  },
-  remembered_game: {
-    label: "Pamiętasz właśnie zagraną grę",
-    category: "mindset",
-    short: "Nie potrafisz odtworzyć przebiegu = jesteś zmęczony. Koniec.",
-    details: {
-      what: "Test świadomości: po grze potrafisz w 30s opowiedzieć przebieg (lane phase → mid game → ostatnia walka). Nie potrafisz = grałeś na autopilocie = zmęczony = koniec sesji.",
-      how: [
-        "Tuż po grze: pomyśl 'co się stało w tej grze?'",
-        "Sprawdź: czy potrafisz wskazać kluczowy moment (good lub bad)?",
-        "Sprawdź: czy pamiętasz przynajmniej 3 konkretne decyzje?",
-        "Brak odpowiedzi = koniec sesji."
-      ],
-      when: "Po każdej grze.",
-      success: "Wszystkie gry sesji są dla ciebie 'pamiętalne' i analyzowalne.",
-      mistakes: [
-        "Zapisywanie refleksji ogólnikiem bez konkretnej sytuacji.",
-        "Granie dalej mimo autopilota.",
-        "Mylenie wyniku gry z jakością decyzji."
-      ]
-    }
-  }
-};
-
-const LEARNING_PATH = [
-  {
-    title: "1. Setup i higiena sesji",
-    desc: "Najpierw ustaw klienta i zabezpiecz mental. Tego nie trenujesz w grze jak mechaniki — odhaczasz po konfiguracji.",
-    goalIds: ["game_settings", "mute_all", "break_after_loss", "remembered_game", "no_tilt"]
-  },
-  {
-    title: "2. Informacja i pierwsze fale",
-    desc: "Naucz się widzieć mapę i planować lane phase zanim dorzucisz trudniejsze decyzje.",
-    goalIds: ["minimap_3s", "info_collection", "pre_first_wave", "cs_timers", "slow_push", "canon_recall"]
-  },
-  {
-    title: "3. Kontrola fali i pierwsze zejścia",
-    desc: "Dopiero po podstawach dokładamy freeze, hard push, wizję i roamowanie.",
-    goalIds: ["freeze", "hard_push", "proactive_vision", "track_flashes", "roam_after_push"]
-  },
-  {
-    title: "4. Micro wykonania",
-    desc: "Mechaniki mają wspierać decyzję, a nie zastępować macro.",
-    goalIds: ["continuous_clicking", "attack_move", "cancel_aa_animation", "skill_queueing", "animation_lock", "spacing_ranges", "skillshot_angles", "value_spells", "smartcast_dash"]
-  },
-  {
-    title: "5. Tempo, rotacje i objective",
-    desc: "Tu uczysz się brać cele z prio, tempa, wizji i rotacji, a nie z przypadku.",
-    goalIds: ["prio_tempo", "rotation_t1", "objective_from_something", "herald_map", "map_sync", "river_bush_control"]
-  },
-  {
-    title: "6. Mid/late, zasoby i walki",
-    desc: "Na końcu spinamy side lane, struktury mapy i teamfighty.",
-    goalIds: ["side_resources", "splitpush_structures", "comp_awareness", "front_to_back_flank", "fight_roles", "not_fight", "play_behind"]
-  },
-  {
-    title: "7. Maksymalizacje",
-    desc: "Drobne przewagi dorzucaj po opanowaniu fundamentów.",
-    goalIds: ["fountain_end", "recall_under_tower", "burn_pre_recall", "zero_plus"]
-  }
-];
-
-const ALWAYS_ON_RULES = [
-  { id: "chat_off", label: "Czat OFF (tylko pingi)" },
-  { id: "break_after_loss", label: "Min 5 min przerwy po przegranej" },
-  { id: "remembered_game", label: "Pamiętam właśnie zagraną grę" },
-  { id: "no_blame", label: "Brak narzekania na team" }
-];
 
 const DEFAULT_STATE = {
-  activeGoals: ["slow_push", "canon_recall"],
-  completedSetupGoals: [],
+  activeGoals: ["minimap_3s", "continuous_clicking"],
   games: [],
   sessionPlan: null,
   theme: "dark",
@@ -1041,7 +52,14 @@ const DEFAULT_STATE = {
   lastGameEndTime: null,
   sessionLocked: false,
   sessionLockReason: null,
-  preGameSnapshot: null
+  preGameSnapshot: null,
+  // Champion pool — z Excela: max 3 postacie na linii, jedna linia
+  championPool: {
+    lane: "",        // top/jg/mid/adc/sup
+    champions: ["", "", ""]
+  },
+  // Currently selected champion for next game (zapisuje się w grze)
+  currentChampion: ""
 };
 
 // ============================================================
@@ -1294,7 +312,7 @@ function ProgressBar({ value, color, height = 6 }) {
 // ============================================================
 // GOAL CARD — accordion z pełnym opisem
 // ============================================================
-function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleActive, stats, hideToggle, isSetup, isCompletedSetup, onToggleSetupDone }) {
+function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleActive, stats, hideToggle }) {
   const d = goal.details;
   const mastery = useMemo(
     () => getMastery(stats?.gamesWithGoal || 0, stats?.compliance || 0),
@@ -1315,15 +333,15 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
             <H2 style={{ fontSize: "14px" }}>{goal.label}</H2>
-            {isSetup && <Pill color={isCompletedSetup ? c.success : c.warning} bg={isCompletedSetup ? c.activeBg : c.warningBg}>{isCompletedSetup ? "USTAWIONE" : "CHECKLISTA"}</Pill>}
-            {!isSetup && isActive && <Pill color={c.success} bg={c.activeBg}>AKTYWNY</Pill>}
+            {isActive && <Pill color={c.success} bg={c.activeBg}>AKTYWNY</Pill>}
+            {goal.phase && <Pill color={c.warning}>{goal.phase === "ongoing" ? "CIĄGLE" : `F${goal.phase}`}{goal.week ? ` · TYDZ ${goal.week}` : ""}</Pill>}
             {mastery.level > 0 && <Pill color={mastery.color}>{mastery.label}</Pill>}
             {mastery.isWarning && <Pill color={c.accent} bg={c.dangerBg}>{mastery.label}</Pill>}
           </div>
           <Text dim style={{ fontSize: "12px", lineHeight: 1.4, display: "block" }}>{goal.short}</Text>
 
           {/* MASTERY PROGRESS BAR */}
-          {!isSetup && stats && stats.gamesWithGoal > 0 && mastery.level < 3 && mastery.nextThreshold && (
+          {stats && stats.gamesWithGoal > 0 && mastery.level < 3 && mastery.nextThreshold && (
             <div style={{ marginTop: 10 }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
                 <Text mute style={{ fontSize: "10px" }}>
@@ -1331,7 +349,7 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
                 </Text>
                 {stats.gamesWithGoal >= 1 && (
                   <Text mute style={{ fontSize: "10px" }}>
-                    wykonanie {stats.complianceRate}%
+                    compliance {stats.complianceRate}%
                   </Text>
                 )}
               </div>
@@ -1339,9 +357,9 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
             </div>
           )}
 
-          {!isSetup && stats && stats.gamesWithGoal > 0 && mastery.level === 3 && (
+          {stats && stats.gamesWithGoal > 0 && mastery.level === 3 && (
             <div style={{ marginTop: 6, display: "flex", gap: 12 }}>
-              <Text mute style={{ fontSize: "11px" }}>{stats.gamesWithGoal} gier · {stats.complianceRate}% wykonania</Text>
+              <Text mute style={{ fontSize: "11px" }}>{stats.gamesWithGoal} gier · {stats.complianceRate}% compliance</Text>
             </div>
           )}
         </div>
@@ -1421,7 +439,7 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
           )}
 
           {/* STATS RECAP */}
-          {!isSetup && stats && stats.gamesWithGoal > 0 && (
+          {stats && stats.gamesWithGoal > 0 && (
             <div style={{
               background: c.panel, padding: "12px 14px",
               border: `1px solid ${c.border}`,
@@ -1442,19 +460,7 @@ function GoalCard({ goalId, goal, expanded, onToggleExpand, isActive, onToggleAc
             </div>
           )}
 
-          {!hideToggle && isSetup && (
-            <Btn
-              variant={isCompletedSetup ? "success" : "amber"}
-              onClick={(e) => { e.stopPropagation(); onToggleSetupDone(); }}
-              fullWidth
-            >
-              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                <Check size={14} /> {isCompletedSetup ? "USTAWIONE — ODHACZONE" : "ODHACZ PO USTAWIENIU"}
-              </span>
-            </Btn>
-          )}
-
-          {!hideToggle && !isSetup && (
+          {!hideToggle && (
             <Btn
               variant={isActive ? "danger" : "success"}
               onClick={(e) => { e.stopPropagation(); onToggleActive(); }}
@@ -1586,7 +592,7 @@ function ReviewQueue({ mistakes, compact = false }) {
     <Box style={{ padding: compact ? "12px 14px" : "14px 16px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
         <History size={14} color={c.amber} />
-        <H2 style={{ fontSize: compact ? "13px" : "15px" }}>POWTÓRKA BŁĘDÓW</H2>
+        <H2 style={{ fontSize: compact ? "13px" : "15px" }}>REVIEW QUEUE</H2>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {mistakes.map((item, index) => (
@@ -1632,15 +638,14 @@ function WeaknessSuggestions({ suggestions, onUseSuggestion }) {
 }
 
 function SessionPlanPanel({ state, setState, recentMistakes, suggestions, compact = false }) {
-  const trainableGoalIds = getTrainableActiveGoalIds(state.activeGoals, GOALS);
-  const plan = state.sessionPlan || createDefaultSessionPlan(trainableGoalIds, recentMistakes);
-  const activeGoalObjects = trainableGoalIds.map(id => ({ id, ...GOALS[id] })).filter(g => g.label);
+  const plan = state.sessionPlan || createDefaultSessionPlan(state.activeGoals, recentMistakes);
+  const activeGoalObjects = state.activeGoals.map(id => ({ id, ...GOALS[id] })).filter(g => g.label);
 
   const updatePlan = (patch) => {
     setState(s => ({
       ...s,
       sessionPlan: {
-        ...createDefaultSessionPlan(getTrainableActiveGoalIds(s.activeGoals, GOALS), getRecentMistakes(s.games)),
+        ...createDefaultSessionPlan(s.activeGoals, getRecentMistakes(s.games)),
         ...(s.sessionPlan || {}),
         ...patch,
         updatedAt: Date.now()
@@ -1668,7 +673,7 @@ function SessionPlanPanel({ state, setState, recentMistakes, suggestions, compac
 
       <div style={{ display: "grid", gridTemplateColumns: compact ? "1fr" : "1fr 1fr", gap: 10 }}>
         <div>
-          <Label>Główny focus</Label>
+          <Label>Primary focus</Label>
           <select
             value={plan.primaryGoalId}
             onChange={e => updatePlan({ primaryGoalId: e.target.value })}
@@ -1682,7 +687,7 @@ function SessionPlanPanel({ state, setState, recentMistakes, suggestions, compac
           </select>
         </div>
         <div>
-          <Label>Drugi focus</Label>
+          <Label>Secondary focus</Label>
           <select
             value={plan.secondaryGoalId}
             onChange={e => updatePlan({ secondaryGoalId: e.target.value })}
@@ -1738,14 +743,18 @@ function PreGameView({ state, setState, onClose }) {
   const [expandedDetails, setExpandedDetails] = useState({});
   const recentMistakes = useMemo(() => getRecentMistakes(state.games), [state.games]);
   const suggestions = useMemo(() => getWeaknessSuggestions(state.games, GOALS), [state.games]);
-  const trainableGoalIds = getTrainableActiveGoalIds(state.activeGoals, GOALS);
-  const plan = state.sessionPlan || createDefaultSessionPlan(trainableGoalIds, recentMistakes);
+  const plan = state.sessionPlan || createDefaultSessionPlan(state.activeGoals, recentMistakes);
   const initialFocusGoals = [plan.primaryGoalId, plan.secondaryGoalId]
-    .filter((id, index, arr) => id && trainableGoalIds.includes(id) && arr.indexOf(id) === index)
+    .filter((id, index, arr) => id && state.activeGoals.includes(id) && arr.indexOf(id) === index)
     .slice(0, 2);
   const [focusGoals, setFocusGoals] = useState(initialFocusGoals);
 
-  const activeGoals = trainableGoalIds
+  // Champion z poola
+  const pool = state.championPool || { champions: [] };
+  const poolChamps = (pool.champions || []).filter(Boolean);
+  const [champion, setChampion] = useState(state.currentChampion || poolChamps[0] || "");
+
+  const activeGoals = state.activeGoals
     .map(id => ({ id, ...GOALS[id] }))
     .filter(g => g.label);
 
@@ -1756,16 +765,17 @@ function PreGameView({ state, setState, onClose }) {
       startedAt: Date.now(),
       mood,
       focusGoals,
-      sessionPlan: plan
+      sessionPlan: plan,
+      champion
     };
-    setState(s => ({ ...s, preGameSnapshot: snapshot }));
+    setState(s => ({ ...s, preGameSnapshot: snapshot, currentChampion: champion }));
     onClose();
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div>
-        <Label>1 / Stan przed grą</Label>
+        <Label>1 / Mood check</Label>
         <MoodPicker value={mood} onChange={setMood} />
         {mood === "tilt" && (
           <div style={{
@@ -1799,8 +809,36 @@ function PreGameView({ state, setState, onClose }) {
 
       <ReviewQueue mistakes={recentMistakes} compact />
 
+      {poolChamps.length > 0 ? (
+        <div>
+          <Label>2 / Champion (z twojego poola)</Label>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {poolChamps.map(ch => (
+              <button key={ch} onClick={() => setChampion(ch)} style={{
+                padding: "10px 14px",
+                background: champion === ch ? c.success : c.card,
+                border: `1px solid ${champion === ch ? c.success : c.border}`,
+                color: champion === ch ? c.onSuccess : c.textDim,
+                fontFamily: fMono, fontSize: "12px", fontWeight: 700,
+                cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
+              }}>{ch}</button>
+            ))}
+          </div>
+          <Text mute style={{ fontSize: "10px", display: "block", marginTop: 6 }}>
+            Wybór championa daje ci personal stats per champ. Pool ustawiasz w OPCJACH.
+          </Text>
+        </div>
+      ) : (
+        <div style={{ padding: 12, background: c.warningBg, border: `1px solid ${c.warning}`, display: "flex", gap: 10, alignItems: "center" }}>
+          <AlertCircle size={16} color={c.warning} />
+          <Text style={{ color: c.warning, fontSize: "11px" }}>
+            Brak champion poola. Ustaw w OPCJACH (max 3 postacie na linii — przysięga z Excela).
+          </Text>
+        </div>
+      )}
+
       <div>
-        <Label>2 / Co trenujesz w tej grze (max 2 zadania)</Label>
+        <Label>3 / Co trenujesz w tej grze (max 2 zadania)</Label>
         {activeGoals.length === 0 ? (
           <div style={{ padding: 16, background: c.card, border: `1px solid ${c.border}`, textAlign: "center" }}>
             <Text mute style={{ display: "block", marginBottom: 12 }}>
@@ -1868,7 +906,8 @@ function PostGameView({ state, setState, onClose }) {
       remembered,
       mistake: mistake.trim(),
       winThing: winThing.trim(),
-      durationMin: Math.round((Date.now() - snap.startedAt) / 60000)
+      durationMin: Math.round((Date.now() - snap.startedAt) / 60000),
+      champion: snap.champion || ""
     };
 
     setState(s => {
@@ -1910,7 +949,7 @@ function PostGameView({ state, setState, onClose }) {
           </Text>
           <Text dim style={{ fontSize: "11px", lineHeight: 1.5, display: "block" }}>
             Nie pytamy o WIN/LOSS. To nie ma znaczenia dla nauki. Liczy się WYŁĄCZNIE jak wykonałeś trenowane zadania.
-            Wygrana ze słabym wykonaniem to słaba nauka. Przegrana z dobrym wykonaniem to postęp.
+            Wygrałeś z gównianym wykonaniem? Strata. Przegrałeś z dobrym wykonaniem? Postęp.
           </Text>
         </div>
       </div>
@@ -1925,6 +964,12 @@ function PostGameView({ state, setState, onClose }) {
           <Label style={{ marginBottom: 2 }}>Czas gry</Label>
           <Text>{Math.round((Date.now() - snap.startedAt) / 60000)} min</Text>
         </div>
+        {snap.champion && (
+          <div>
+            <Label style={{ marginBottom: 2 }}>Champion</Label>
+            <Text>{snap.champion}</Text>
+          </div>
+        )}
         <div style={{ marginLeft: "auto", display: "flex", gap: 4, flexWrap: "wrap" }}>
           {focusGoals.map(g => <Pill key={g.id} color={c.amber}>{g.label}</Pill>)}
         </div>
@@ -1953,7 +998,7 @@ function PostGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>2 / Stałe zasady — dyscyplina sesji</Label>
+        <Label>2 / Always-on zasady — dyscyplina sesji</Label>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {ALWAYS_ON_RULES.map(r => (
             <CheckRow
@@ -1984,7 +1029,7 @@ function PostGameView({ state, setState, onClose }) {
         <Label>4 / Jeden konkretny błąd (nie związany z W/L)</Label>
         <textarea
           value={mistake} onChange={e => setMistake(e.target.value)}
-          placeholder="np. Cofnąłem nie przed cannon wave w 12 min, oddałem 4 CS"
+          placeholder="np. Cofnąłem nie na canon w 12 min, oddałem 4 CS"
           rows={2}
           style={{
             width: "100%", background: c.card, border: `1px solid ${c.border}`,
@@ -1999,7 +1044,7 @@ function PostGameView({ state, setState, onClose }) {
         <Label>5 / Jedna rzecz która wyszła</Label>
         <textarea
           value={winThing} onChange={e => setWinThing(e.target.value)}
-          placeholder="np. Trzy razy zszedłem z mida po pushu i nie straciłem fali"
+          placeholder="np. Trzy razy out-roamowałem enemy mida"
           rows={2}
           style={{
             width: "100%", background: c.card, border: `1px solid ${c.border}`,
@@ -2011,7 +1056,7 @@ function PostGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>6 / Stan po grze</Label>
+        <Label>6 / Mood po grze</Label>
         <MoodPicker value={postMood} onChange={setPostMood} />
       </div>
 
@@ -2033,12 +1078,15 @@ function PostGameView({ state, setState, onClose }) {
 function KnowledgeView({ state, setState }) {
   const [expanded, setExpanded] = useState({});
   const [filter, setFilter] = useState("all");
+  const [phaseFilter, setPhaseFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [groupBy, setGroupBy] = useState("category"); // "category" | "phase"
 
   const goalStats = useMemo(() => {
     const stats = {};
     Object.keys(GOALS).forEach(id => {
-      const gamesWithGoal = state.games.filter(g => g.focusGoals.includes(id));
-      const compliance = gamesWithGoal.filter(g => g.goalCompliance[id]);
+      const gamesWithGoal = state.games.filter(g => Array.isArray(g.focusGoals) && g.focusGoals.includes(id));
+      const compliance = gamesWithGoal.filter(g => g.goalCompliance?.[id]);
       stats[id] = {
         gamesWithGoal: gamesWithGoal.length,
         compliance: compliance.length,
@@ -2049,11 +1097,7 @@ function KnowledgeView({ state, setState }) {
     return stats;
   }, [state.games]);
 
-  const completedSetupGoals = state.completedSetupGoals || [];
-  const trainableActiveGoals = getTrainableActiveGoalIds(state.activeGoals, GOALS);
-
   const toggleActive = (id) => {
-    if (GOALS[id]?.type === "setup") return;
     setState(s => ({
       ...s,
       activeGoals: s.activeGoals.includes(id)
@@ -2062,66 +1106,93 @@ function KnowledgeView({ state, setState }) {
     }));
   };
 
-  const toggleSetupDone = (id) => {
-    setState(s => {
-      const completed = s.completedSetupGoals || [];
-      return {
-        ...s,
-        completedSetupGoals: completed.includes(id)
-          ? completed.filter(x => x !== id)
-          : [...completed, id]
-      };
-    });
+  const searchLower = search.trim().toLowerCase();
+  const matchesSearch = (g) => {
+    if (!searchLower) return true;
+    const haystack = [
+      g.label, g.short,
+      g.details?.what, g.details?.when, g.details?.whenNot, g.details?.success,
+      ...(g.details?.how || []), ...(g.details?.mistakes || [])
+    ].filter(Boolean).join(" ").toLowerCase();
+    return haystack.includes(searchLower);
   };
 
-  const sections = useMemo(() => {
-    const ordered = getOrderedLearningItems(GOALS, LEARNING_PATH);
+  const filteredGoals = useMemo(() => {
+    return Object.entries(GOALS)
+      .map(([id, g]) => ({ id, ...g }))
+      .filter(g => {
+        if (filter === "active" && !state.activeGoals.includes(g.id)) return false;
+        if (filter !== "all" && filter !== "active" && filter !== g.category) return false;
+        if (phaseFilter !== "all" && String(g.phase) !== String(phaseFilter)) return false;
+        if (!matchesSearch(g)) return false;
+        return true;
+      })
+      .sort((a, b) => (a.order || 999) - (b.order || 999));
+  }, [filter, phaseFilter, search, state.activeGoals]);
 
-    if (filter === "all") {
-      return LEARNING_PATH.map((stage, index) => ({
-        id: `stage-${index}`,
-        title: stage.title,
-        subtitle: stage.desc,
-        icon: GraduationCap,
-        goals: ordered.filter(item => item.stageIndex === index)
-      })).filter(section => section.goals.length > 0);
-    }
-
-    if (filter === "active") {
-      return [{
-        id: "active",
-        title: "AKTYWNE ZADANIA TRENINGOWE",
-        subtitle: "Tylko zadania, które pojawią się w pre-game. Setup nie trafia do treningu.",
-        icon: Target,
-        goals: ordered.filter(item => trainableActiveGoals.includes(item.id))
-      }].filter(section => section.goals.length > 0);
-    }
-
-    const cat = CATEGORIES[filter];
-    if (!cat) return [];
-    return [{
-      id: filter,
-      title: cat.name,
-      subtitle: cat.subtitle,
-      icon: cat.icon,
-      goals: ordered.filter(item => item.category === filter)
-    }].filter(section => section.goals.length > 0);
-  }, [filter, state.activeGoals, completedSetupGoals]);
+  const grouped = useMemo(() => {
+    const out = {};
+    filteredGoals.forEach(g => {
+      const key = groupBy === "phase" ? String(g.phase || "ongoing") : g.category;
+      if (!out[key]) out[key] = [];
+      out[key].push(g);
+    });
+    return out;
+  }, [filteredGoals, groupBy]);
 
   const filters = [
-    { id: "all", label: "ŚCIEŻKA" },
-    { id: "active", label: `AKTYWNE (${trainableActiveGoals.length})` },
+    { id: "all", label: "WSZYSTKIE" },
+    { id: "active", label: `AKTYWNE (${state.activeGoals.length})` },
     ...Object.entries(CATEGORIES).map(([id, cat]) => ({ id, label: cat.name }))
+  ];
+
+  const phaseFilters = [
+    { id: "all", label: "WSZYSTKIE FAZY" },
+    { id: "1", label: "FAZA 1" },
+    { id: "2", label: "FAZA 2" },
+    { id: "3", label: "FAZA 3" },
+    { id: "ongoing", label: "UNIWERSALNE" }
   ];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div>
         <Text dim style={{ fontSize: "12px", display: "block", marginBottom: 12 }}>
-          Domyślny widok pokazuje kolejność nauki: setup → informacja → fale → micro → macro → walki → maksymalizacje.
-          Zadania treningowe pojawiają się w pre-game, a setup możesz odhaczyć od razu po konfiguracji.
+          {Object.keys(GOALS).length} zadań w bazie · 54 punkty z planu Claude (technika małych kroczków) + extra splity.
+          Po 3+ grach z 66%+ skutecznością — status <strong style={{ color: c.textDim }}>WSTĘPNIE OPANOWANE</strong>.
         </Text>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+
+        {/* Search */}
+        <div style={{ position: "relative", marginBottom: 12 }}>
+          <Search size={14} color={c.textMute} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Szukaj w zadaniach (label, opis, jak wykonać)..."
+            style={{
+              width: "100%", background: c.card, border: `1px solid ${c.border}`,
+              color: c.text, padding: "10px 12px 10px 36px", fontFamily: fMono, fontSize: "12px",
+              outline: "none", boxSizing: "border-box"
+            }}
+          />
+        </div>
+
+        {/* Phase filters */}
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+          {phaseFilters.map(f => (
+            <button key={f.id} onClick={() => setPhaseFilter(f.id)} style={{
+              padding: "6px 12px",
+              background: phaseFilter === f.id ? c.warning : c.card,
+              border: `1px solid ${phaseFilter === f.id ? c.warning : c.border}`,
+              color: phaseFilter === f.id ? c.bg : c.textDim,
+              fontFamily: fMono, fontSize: "10px", fontWeight: 700,
+              cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
+            }}>{f.label}</button>
+          ))}
+        </div>
+
+        {/* Category filters */}
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
           {filters.map(f => (
             <button key={f.id} onClick={() => setFilter(f.id)} style={{
               padding: "6px 12px",
@@ -2133,21 +1204,54 @@ function KnowledgeView({ state, setState }) {
             }}>{f.label}</button>
           ))}
         </div>
+
+        {/* Group by toggle */}
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <Text mute style={{ fontSize: "11px" }}>Grupuj wg:</Text>
+          {[["category", "KATEGORII"], ["phase", "FAZY"]].map(([k, l]) => (
+            <button key={k} onClick={() => setGroupBy(k)} style={{
+              padding: "4px 8px",
+              background: groupBy === k ? c.cardHi : "transparent",
+              border: `1px solid ${groupBy === k ? c.borderHi : c.border}`,
+              color: groupBy === k ? c.text : c.textMute,
+              fontFamily: fMono, fontSize: "10px", fontWeight: 700,
+              cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
+            }}>{l}</button>
+          ))}
+        </div>
+
+        {filteredGoals.length === 0 && (
+          <div style={{ padding: 24, textAlign: "center", marginTop: 12, background: c.card, border: `1px solid ${c.border}` }}>
+            <Text mute style={{ display: "block" }}>Brak zadań dla wybranych filtrów.</Text>
+          </div>
+        )}
       </div>
 
-      {sections.map(section => {
-        const Icon = section.icon;
+      {Object.entries(grouped).map(([groupKey, goals]) => {
+        if (goals.length === 0) return null;
+        let headerName, headerSub, Icon;
+        if (groupBy === "phase") {
+          const p = PHASES[groupKey] || PHASES.ongoing;
+          headerName = p.name;
+          headerSub = p.weeks + " · " + p.subtitle;
+          Icon = Calendar;
+        } else {
+          const cat = CATEGORIES[groupKey] || { name: groupKey, subtitle: "", icon: BookOpen };
+          headerName = cat.name;
+          headerSub = cat.subtitle;
+          Icon = cat.icon || BookOpen;
+        }
         return (
-          <div key={section.id}>
+          <div key={groupKey}>
             <div style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 10 }}>
               <Icon size={18} color={c.amber} />
               <div>
-                <H2>{section.title}</H2>
-                <Text mute style={{ fontSize: "11px", display: "block", marginTop: 2 }}>{section.subtitle}</Text>
+                <H2>{headerName}</H2>
+                <Text mute style={{ fontSize: "11px", display: "block", marginTop: 2 }}>{headerSub} · {goals.length} zadań</Text>
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {section.goals.map(g => (
+              {goals.map(g => (
                 <GoalCard
                   key={g.id} goalId={g.id} goal={g}
                   expanded={!!expanded[g.id]}
@@ -2155,9 +1259,6 @@ function KnowledgeView({ state, setState }) {
                   isActive={state.activeGoals.includes(g.id)}
                   onToggleActive={() => toggleActive(g.id)}
                   stats={goalStats[g.id]}
-                  isSetup={g.type === "setup"}
-                  isCompletedSetup={completedSetupGoals.includes(g.id)}
-                  onToggleSetupDone={() => toggleSetupDone(g.id)}
                 />
               ))}
             </div>
@@ -2248,7 +1349,7 @@ function HistoryView({ state }) {
 }
 
 // ============================================================
-// STATS — fokus na wykonanie celu, brak W/L
+// STATS — fokus na compliance per cel, brak W/L
 // ============================================================
 function StatsView({ state }) {
   const games = state.games;
@@ -2257,7 +1358,7 @@ function StatsView({ state }) {
     if (games.length === 0) return null;
 
     const perGoal = {};
-    Object.keys(GOALS).filter(id => GOALS[id]?.type !== "setup").forEach(id => {
+    Object.keys(GOALS).forEach(id => {
       const gamesWithGoal = games.filter(g => g.focusGoals.includes(id));
       const compliance = gamesWithGoal.filter(g => g.goalCompliance[id]);
       perGoal[id] = {
@@ -2334,7 +1435,7 @@ function StatsView({ state }) {
       <div>
         <H2 style={{ marginBottom: 12 }}>POSTĘP NAUKI ZADAŃ</H2>
         <Text dim style={{ fontSize: "12px", display: "block", marginBottom: 12 }}>
-          Każde zadanie ma własny licznik gier. Trend pokazuje ostatnie 5 prób danego zadania. Po <strong>3+ grach z minimum 66% wykonań</strong> zadanie zostaje "WSTĘPNIE OPANOWANE".
+          Każde zadanie ma własny licznik gier. Trend pokazuje ostatnie 5 prób danego skilla. Po <strong>3+ grach z minimum 66% wykonań</strong> zadanie zostaje "WSTĘPNIE OPANOWANE".
         </Text>
 
         {masteryGroups.warning.length > 0 && (
@@ -2393,7 +1494,7 @@ function StatsView({ state }) {
         )}
       </div>
 
-      {/* Stałe zasady */}
+      {/* Always-on */}
       <div>
         <H2 style={{ marginBottom: 12 }}>DYSCYPLINA SESJI</H2>
         <Box style={{ padding: "16px" }}>
@@ -2464,9 +1565,371 @@ function GoalProgressRow({ goal, stat, isLast }) {
 // ============================================================
 // SETTINGS
 // ============================================================
+// ============================================================
+// PROGRAM VIEW — 12-tygodniowy plan (z Excela Claude)
+// ============================================================
+function ProgramView({ state, setState, setView }) {
+  const phaseProgress = useMemo(() => getPhaseProgress(state.games, GOALS), [state.games]);
+  const currentPhase = useMemo(() => getCurrentUserPhase(state.games, GOALS), [state.games]);
+  const suggestedNext = useMemo(
+    () => getSuggestedNextGoal(state.games, GOALS, state.activeGoals, currentPhase),
+    [state.games, state.activeGoals, currentPhase]
+  );
+
+  const goalsByPhaseWeek = useMemo(() => {
+    const out = { 1: {}, 2: {}, 3: {}, ongoing: {} };
+    Object.entries(GOALS).forEach(([id, g]) => {
+      const phase = g.phase || "ongoing";
+      const week = g.week || "—";
+      if (!out[phase]) out[phase] = {};
+      if (!out[phase][week]) out[phase][week] = [];
+      out[phase][week].push({ id, ...g });
+    });
+    Object.keys(out).forEach(p => {
+      Object.keys(out[p]).forEach(w => {
+        out[p][w].sort((a, b) => (a.order || 999) - (b.order || 999));
+      });
+    });
+    return out;
+  }, []);
+
+  const isMastered = (id) => {
+    const games = state.games.filter(g => Array.isArray(g.focusGoals) && g.focusGoals.includes(id));
+    if (games.length < 3) return false;
+    const compliance = games.filter(g => g.goalCompliance?.[id]).length;
+    return compliance / games.length >= 0.66;
+  };
+
+  const activate = (id) => setState(s => ({
+    ...s,
+    activeGoals: s.activeGoals.includes(id) ? s.activeGoals : [...s.activeGoals, id]
+  }));
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <Box style={{ padding: "16px 18px", background: c.activeBg, borderColor: c.success }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+          <Calendar size={20} color={c.success} />
+          <H2 style={{ color: c.success }}>PROGRAM 12-TYGODNIOWY</H2>
+        </div>
+        <Text dim style={{ fontSize: "12px", lineHeight: 1.5, display: "block" }}>
+          54 punkty z notatek podzielone na 3 fazy. Każdy element trenujesz 3-4 gry zanim przejdziesz dalej. Sugerowana faza dla ciebie:{" "}
+          <strong style={{ color: c.success }}>FAZA {currentPhase}</strong>.
+        </Text>
+        {suggestedNext && (
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${c.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <div>
+              <Label style={{ color: c.amber }}>NASTĘPNE ZADANIE DO TRENINGU</Label>
+              <Text style={{ fontSize: "14px", fontWeight: 700, display: "block" }}>{GOALS[suggestedNext].label}</Text>
+              <Text mute style={{ fontSize: "11px" }}>{GOALS[suggestedNext].short}</Text>
+            </div>
+            <Btn variant="success" onClick={() => activate(suggestedNext)}>
+              WŁĄCZ DO TRENINGU
+            </Btn>
+          </div>
+        )}
+      </Box>
+
+      {/* Phase summary */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+        {[1, 2, 3, "ongoing"].map(p => {
+          const phase = PHASES[p];
+          const stats = phaseProgress[p];
+          const rate = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
+          const isCurrent = String(currentPhase) === String(p);
+          return (
+            <Box key={p} style={{ padding: "12px 14px", borderColor: isCurrent ? c.success : c.border }}>
+              <Label style={{ color: isCurrent ? c.success : c.textMute, marginBottom: 4 }}>{phase.weeks}</Label>
+              <Text style={{ fontSize: "12px", fontWeight: 700, display: "block" }}>{phase.name}</Text>
+              <div style={{ marginTop: 8 }}>
+                <ProgressBar value={rate} color={isCurrent ? c.success : c.amber} height={4} />
+                <Text mute style={{ fontSize: "10px", display: "block", marginTop: 4 }}>{stats.mastered}/{stats.total} opanowane ({rate}%)</Text>
+              </div>
+            </Box>
+          );
+        })}
+      </div>
+
+      {/* Phases & weeks roadmap */}
+      {[1, 2, 3, "ongoing"].map(p => {
+        const phase = PHASES[p];
+        const weeks = goalsByPhaseWeek[p];
+        const weekKeys = Object.keys(weeks).sort((a, b) => {
+          if (a === "—") return 1;
+          if (b === "—") return -1;
+          return Number(a) - Number(b);
+        });
+        return (
+          <div key={p}>
+            <div style={{ marginBottom: 12 }}>
+              <H2>{phase.name}</H2>
+              <Text mute style={{ fontSize: "11px", display: "block", marginTop: 2 }}>{phase.weeks} · {phase.subtitle}</Text>
+              <Text dim style={{ fontSize: "12px", display: "block", marginTop: 8, lineHeight: 1.5 }}>{phase.description}</Text>
+            </div>
+            {weekKeys.map(wk => {
+              const items = weeks[wk];
+              if (!items?.length) return null;
+              return (
+                <Box key={wk} style={{ padding: "12px 14px", marginBottom: 10 }}>
+                  <Label style={{ color: c.amber, marginBottom: 8 }}>
+                    {wk === "—" ? "BEZ TYGODNIA" : `TYDZIEŃ ${wk}`}
+                  </Label>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {items.map(g => {
+                      const active = state.activeGoals.includes(g.id);
+                      const mastered = isMastered(g.id);
+                      return (
+                        <div key={g.id} style={{
+                          display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10,
+                          padding: "8px 10px", background: c.panel, border: `1px solid ${mastered ? c.success : c.border}`
+                        }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+                              <Text style={{ fontSize: "12px", fontWeight: 700 }}>{g.label}</Text>
+                              {mastered && <Pill color={c.success} bg={c.activeBg}>✓ OPANOWANE</Pill>}
+                              {active && !mastered && <Pill color={c.amber}>W TRAKCIE</Pill>}
+                            </div>
+                            <Text mute style={{ fontSize: "10px", display: "block", marginTop: 2 }}>{g.short}</Text>
+                          </div>
+                          {!active && (
+                            <Btn variant="ghost" onClick={() => activate(g.id)} style={{ padding: "5px 9px", fontSize: "10px" }}>
+                              WŁĄCZ
+                            </Btn>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Box>
+              );
+            })}
+          </div>
+        );
+      })}
+
+      <Box style={{ padding: "14px 16px", background: c.warningBg, borderColor: c.warning }}>
+        <H2 style={{ color: c.warning, marginBottom: 8 }}>ZASADY PROGRAMU</H2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {[
+            "3-4 gry na każdy element (technika małych kroczków)",
+            "Refleksja po grze = NIE win/lose, tylko JAK wykonałem element",
+            "Nie pamiętasz właśnie zagranej gry = KONIEC NA DZIŚ",
+            "Strata LP z nauką = ZYSK. Gra to nauka, nie LP.",
+            "Po 3 przegranych z rzędu — koniec na dziś. Bez wyjątków.",
+            "Przejdź do następnej fazy gdy 80%+ obecnej jest OPANOWANE"
+          ].map((rule, i) => (
+            <div key={i} style={{ display: "flex", gap: 8 }}>
+              <span style={{ color: c.warning, fontFamily: fMono, fontSize: "11px", fontWeight: 800 }}>{String(i + 1).padStart(2, "0")}</span>
+              <Text style={{ fontSize: "12px", lineHeight: 1.5 }}>{rule}</Text>
+            </div>
+          ))}
+        </div>
+      </Box>
+    </div>
+  );
+}
+
+// ============================================================
+// CHEATSHEET VIEW — ściąga do wydruku (z Excela)
+// ============================================================
+function CheatsheetView() {
+  const sections = [
+    {
+      title: "TIMERY — FALE I LEVEL",
+      icon: Clock,
+      items: [
+        ["SOLO LANE", "Lvl 2 = 7 CS · Lvl 3 = 14 CS · Lvl 4 = 24 CS · Lvl 6 = po fali 8"],
+        ["BOT LANE", "Lvl 2 = 9 CS (1 fala + 3 mele) · Lvl 3 = 21 CS"],
+        ["CANNON FALA", "Co 3. fala. Hard push PRZED canonem → recall"],
+        ["JG CAMP", "1 camp = 4 CS. Liczy się od pierwszego widzianego CS junglera"]
+      ]
+    },
+    {
+      title: "OBJEKTIVE TIMERY",
+      icon: Target,
+      items: [
+        ["SMOK", "Spawn 5:00. Co 5 min od śmierci. Soul point po 3-4 smoku."],
+        ["HERALD", "Spawn 14:00. Despawn 19:30 (lub gdy nie wzięty)"],
+        ["GRUBSY", "Spawn ~7:30 (jeśli dostępne)"],
+        ["BARON", "Spawn 20:00. Co 6 min od śmierci. Empower 3:30."],
+        ["ELDER DRAGON", "Po wzięciu 4 smoków. Burn debuff = WIN walkę = WIN gra."]
+      ]
+    },
+    {
+      title: "FLASH I SUMMONERS",
+      icon: Zap,
+      items: [
+        ["FLASH BAZA", "5 min (300s) bez ulta z F"],
+        ["FLASH Z ULTEM", "4 min (240s) z Cosmic Insight"],
+        ["TELEPORT", "4 min (240s) early → później 5 min"],
+        ["IGNITE", "180s. Dmg = ~70-410 (level)"],
+        ["EXHAUST", "210s. -40% dmg na enemy"]
+      ]
+    },
+    {
+      title: "5 CZYNNIKÓW OBJEKTIVA",
+      icon: Map,
+      items: [
+        ["1. PRIO", "Fala wpushowana przed enemy"],
+        ["2. TEMPO", "Przewaga czasu — możesz coś zrobić pierwszy"],
+        ["3. SIŁA W WALCE", "Fed, item spike up"],
+        ["4. WYGRANA WALKA", "Enemy 2+ down → obj za darmo"],
+        ["5. ROTACJE", "Nafedowany champ rotuje → enemy musi odpuścić"]
+      ]
+    },
+    {
+      title: "SCHEMATY MACRO",
+      icon: Activity,
+      items: [
+        ["BAZA", "wave → objective → wave → objective"],
+        ["SMOK", "wave → wizja → wave → smok"],
+        ["HERALD", "Mobilny mid → BOT tower. Niemobilny → MID. Top NIE."],
+        ["ROTACJA T1", "BOT T1 → mid. MID T1 → side. TOP T1 → top zostaje."],
+        ["4-1 T2", "Toplaner sajt, JG+supp między, carry mid. Enemy 5 mid → supp+JG do topa = 3v1"]
+      ]
+    },
+    {
+      title: "WAVE MGMT",
+      icon: Crosshair,
+      items: [
+        ["SLOW PUSH", "Ostatnie hity. 3 fale stack. Crash pod tower enemy = okno akcji"],
+        ["FREEZE", "+3 caster minionów enemy. NIE bij z ręki."],
+        ["HARD PUSH", "Pełną siłą. Tylko przed canonem/roamem/objective"],
+        ["RECALL", "TYLKO na canon falę. Hard push przed canonem → recall."]
+      ]
+    },
+    {
+      title: "ZASADY ŻELAZNE",
+      icon: AlertCircle,
+      items: [
+        ["LP vs SKILL", "Gram pod NAUKĘ, nie pod LP. Strata LP z nauką = zysk."],
+        ["3-4 GRY", "Każdy element trenuję 3-4 gry. Potem następny."],
+        ["REFLEKSJA", "Po grze: JAK wykonałem, NIE win/lose."],
+        ["PAMIĘĆ", "Nie pamiętam gry = KONIEC NA DZIŚ. Więcej gier = mniej nauki."],
+        ["CHAT", "All chat OFF. Team chat — mute jak szczekają."],
+        ["PRZERWA", "Po przegranej min 5 min od kompa. Bez wyjątków."]
+      ]
+    },
+    {
+      title: "TEAMFIGHT — TRÓJKĄT",
+      icon: Swords,
+      items: [
+        ["ENGAGE", "Mobilni z CC: Malphite, Diana. Bije POKE."],
+        ["POKE", "Długi range, mało CC: Xerath, Varus. Bije DISENGAGE."],
+        ["DISENGAGE", "Tarcze, zerowanie engage: Galio, Braum. Bije ENGAGE."],
+        ["FRONT-TO-BACK", "Silne carry zza frontu. Mage → najbliższy target."],
+        ["FLANKA", "Wejście z boku, łamie front-to-back."]
+      ]
+    },
+    {
+      title: "0+ / 0- AKCJE",
+      icon: Lightbulb,
+      items: [
+        ["F-KEY CHECK", "Sprawdź side podczas animacji. Zwykle 0, czasem info kluczowa."],
+        ["FOG ENTRY", "Wejdź w fog gdy nic nie tracisz = enemy musi respect."],
+        ["PING FLASH", "Ping cyferki 1-5 dla użytego flasha enemy."],
+        ["NIE 2 STAKI", "Trzymanie 2 staków wardów = strata info."],
+        ["NIE FACECHECK", "Klasyczne 0- = łatwa śmierć."]
+      ]
+    }
+  ];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <Box style={{ padding: "16px 18px", background: c.warningBg, borderColor: c.warning }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <FileText size={20} color={c.warning} />
+          <div>
+            <H2 style={{ color: c.warning }}>ŚCIĄGA</H2>
+            <Text dim style={{ fontSize: "11px", display: "block", marginTop: 2 }}>
+              Timery i zasady z notatek. Możesz wydrukować i położyć obok monitora.
+            </Text>
+          </div>
+        </div>
+      </Box>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
+        {sections.map((s, idx) => {
+          const Icon = s.icon;
+          return (
+            <Box key={idx} style={{ padding: "14px 16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                <Icon size={16} color={c.amber} />
+                <H2 style={{ fontSize: "13px" }}>{s.title}</H2>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {s.items.map(([key, val], i) => (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", gap: 2, paddingBottom: 6, borderBottom: i < s.items.length - 1 ? `1px solid ${c.border}` : "none" }}>
+                    <Text style={{ fontSize: "10px", color: c.accent, fontWeight: 800, letterSpacing: "0.1em" }}>{key}</Text>
+                    <Text dim style={{ fontSize: "11px", lineHeight: 1.4 }}>{val}</Text>
+                  </div>
+                ))}
+              </div>
+            </Box>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function SettingsView({ state, setState }) {
+  const pool = state.championPool || { lane: "", champions: ["", "", ""] };
+  const updatePool = (patch) => setState(s => ({ ...s, championPool: { ...pool, ...patch } }));
+  const updateChamp = (idx, val) => {
+    const champions = [...pool.champions];
+    champions[idx] = val;
+    updatePool({ champions });
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+      {/* CHAMPION POOL — przysięga z Excela */}
+      <div>
+        <H2 style={{ marginBottom: 6 }}>CHAMPION POOL — PRZYSIĘGA</H2>
+        <Text mute style={{ fontSize: "12px", display: "block", marginBottom: 12 }}>
+          Z Excela: gram MAKSYMALNIE 3 postacie na jednej linii. Trzymam się ich.
+          Nie zmieniam co tydzień. Pozwala wyczuć limity (mało zmiennych).
+        </Text>
+        <Box style={{ padding: "16px", display: "flex", flexDirection: "column", gap: 12 }}>
+          <div>
+            <Label>LINIA</Label>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {LANES.map(l => (
+                <button key={l.id} onClick={() => updatePool({ lane: l.id })} style={{
+                  padding: "8px 14px",
+                  background: pool.lane === l.id ? c.accent : c.card,
+                  border: `1px solid ${pool.lane === l.id ? c.accent : c.border}`,
+                  color: pool.lane === l.id ? c.onAccent : c.textDim,
+                  fontFamily: fMono, fontSize: "11px", fontWeight: 700,
+                  cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
+                }}>{l.label}</button>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            {[0, 1, 2].map(idx => (
+              <div key={idx}>
+                <Label>CHAMP #{idx + 1}</Label>
+                <input
+                  value={pool.champions[idx] || ""}
+                  onChange={e => updateChamp(idx, e.target.value)}
+                  placeholder={idx === 0 ? "np. Syndra" : idx === 1 ? "np. Ahri" : "np. Qiyana"}
+                  style={{
+                    width: "100%", background: c.card, border: `1px solid ${c.border}`,
+                    color: c.text, padding: "10px 12px", fontFamily: fMono, fontSize: "12px",
+                    outline: "none", boxSizing: "border-box"
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+          <Text mute style={{ fontSize: "10px", display: "block" }}>
+            Zmiana champion poola robi się raz na ~miesiąc, nie co tydzień. Tylko mając pełen pool możesz wypełnić champa w pre-game.
+          </Text>
+        </Box>
+      </div>
+
       <div>
         <H2 style={{ marginBottom: 12 }}>WYGLĄD</H2>
         <Box style={{ padding: "16px" }}>
@@ -2580,16 +2043,21 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
   const cooldownActive = state.lastGameEndTime && minsSinceLast < cooldown;
   const cooldownRemaining = Math.max(0, cooldown - minsSinceLast);
 
-  const trainableGoalIds = getTrainableActiveGoalIds(state.activeGoals, GOALS);
-  const activeGoalObjects = trainableGoalIds.map(id => ({ id, ...GOALS[id] })).filter(g => g.label);
+  const activeGoalObjects = state.activeGoals.map(id => ({ id, ...GOALS[id] })).filter(g => g.label);
   const recentMistakes = useMemo(() => getRecentMistakes(state.games), [state.games]);
   const weaknessSuggestions = useMemo(() => getWeaknessSuggestions(state.games, GOALS), [state.games]);
+  const streak = useMemo(() => getReflectionStreak(state.games), [state.games]);
+  const currentPhase = useMemo(() => getCurrentUserPhase(state.games, GOALS), [state.games]);
+  const suggestedNext = useMemo(
+    () => getSuggestedNextGoal(state.games, GOALS, state.activeGoals, currentPhase),
+    [state.games, state.activeGoals, currentPhase]
+  );
 
   const goalStats = useMemo(() => {
     const stats = {};
     Object.keys(GOALS).forEach(id => {
-      const gamesWithGoal = state.games.filter(g => g.focusGoals.includes(id));
-      const compliance = gamesWithGoal.filter(g => g.goalCompliance[id]);
+      const gamesWithGoal = state.games.filter(g => Array.isArray(g.focusGoals) && g.focusGoals.includes(id));
+      const compliance = gamesWithGoal.filter(g => g.goalCompliance?.[id]);
       stats[id] = {
         gamesWithGoal: gamesWithGoal.length,
         compliance: compliance.length,
@@ -2605,7 +2073,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
       ...s,
       activeGoals: s.activeGoals.includes(goalId) ? s.activeGoals : [...s.activeGoals, goalId],
       sessionPlan: {
-        ...createDefaultSessionPlan(getTrainableActiveGoalIds(s.activeGoals.includes(goalId) ? s.activeGoals : [...s.activeGoals, goalId], GOALS), getRecentMistakes(s.games)),
+        ...createDefaultSessionPlan(s.activeGoals.includes(goalId) ? s.activeGoals : [...s.activeGoals, goalId], getRecentMistakes(s.games)),
         ...(s.sessionPlan || {}),
         primaryGoalId: goalId,
         updatedAt: Date.now()
@@ -2631,13 +2099,27 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
         <Box style={{ padding: "14px" }}>
           <Label>DZIŚ</Label>
           <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
             <span style={{ fontFamily: fDisplay, fontSize: "32px", color: c.text }}>{state.gamesToday}</span>
           </div>
           <Text mute style={{ fontSize: "11px" }}>gier z refleksją</Text>
+        </Box>
+        <Box style={{ padding: "14px" }}>
+          <Label>STREAK</Label>
+          <div style={{ fontFamily: fDisplay, fontSize: "32px", color: streak > 0 ? c.success : c.textMute }}>
+            {streak}
+          </div>
+          <Text mute style={{ fontSize: "11px" }}>{streak === 1 ? "dzień" : "dni z rzędu"}</Text>
+        </Box>
+        <Box style={{ padding: "14px" }}>
+          <Label>FAZA</Label>
+          <div style={{ fontFamily: fDisplay, fontSize: "32px", color: c.warning }}>
+            {currentPhase === "ongoing" ? "U" : currentPhase}
+          </div>
+          <Text mute style={{ fontSize: "11px" }}>sugerowana</Text>
         </Box>
         <Box style={{ padding: "14px" }}>
           <Label>OSTATNIA</Label>
@@ -2650,10 +2132,33 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
         </Box>
         <Box style={{ padding: "14px" }}>
           <Label>AKTYWNYCH</Label>
-          <div style={{ fontFamily: fDisplay, fontSize: "32px", color: c.amber }}>{trainableGoalIds.length}</div>
-          <Text mute style={{ fontSize: "11px" }}>zadań w treningu</Text>
+          <div style={{ fontFamily: fDisplay, fontSize: "32px", color: c.amber }}>{state.activeGoals.length}</div>
+          <Text mute style={{ fontSize: "11px" }}>zadań trenujesz</Text>
         </Box>
       </div>
+
+      {/* Suggested next from program */}
+      {suggestedNext && !state.activeGoals.includes(suggestedNext) && (
+        <Box style={{ padding: "14px 16px", background: c.activeBg, borderColor: c.success }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <Label style={{ color: c.success }}>NASTĘPNE Z PROGRAMU (FAZA {currentPhase})</Label>
+              <Text style={{ fontSize: "14px", fontWeight: 700, display: "block", marginBottom: 2 }}>
+                {GOALS[suggestedNext].label}
+              </Text>
+              <Text mute style={{ fontSize: "11px" }}>{GOALS[suggestedNext].short}</Text>
+            </div>
+            <div style={{ display: "flex", gap: 6 }}>
+              <Btn variant="ghost" onClick={() => setView("program")} style={{ padding: "8px 12px", fontSize: "11px" }}>
+                ZOBACZ PROGRAM
+              </Btn>
+              <Btn variant="success" onClick={() => setState(s => ({ ...s, activeGoals: [...s.activeGoals, suggestedNext] }))} style={{ padding: "8px 12px", fontSize: "11px" }}>
+                WŁĄCZ
+              </Btn>
+            </div>
+          </div>
+        </Box>
+      )}
 
       <SessionPlanPanel
         state={state}
@@ -2676,11 +2181,11 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
               }}>
                 <Clock size={18} color={c.warning} />
                 <Text style={{ color: c.warning, fontWeight: 700 }}>
-                  PRZERWA PO OSTATNIEJ GRZE: {cooldownRemaining} min. Wstań od kompa.
+                  COOLDOWN PO OSTATNIEJ GRZE: {cooldownRemaining} min. Wstań od kompa.
                 </Text>
               </div>
             )}
-            {trainableGoalIds.length === 0 && (
+            {state.activeGoals.length === 0 && (
               <div style={{
                 background: c.warningBg, border: `1px solid ${c.warning}`,
                 padding: "14px", display: "flex", alignItems: "center", gap: 12, marginBottom: 12
@@ -2694,7 +2199,7 @@ function DashboardView({ state, setState, openPreGame, openPostGame, setView }) 
             <Btn
               variant="primary"
               onClick={openPreGame}
-              disabled={state.sessionLocked || cooldownActive || trainableGoalIds.length === 0}
+              disabled={state.sessionLocked || cooldownActive || state.activeGoals.length === 0}
               fullWidth style={{ padding: "20px", fontSize: "16px" }}
             >
               <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
@@ -2838,7 +2343,16 @@ export default function App() {
   const [view, setView] = useState("dashboard");
   const [modal, setModal] = useState(null);
 
+  // Theme apply: synchronously mutate c before children render
   applyTheme(state.theme || "dark");
+
+  // Keep document.body background in sync with theme to avoid white flash
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.body.style.background = c.bg;
+      document.body.style.color = c.text;
+    }
+  }, [state.theme]);
 
   useEffect(() => {
     let s = loadState();
@@ -2868,11 +2382,11 @@ export default function App() {
     );
   }
 
-  const trainableActiveCount = getTrainableActiveGoalIds(state.activeGoals, GOALS).length;
-
   const tabs = [
     { id: "dashboard", label: "PANEL", icon: Target },
     { id: "knowledge", label: "BAZA WIEDZY", icon: GraduationCap },
+    { id: "program", label: "PROGRAM", icon: Calendar },
+    { id: "cheatsheet", label: "ŚCIĄGA", icon: FileText },
     { id: "history", label: "HISTORIA", icon: History },
     { id: "stats", label: "POSTĘP", icon: BarChart3 },
     { id: "settings", label: "OPCJE", icon: Settings }
@@ -2896,7 +2410,7 @@ export default function App() {
             </Text>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Pill color={c.amber}>{trainableActiveCount} AKTYWNE</Pill>
+            <Pill color={c.amber}>{state.activeGoals.length} ACTIVE</Pill>
             <Pill color={c.textDim}>
               {new Date().toLocaleDateString("pl-PL", { weekday: "short", day: "2-digit", month: "short" })}
             </Pill>
@@ -2943,6 +2457,8 @@ export default function App() {
           />
         )}
         {view === "knowledge" && <KnowledgeView state={state} setState={setState} />}
+        {view === "program" && <ProgramView state={state} setState={setState} setView={setView} />}
+        {view === "cheatsheet" && <CheatsheetView />}
         {view === "history" && <HistoryView state={state} />}
         {view === "stats" && <StatsView state={state} />}
         {view === "settings" && <SettingsView state={state} setState={setState} />}
