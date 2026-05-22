@@ -12,6 +12,7 @@ import {
   getRecentMistakes,
   getWeaknessSuggestions,
   getPhaseProgress,
+  getSectionProgress,
   getSuggestedNextGoal,
   getCurrentUserPhase,
   getChampionStats,
@@ -19,7 +20,7 @@ import {
   getTopMistakeCategories
 } from "./learningLogic.js";
 import {
-  GOALS, CATEGORIES, ALWAYS_ON_RULES, PHASES, LANES
+  GOALS, PHASES, LANES, TABS, getGoalsBySection
 } from "./goals.js";
 
 // ============================================================
@@ -749,10 +750,7 @@ function PreGameView({ state, setState, onClose }) {
     .slice(0, 2);
   const [focusGoals, setFocusGoals] = useState(initialFocusGoals);
 
-  // Champion z poola
-  const pool = state.championPool || { champions: [] };
-  const poolChamps = (pool.champions || []).filter(Boolean);
-  const [champion, setChampion] = useState(state.currentChampion || poolChamps[0] || "");
+  const currentChampion = (state.currentChampion || "").trim();
 
   const activeGoals = state.activeGoals
     .map(id => ({ id, ...GOALS[id] }))
@@ -766,9 +764,9 @@ function PreGameView({ state, setState, onClose }) {
       mood,
       focusGoals,
       sessionPlan: plan,
-      champion
+      champion: currentChampion
     };
-    setState(s => ({ ...s, preGameSnapshot: snapshot, currentChampion: champion }));
+    setState(s => ({ ...s, preGameSnapshot: snapshot }));
     onClose();
   };
 
@@ -809,33 +807,34 @@ function PreGameView({ state, setState, onClose }) {
 
       <ReviewQueue mistakes={recentMistakes} compact />
 
-      {poolChamps.length > 0 ? (
-        <div>
-          <Label>2 / Champion (z twojego poola)</Label>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {poolChamps.map(ch => (
-              <button key={ch} onClick={() => setChampion(ch)} style={{
-                padding: "10px 14px",
-                background: champion === ch ? c.success : c.card,
-                border: `1px solid ${champion === ch ? c.success : c.border}`,
-                color: champion === ch ? c.onSuccess : c.textDim,
-                fontFamily: fMono, fontSize: "12px", fontWeight: 700,
-                cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
-              }}>{ch}</button>
-            ))}
+      <div>
+        <Label>2 / Champion (ustawiony raz w OPCJACH)</Label>
+        <Box style={{
+          padding: "12px 14px",
+          background: currentChampion ? c.activeBg : c.warningBg,
+          borderColor: currentChampion ? c.success : c.warning,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
+          flexWrap: "wrap"
+        }}>
+          <div>
+            <Text style={{
+              display: "block",
+              color: currentChampion ? c.success : c.warning,
+              fontWeight: 800,
+              fontSize: "13px",
+              textTransform: "uppercase"
+            }}>
+              {currentChampion || "Brak ustawionej postaci"}
+            </Text>
+            <Text mute style={{ fontSize: "10px", display: "block", marginTop: 4 }}>
+              Nie wybierasz championa przed każdą grą. Zmieniasz go tylko świadomie w OPCJACH.
+            </Text>
           </div>
-          <Text mute style={{ fontSize: "10px", display: "block", marginTop: 6 }}>
-            Wybór championa daje ci personal stats per champ. Pool ustawiasz w OPCJACH.
-          </Text>
-        </div>
-      ) : (
-        <div style={{ padding: 12, background: c.warningBg, border: `1px solid ${c.warning}`, display: "flex", gap: 10, alignItems: "center" }}>
-          <AlertCircle size={16} color={c.warning} />
-          <Text style={{ color: c.warning, fontSize: "11px" }}>
-            Brak champion poola. Ustaw w OPCJACH (max 3 postacie na linii — przysięga z Excela).
-          </Text>
-        </div>
-      )}
+        </Box>
+      </div>
 
       <div>
         <Label>3 / Co trenujesz w tej grze (max 2 zadania)</Label>
@@ -883,7 +882,6 @@ function PreGameView({ state, setState, onClose }) {
 function PostGameView({ state, setState, onClose }) {
   const snap = state.preGameSnapshot;
   const [goalCompliance, setGoalCompliance] = useState({});
-  const [alwaysOnCompliance, setAlwaysOnCompliance] = useState({});
   const [mistake, setMistake] = useState("");
   const [winThing, setWinThing] = useState("");
   const [remembered, setRemembered] = useState(null);
@@ -902,7 +900,6 @@ function PostGameView({ state, setState, onClose }) {
       postMood,
       focusGoals: snap.focusGoals,
       goalCompliance,
-      alwaysOnCompliance,
       remembered,
       mistake: mistake.trim(),
       winThing: winThing.trim(),
@@ -998,20 +995,7 @@ function PostGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>2 / Always-on zasady — dyscyplina sesji</Label>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {ALWAYS_ON_RULES.map(r => (
-            <CheckRow
-              key={r.id} checked={!!alwaysOnCompliance[r.id]}
-              onToggle={() => setAlwaysOnCompliance(s => ({ ...s, [r.id]: !s[r.id] }))}
-              label={r.label}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <Label>3 / Czy pamiętasz tę grę?</Label>
+        <Label>2 / Czy pamiętasz tę grę?</Label>
         <Text dim style={{ fontSize: "11px", display: "block", marginBottom: 10 }}>
           Potrafisz odtworzyć przebieg (lane → mid game → walka)? Nie potrafisz = zmęczony = koniec sesji.
         </Text>
@@ -1026,7 +1010,7 @@ function PostGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>4 / Jeden konkretny błąd (nie związany z W/L)</Label>
+        <Label>3 / Jeden konkretny błąd (nie związany z W/L)</Label>
         <textarea
           value={mistake} onChange={e => setMistake(e.target.value)}
           placeholder="np. Cofnąłem nie na canon w 12 min, oddałem 4 CS"
@@ -1041,7 +1025,7 @@ function PostGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>5 / Jedna rzecz która wyszła</Label>
+        <Label>4 / Jedna rzecz która wyszła</Label>
         <textarea
           value={winThing} onChange={e => setWinThing(e.target.value)}
           placeholder="np. Trzy razy out-roamowałem enemy mida"
@@ -1056,7 +1040,7 @@ function PostGameView({ state, setState, onClose }) {
       </div>
 
       <div>
-        <Label>6 / Mood po grze</Label>
+        <Label>5 / Mood po grze</Label>
         <MoodPicker value={postMood} onChange={setPostMood} />
       </div>
 
@@ -1075,12 +1059,12 @@ function PostGameView({ state, setState, onClose }) {
 // ============================================================
 // KNOWLEDGE BASE VIEW — wszystkie zadania, akordeon, filtr
 // ============================================================
-function KnowledgeView({ state, setState }) {
+function KnowledgeViewV2({ state, setState }) {
   const [expanded, setExpanded] = useState({});
-  const [filter, setFilter] = useState("all");
-  const [phaseFilter, setPhaseFilter] = useState("all");
+  const [activeTab, setActiveTab] = useState("macro");
+  const [showOnlyActive, setShowOnlyActive] = useState(false);
   const [search, setSearch] = useState("");
-  const [groupBy, setGroupBy] = useState("category"); // "category" | "phase"
+  const [collapsedSections, setCollapsedSections] = useState({});
 
   const goalStats = useMemo(() => {
     const stats = {};
@@ -1097,6 +1081,51 @@ function KnowledgeView({ state, setState }) {
     return stats;
   }, [state.games]);
 
+  const sectionProgress = useMemo(() => getSectionProgress(state.games, GOALS), [state.games]);
+  const searchLower = search.trim().toLowerCase();
+  const matchesSearch = (goal) => {
+    if (!searchLower) return true;
+    const haystack = [
+      goal.label,
+      goal.short,
+      goal.details?.what,
+      goal.details?.when,
+      goal.details?.whenNot,
+      goal.details?.success,
+      ...(goal.details?.how || []),
+      ...(goal.details?.mistakes || [])
+    ].filter(Boolean).join(" ").toLowerCase();
+    return haystack.includes(searchLower);
+  };
+
+  const tabCounts = useMemo(() => {
+    const counts = {
+      macro: { total: 0, active: 0 },
+      micro: { total: 0, active: 0 }
+    };
+    getGoalsBySection().forEach(section => {
+      section.goals.forEach(goal => {
+        counts[goal.tab].total += 1;
+        if (state.activeGoals.includes(goal.id)) counts[goal.tab].active += 1;
+      });
+    });
+    return counts;
+  }, [state.activeGoals]);
+
+  const sections = useMemo(() => {
+    return getGoalsBySection(activeTab)
+      .map(section => ({
+        ...section,
+        goals: section.goals.filter(goal => {
+          if (showOnlyActive && !state.activeGoals.includes(goal.id)) return false;
+          return matchesSearch(goal);
+        })
+      }))
+      .filter(section => section.goals.length > 0);
+  }, [activeTab, showOnlyActive, search, state.activeGoals]);
+
+  const visibleGoalCount = sections.reduce((sum, section) => sum + section.goals.length, 0);
+
   const toggleActive = (id) => {
     setState(s => ({
       ...s,
@@ -1106,69 +1135,82 @@ function KnowledgeView({ state, setState }) {
     }));
   };
 
-  const searchLower = search.trim().toLowerCase();
-  const matchesSearch = (g) => {
-    if (!searchLower) return true;
-    const haystack = [
-      g.label, g.short,
-      g.details?.what, g.details?.when, g.details?.whenNot, g.details?.success,
-      ...(g.details?.how || []), ...(g.details?.mistakes || [])
-    ].filter(Boolean).join(" ").toLowerCase();
-    return haystack.includes(searchLower);
-  };
-
-  const filteredGoals = useMemo(() => {
-    return Object.entries(GOALS)
-      .map(([id, g]) => ({ id, ...g }))
-      .filter(g => {
-        if (filter === "active" && !state.activeGoals.includes(g.id)) return false;
-        if (filter !== "all" && filter !== "active" && filter !== g.category) return false;
-        if (phaseFilter !== "all" && String(g.phase) !== String(phaseFilter)) return false;
-        if (!matchesSearch(g)) return false;
-        return true;
-      })
-      .sort((a, b) => (a.order || 999) - (b.order || 999));
-  }, [filter, phaseFilter, search, state.activeGoals]);
-
-  const grouped = useMemo(() => {
-    const out = {};
-    filteredGoals.forEach(g => {
-      const key = groupBy === "phase" ? String(g.phase || "ongoing") : g.category;
-      if (!out[key]) out[key] = [];
-      out[key].push(g);
-    });
-    return out;
-  }, [filteredGoals, groupBy]);
-
-  const filters = [
-    { id: "all", label: "WSZYSTKIE" },
-    { id: "active", label: `AKTYWNE (${state.activeGoals.length})` },
-    ...Object.entries(CATEGORIES).map(([id, cat]) => ({ id, label: cat.name }))
-  ];
-
-  const phaseFilters = [
-    { id: "all", label: "WSZYSTKIE FAZY" },
-    { id: "1", label: "FAZA 1" },
-    { id: "2", label: "FAZA 2" },
-    { id: "3", label: "FAZA 3" },
-    { id: "ongoing", label: "UNIWERSALNE" }
-  ];
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div>
         <Text dim style={{ fontSize: "12px", display: "block", marginBottom: 12 }}>
-          {Object.keys(GOALS).length} zadań w bazie · 54 punkty z planu Claude (technika małych kroczków) + extra splity.
-          Po 3+ grach z 66%+ skutecznością — status <strong style={{ color: c.textDim }}>WSTĘPNIE OPANOWANE</strong>.
+          {Object.keys(GOALS).length} zadań w bazie. Wybierz MACRO albo MICRO i ucz się jednego typu rzeczy naraz.
+          Po 3+ grach z 66%+ skutecznością status przechodzi na <strong style={{ color: c.textDim }}>WSTĘPNIE OPANOWANE</strong>.
         </Text>
 
-        {/* Search */}
-        <div style={{ position: "relative", marginBottom: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 14 }}>
+          {Object.values(TABS).map(tab => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.id;
+            const counts = tabCounts[tab.id] || { total: 0, active: 0 };
+            return (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+                textAlign: "left",
+                padding: "16px",
+                background: active ? c.activeBg : c.card,
+                border: `1px solid ${active ? c.success : c.border}`,
+                cursor: "pointer",
+                display: "flex",
+                gap: 12,
+                alignItems: "flex-start",
+                minHeight: 118
+              }}>
+                <Icon size={22} color={active ? c.success : c.textDim} style={{ flexShrink: 0 }} />
+                <div style={{ minWidth: 0 }}>
+                  <div style={{
+                    fontFamily: fDisplay,
+                    color: active ? c.success : c.text,
+                    fontSize: "18px",
+                    lineHeight: 1,
+                    marginBottom: 6
+                  }}>{tab.name}</div>
+                  <Text mute style={{ fontSize: "10px", display: "block", marginBottom: 8 }}>
+                    {tab.subtitle}
+                  </Text>
+                  <Text dim style={{ fontSize: "11px", lineHeight: 1.4, display: "block" }}>
+                    {tab.description}
+                  </Text>
+                  <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
+                    <Pill color={active ? c.success : c.textDim}>{counts.total} zadań</Pill>
+                    <Pill color={counts.active > 0 ? c.amber : c.textMute}>{counts.active} aktywne</Pill>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+          <Btn
+            variant={showOnlyActive ? "default" : "primary"}
+            onClick={() => setShowOnlyActive(false)}
+            style={{ padding: "8px 12px", fontSize: "11px" }}
+          >
+            WSZYSTKIE
+          </Btn>
+          <Btn
+            variant={showOnlyActive ? "primary" : "default"}
+            onClick={() => setShowOnlyActive(true)}
+            style={{ padding: "8px 12px", fontSize: "11px" }}
+          >
+            AKTYWNE ({tabCounts[activeTab]?.active || 0})
+          </Btn>
+          <Text mute style={{ fontSize: "11px" }}>
+            Pokazuję {visibleGoalCount} zadań w {TABS[activeTab].name}
+          </Text>
+        </div>
+
+        <div style={{ position: "relative" }}>
           <Search size={14} color={c.textMute} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Szukaj w zadaniach (label, opis, jak wykonać)..."
+            placeholder={`Szukaj w ${TABS[activeTab].name} (label, opis, jak wykonać)...`}
             style={{
               width: "100%", background: c.card, border: `1px solid ${c.border}`,
               color: c.text, padding: "10px 12px 10px 36px", fontFamily: fMono, fontSize: "12px",
@@ -1177,91 +1219,61 @@ function KnowledgeView({ state, setState }) {
           />
         </div>
 
-        {/* Phase filters */}
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-          {phaseFilters.map(f => (
-            <button key={f.id} onClick={() => setPhaseFilter(f.id)} style={{
-              padding: "6px 12px",
-              background: phaseFilter === f.id ? c.warning : c.card,
-              border: `1px solid ${phaseFilter === f.id ? c.warning : c.border}`,
-              color: phaseFilter === f.id ? c.bg : c.textDim,
-              fontFamily: fMono, fontSize: "10px", fontWeight: 700,
-              cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
-            }}>{f.label}</button>
-          ))}
-        </div>
-
-        {/* Category filters */}
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-          {filters.map(f => (
-            <button key={f.id} onClick={() => setFilter(f.id)} style={{
-              padding: "6px 12px",
-              background: filter === f.id ? c.accent : c.card,
-              border: `1px solid ${filter === f.id ? c.accent : c.border}`,
-              color: filter === f.id ? c.onAccent : c.textDim,
-              fontFamily: fMono, fontSize: "11px", fontWeight: 700,
-              cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
-            }}>{f.label}</button>
-          ))}
-        </div>
-
-        {/* Group by toggle */}
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <Text mute style={{ fontSize: "11px" }}>Grupuj wg:</Text>
-          {[["category", "KATEGORII"], ["phase", "FAZY"]].map(([k, l]) => (
-            <button key={k} onClick={() => setGroupBy(k)} style={{
-              padding: "4px 8px",
-              background: groupBy === k ? c.cardHi : "transparent",
-              border: `1px solid ${groupBy === k ? c.borderHi : c.border}`,
-              color: groupBy === k ? c.text : c.textMute,
-              fontFamily: fMono, fontSize: "10px", fontWeight: 700,
-              cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
-            }}>{l}</button>
-          ))}
-        </div>
-
-        {filteredGoals.length === 0 && (
+        {visibleGoalCount === 0 && (
           <div style={{ padding: 24, textAlign: "center", marginTop: 12, background: c.card, border: `1px solid ${c.border}` }}>
             <Text mute style={{ display: "block" }}>Brak zadań dla wybranych filtrów.</Text>
           </div>
         )}
       </div>
 
-      {Object.entries(grouped).map(([groupKey, goals]) => {
-        if (goals.length === 0) return null;
-        let headerName, headerSub, Icon;
-        if (groupBy === "phase") {
-          const p = PHASES[groupKey] || PHASES.ongoing;
-          headerName = p.name;
-          headerSub = p.weeks + " · " + p.subtitle;
-          Icon = Calendar;
-        } else {
-          const cat = CATEGORIES[groupKey] || { name: groupKey, subtitle: "", icon: BookOpen };
-          headerName = cat.name;
-          headerSub = cat.subtitle;
-          Icon = cat.icon || BookOpen;
-        }
+      {sections.map(section => {
+        const Icon = section.icon || BookOpen;
+        const stats = sectionProgress[section.id] || { total: section.goals.length, mastered: 0 };
+        const masteryRate = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
+        const collapsed = !!collapsedSections[section.id];
         return (
-          <div key={groupKey}>
-            <div style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 10 }}>
-              <Icon size={18} color={c.amber} />
-              <div>
-                <H2>{headerName}</H2>
-                <Text mute style={{ fontSize: "11px", display: "block", marginTop: 2 }}>{headerSub} · {goals.length} zadań</Text>
+          <div key={section.id}>
+            <div
+              onClick={() => setCollapsedSections(s => ({ ...s, [section.id]: !s[section.id] }))}
+              style={{
+                marginBottom: 12,
+                padding: "12px 14px",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                background: c.panel,
+                border: `1px solid ${c.border}`,
+                cursor: "pointer"
+              }}
+            >
+              <Icon size={18} color={c.amber} style={{ flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <H2>{section.name}</H2>
+                <Text mute style={{ fontSize: "11px", display: "block", marginTop: 2 }}>
+                  {section.subtitle} · {section.goals.length} zadań · {stats.mastered}/{stats.total} opanowane
+                </Text>
+                <div style={{ marginTop: 8, maxWidth: 220 }}>
+                  <ProgressBar value={masteryRate} color={masteryRate >= 66 ? c.success : c.amber} height={4} />
+                </div>
+              </div>
+              <div style={{ flexShrink: 0 }}>
+                {collapsed ? <ChevronDown size={18} color={c.textDim} /> : <ChevronUp size={18} color={c.textDim} />}
               </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {goals.map(g => (
-                <GoalCard
-                  key={g.id} goalId={g.id} goal={g}
-                  expanded={!!expanded[g.id]}
-                  onToggleExpand={() => setExpanded(s => ({ ...s, [g.id]: !s[g.id] }))}
-                  isActive={state.activeGoals.includes(g.id)}
-                  onToggleActive={() => toggleActive(g.id)}
-                  stats={goalStats[g.id]}
-                />
-              ))}
-            </div>
+            {!collapsed && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {section.goals.map(goal => (
+                  <GoalCard
+                    key={goal.id} goalId={goal.id} goal={goal}
+                    expanded={!!expanded[goal.id]}
+                    onToggleExpand={() => setExpanded(s => ({ ...s, [goal.id]: !s[goal.id] }))}
+                    isActive={state.activeGoals.includes(goal.id)}
+                    onToggleActive={() => toggleActive(goal.id)}
+                    stats={goalStats[goal.id]}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
@@ -1371,20 +1383,7 @@ function StatsView({ state }) {
       };
     });
 
-    const alwaysOnStats = {};
-    ALWAYS_ON_RULES.forEach(r => {
-      let total = 0, met = 0;
-      games.forEach(g => {
-        total++;
-        if (g.alwaysOnCompliance?.[r.id]) met++;
-      });
-      alwaysOnStats[r.id] = {
-        total, met,
-        rate: total > 0 ? Math.round((met / total) * 100) : 0
-      };
-    });
-
-    return { total: games.length, perGoal, alwaysOnStats };
+    return { total: games.length, perGoal };
   }, [games]);
 
   if (!stats) {
@@ -1492,26 +1491,6 @@ function StatsView({ state }) {
             </Box>
           </div>
         )}
-      </div>
-
-      {/* Always-on */}
-      <div>
-        <H2 style={{ marginBottom: 12 }}>DYSCYPLINA SESJI</H2>
-        <Box style={{ padding: "16px" }}>
-          {ALWAYS_ON_RULES.map(r => {
-            const data = stats.alwaysOnStats[r.id];
-            const color = data.rate >= 90 ? c.success : data.rate >= 70 ? c.warning : c.accent;
-            return (
-              <div key={r.id} style={{ marginBottom: 10 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                  <Text style={{ fontSize: "12px", fontWeight: 700 }}>{r.label}</Text>
-                  <Text style={{ fontSize: "12px", color, fontWeight: 700 }}>{data.rate}%</Text>
-                </div>
-                <ProgressBar value={data.rate} color={color} height={5} />
-              </div>
-            );
-          })}
-        </Box>
       </div>
 
       {/* Recent mistakes */}
@@ -1881,6 +1860,8 @@ function SettingsView({ state, setState }) {
     champions[idx] = val;
     updatePool({ champions });
   };
+  const poolChamps = (pool.champions || []).map(ch => ch.trim()).filter(Boolean);
+  const setCurrentChampion = (champion) => setState(s => ({ ...s, currentChampion: champion }));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
@@ -1924,8 +1905,25 @@ function SettingsView({ state, setState }) {
               </div>
             ))}
           </div>
+          {poolChamps.length > 0 && (
+            <div>
+              <Label>AKTYWNA POSTAĆ DO GIER</Label>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {poolChamps.map(champion => (
+                  <button key={champion} onClick={() => setCurrentChampion(champion)} style={{
+                    padding: "9px 12px",
+                    background: state.currentChampion === champion ? c.success : c.card,
+                    border: `1px solid ${state.currentChampion === champion ? c.success : c.border}`,
+                    color: state.currentChampion === champion ? c.onSuccess : c.textDim,
+                    fontFamily: fMono, fontSize: "11px", fontWeight: 700,
+                    cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em"
+                  }}>{champion}</button>
+                ))}
+              </div>
+            </div>
+          )}
           <Text mute style={{ fontSize: "10px", display: "block" }}>
-            Zmiana champion poola robi się raz na ~miesiąc, nie co tydzień. Tylko mając pełen pool możesz wypełnić champa w pre-game.
+            Zmiana champion poola robi się raz na ~miesiąc, nie co tydzień. Aktywną postać wybierasz tutaj raz, a pre-game tylko ją przypomina.
           </Text>
         </Box>
       </div>
@@ -2456,7 +2454,7 @@ export default function App() {
             setView={setView}
           />
         )}
-        {view === "knowledge" && <KnowledgeView state={state} setState={setState} />}
+        {view === "knowledge" && <KnowledgeViewV2 state={state} setState={setState} />}
         {view === "program" && <ProgramView state={state} setState={setState} setView={setView} />}
         {view === "cheatsheet" && <CheatsheetView />}
         {view === "history" && <HistoryView state={state} />}

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\lol-tracker\" && echo \"---\" && ls \"C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\")",
+      "Bash(python -c ' *)",
+      "PowerShell(Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip=[System.IO.Compression.ZipFile]::OpenRead\\('C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\Micro-streszczenie.docx'\\); $entry=$zip.GetEntry\\('word/document.xml'\\); $reader=New-Object System.IO.StreamReader $entry.Open\\(\\); $xml=$reader.ReadToEnd\\(\\); $reader.Close\\(\\); $zip.Dispose\\(\\); [xml]$d=$xml; $d.GetElementsByTagName\\('w:p'\\) | ForEach-Object { $t = \\($_.GetElementsByTagName\\('w:t'\\) | ForEach-Object { $_.InnerText }\\) -join ''; if \\($t.Trim\\(\\)\\) { Write-Output $t } } | Out-File -FilePath 'C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\micro-streszczenie-extracted.txt' -Encoding utf8; Write-Output \"DONE: $\\(Get-Item 'C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\micro-streszczenie-extracted.txt' | Select-Object -ExpandProperty Length\\) bytes\")",
+      "Bash(node -e ' *)",
+      "Bash(node --input-type=module -e ' *)",
+      "Bash(npx vite *)"
+    ]
+  }
+}

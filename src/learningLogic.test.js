@@ -6,6 +6,7 @@ import {
   getRecentMistakes,
   getWeaknessSuggestions,
   getPhaseProgress,
+  getSectionProgress,
   getSuggestedNextGoal,
   getCurrentUserPhase,
   getChampionStats,
@@ -16,10 +17,10 @@ import {
 const goals = {
   minimap_3s: { label: "Minimapa co 3 sekundy", category: "info", phase: 1, week: 1, order: 1 },
   tab_check: { label: "TAB", category: "info", phase: 1, week: 1, order: 2 },
-  freeze: { label: "Freeze fali", category: "wave", phase: 2, week: 5, order: 16 },
-  slow_push: { label: "Slow push", category: "wave", phase: 2, week: 5, order: 15 },
-  prio_basic: { label: "Prio", category: "macro", phase: 3, week: 9, order: 29 },
-  skillshot_angles: { label: "Trafianie skillshotów", category: "micro", phase: 1, week: 3, order: 8 }
+  freeze: { label: "Freeze fali", category: "wave", phase: 2, week: 5, order: 16, section: "wave_macro" },
+  slow_push: { label: "Slow push", category: "wave", phase: 2, week: 5, order: 15, section: "wave_macro" },
+  prio_basic: { label: "Prio", category: "macro", phase: 3, week: 9, order: 29, section: "prio_tempo" },
+  skillshot_angles: { label: "Trafianie skillshotów", category: "micro", phase: 1, week: 3, order: 8, section: "skills" }
 };
 
 test("getRecentMistakes returns the latest non-empty mistakes", () => {
@@ -89,6 +90,19 @@ test("getPhaseProgress groups goals by phase and marks mastered", () => {
   assert.equal(progress[1].mastered, 1);
   assert.ok(progress[1].total >= 2); // minimap_3s + tab_check + skillshot_angles
   assert.equal(progress[2].mastered, 0);
+});
+
+test("getSectionProgress groups goals by section and marks mastered", () => {
+  const games = [
+    { focusGoals: ["freeze"], goalCompliance: { freeze: true } },
+    { focusGoals: ["freeze"], goalCompliance: { freeze: true } },
+    { focusGoals: ["freeze"], goalCompliance: { freeze: true } },
+    { focusGoals: ["prio_basic"], goalCompliance: { prio_basic: false } }
+  ];
+  const progress = getSectionProgress(games, goals);
+  assert.equal(progress.wave_macro.mastered, 1);
+  assert.equal(progress.wave_macro.total, 2);
+  assert.equal(progress.prio_tempo.mastered, 0);
 });
 
 test("getSuggestedNextGoal returns next not-yet-active not-mastered goal in phase", () => {

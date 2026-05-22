@@ -98,6 +98,22 @@ export function getPhaseProgress(games, goals) {
   return phaseStats;
 }
 
+export function getSectionProgress(games, goals) {
+  const sectionStats = {};
+  Object.entries(goals).forEach(([id, goal]) => {
+    const section = goal.section || "unassigned";
+    const gamesWithGoal = games.filter(g => Array.isArray(g.focusGoals) && g.focusGoals.includes(id));
+    const compliance = gamesWithGoal.filter(g => g.goalCompliance?.[id]).length;
+    const isMastered = gamesWithGoal.length >= 3 && compliance / gamesWithGoal.length >= 0.66;
+
+    if (!sectionStats[section]) sectionStats[section] = { goals: [], total: 0, mastered: 0 };
+    sectionStats[section].goals.push({ id, attempts: gamesWithGoal.length, passed: compliance, isMastered });
+    sectionStats[section].total++;
+    if (isMastered) sectionStats[section].mastered++;
+  });
+  return sectionStats;
+}
+
 // Suggested next goal to start training (small steps technique)
 // Logic: within current phase find first goal that user hasn't activated AND hasn't mastered yet
 export function getSuggestedNextGoal(games, goals, activeGoals, currentPhase = 1) {
