@@ -1,51 +1,159 @@
-@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 
 * {
   box-sizing: border-box;
 }
 
 html,
-body {
+body,
+#root {
   margin: 0;
   padding: 0;
-  background: #0a0a0a;
-  color: #f5f5f5;
-  font-family: "JetBrains Mono", monospace;
+  width: 100%;
+  height: 100%;
+  background: #f3f1ec;
+  color: #15171b;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-#root {
-  min-height: 100vh;
+/* Full-window responsive stage. No transform-scale, no fixed dimensions. */
+.op-stage-wrap {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  background: #f3f1ec;
+  overflow: hidden;
 }
 
-/* Custom scrollbar */
+.op-stage {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  background: #f3f1ec;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+}
+
+.op-stage > * {
+  width: 100%;
+  height: 100%;
+}
+
+.op-load-state {
+  margin: auto;
+  min-width: 320px;
+  max-width: 520px;
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #dcd9d1;
+  color: #15171b;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
-  border: 2px solid #0a0a0a;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
+  background: transparent;
 }
 
+::-webkit-scrollbar-thumb {
+  background: #c2bfb5;
+  border: 2px solid #f3f1ec;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8c93a1;
+}
+
+textarea,
+input,
 button {
   font-family: inherit;
 }
 
-input,
-textarea {
-  font-family: inherit;
+textarea:focus,
+input:focus,
+button:focus {
+  outline: 1px solid rgba(0, 0, 0, 0.2);
+  outline-offset: 1px;
 }
 
-input:focus,
-textarea:focus {
-  border-color: #ef4444 !important;
+html[data-op-theme="dark"],
+html[data-op-theme="dark"] body,
+html[data-op-theme="dark"] #root,
+html[data-op-theme="dark"] .op-stage-wrap,
+html[data-op-theme="dark"] .op-stage {
+  background: #0b0d10;
+  color: #e6eaf0;
+}
+
+html[data-op-theme="dark"] .op-load-state {
+  background: #13171d;
+  border-color: #222831;
+  color: #e6eaf0;
+}
+
+html[data-op-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #2c333e;
+  border-color: #0b0d10;
+}
+
+html[data-op-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #5b6472;
+}
+
+html[data-op-theme="dark"] textarea:focus,
+html[data-op-theme="dark"] input:focus,
+html[data-op-theme="dark"] button:focus {
+  outline-color: rgba(230, 234, 240, 0.28);
+}
+
+/* Density variants stay; they tighten padding when active. */
+[data-op-density="compact"] {
+  font-size: 11.5px;
+}
+
+[data-op-density="compact"] [style*="padding: 20px"] {
+  padding: 14px 16px !important;
+}
+
+[data-op-density="compact"] [style*="padding: 18px"] {
+  padding: 12px 14px !important;
+}
+
+[data-op-density="compact"] [style*="padding: 16px"] {
+  padding: 11px 13px !important;
+}
+
+[data-op-density="compact"] [style*="padding: 14px"] {
+  padding: 10px 12px !important;
+}
+
+/* Make any min-width: 0 flex containers actually shrink */
+.op-stage * {
+  min-width: 0;
+}
+
+/* Subtle media query: under 1024px, hide the sidebar's label text and show only icons.
+   Implementation lives in operator-shell via @container-query-emulation classes if needed,
+   but we keep this rule for safety. */
+@media (max-width: 1024px) {
+  .op-stage [data-sidebar="true"] {
+    width: 64px !important;
+  }
+  .op-stage [data-sidebar-label] {
+    display: none !important;
+  }
 }

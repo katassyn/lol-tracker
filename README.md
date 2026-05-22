@@ -65,8 +65,8 @@ npm run tauri:build
 Po `npm run tauri:build` znajdziesz:
 
 - `src-tauri/target/release/master-track.exe` — surowy plik wykonywalny (~8 MB), nie potrzebuje instalacji
-- `src-tauri/target/release/bundle/msi/Master Track_1.0.0_x64_en-US.msi` — Windows Installer
-- `src-tauri/target/release/bundle/nsis/Master Track_1.0.0_x64-setup.exe` — NSIS installer
+- `src-tauri/target/release/bundle/msi/Master Track_2.0.0_x64_en-US.msi` — Windows Installer
+- `src-tauri/target/release/bundle/nsis/Master Track_2.0.0_x64-setup.exe` — NSIS installer
 
 Możesz uruchomić bezpośrednio `.exe` z `target/release/` — nie wymaga instalatora. Dane przechowywane w lokalnym WebView2 storage (per-user, zachowane między uruchomieniami).
 

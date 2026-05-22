@@ -105,6 +105,116 @@ export const SECTIONS = {
   soloq_errors:     { id: "soloq_errors",     tab: "soloq", name: "META-BŁĘDY I STATY",   subtitle: "Pareto 8, statystyki, bonus 5 powodów stuck",         icon: Lightbulb, order: 7 }
 };
 
+// ============================================================
+// LEARNING PLAN — 3-etapowa ścieżka nauki
+// Kolejność świadoma: najpierw teoria + mindset (SoloQ), potem
+// wykonanie (Micro), potem decyzje (Macro). Ustawienia są poza planem:
+// ustawiasz je raz i wracasz tylko kontrolnie.
+// ============================================================
+export const PLAN_STAGES = [
+  {
+    id: "stage_soloq",
+    name: "SoloQ — teoria i mindset",
+    short: "Etap 1 / 3",
+    description: "Zanim wbijesz mechanikę: poukładaj sobie głowę. System rankingowy, mindset climbu, dyscyplina, ludzie, rytuały przed i po grze. Większość to wiedza do przyswojenia (oznacz przeczytane), kilka to nawyki do utrwalenia.",
+    tab: "soloq",
+    sections: [
+      "soloq_system",     // System gry: MMR, LP, serwer, duo, dodge — fundament rozumienia
+      "soloq_mindset",    // 8 zasad climb — mentalna baza decyzji
+      "soloq_pre_game",   // Checklist przed grą
+      "soloq_post_game",  // Rytuał po grze
+      "soloq_people",     // Reakcje na innych
+      "soloq_discipline", // Dyscyplina sesji
+      "soloq_errors"      // Meta-błędy i statystyki
+    ]
+  },
+  {
+    id: "stage_micro",
+    name: "Micro — wykonanie",
+    short: "Etap 2 / 3",
+    description: "Mała skala: klikanie, animacje, skillshoty, pozycje, faza linii, mini-maksymalizacje. Tutaj trenujesz wykonanie pojedynczych decyzji.",
+    tab: "micro",
+    sections: [
+      "micro_basics",   // Klik + kamera + animacje
+      "skills",         // Skillshoty + input buffering
+      "positioning",    // Spacing, trójkąt, krzaki
+      "laning_micro",   // Faza linii: trade, CS, runy, value spelli
+      "max"             // Mini-maksymalizacje: czas, fountain, recall
+    ]
+  },
+  {
+    id: "stage_macro",
+    name: "Macro — decyzje",
+    short: "Etap 3 / 3",
+    description: "Duża skala: świadomość mapy, wave macro, prio, tempo, rotacje, objektivy, wizja jako system, walki, mindset meta. Tutaj trenujesz CO i GDZIE robić.",
+    tab: "macro",
+    sections: [
+      "awareness",      // Świadomość mapy
+      "wave_macro",     // Wave management
+      "prio_tempo",     // Prio i tempo
+      "early_mid",      // Early → mid
+      "mid_late",       // Mid-late + objektivy
+      "vision",         // Wizja jako system
+      "teamfight",      // Walki
+      "mindset_meta"    // Mindset meta (ciągłe)
+    ]
+  }
+];
+
+// Helper: linear list of all sections in plan order
+export const PLAN_SECTION_FLAT = PLAN_STAGES.flatMap(stage =>
+  stage.sections.map(secId => ({ stageId: stage.id, sectionId: secId }))
+);
+
+// Helper: find stage + section by their indices
+export function getPlanFocus(stageIdx, sectionIdx) {
+  const stage = PLAN_STAGES[stageIdx];
+  if (!stage) return null;
+  const sectionId = stage.sections[sectionIdx];
+  if (!sectionId) return null;
+  return { stage, sectionId };
+}
+
+// Helper: advance plan cursor; returns new {stageIdx, sectionIdx} or null when finished
+export function nextPlanFocus(stageIdx, sectionIdx) {
+  const stage = PLAN_STAGES[stageIdx];
+  if (!stage) return null;
+  if (sectionIdx + 1 < stage.sections.length) {
+    return { stageIdx, sectionIdx: sectionIdx + 1 };
+  }
+  if (stageIdx + 1 < PLAN_STAGES.length) {
+    return { stageIdx: stageIdx + 1, sectionIdx: 0 };
+  }
+  return null; // plan complete
+}
+
+export function getPlanCursorProgress(cursor = { stageIdx: 0, sectionIdx: 0 }) {
+  const stageIdx = Number.isInteger(cursor.stageIdx) ? cursor.stageIdx : 0;
+  const sectionIdx = Number.isInteger(cursor.sectionIdx) ? cursor.sectionIdx : 0;
+  const focus = getPlanFocus(stageIdx, sectionIdx);
+  const total = PLAN_SECTION_FLAT.length;
+  if (!focus || total === 0) {
+    return {
+      current: 0,
+      total,
+      percent: 0,
+      stage: null,
+      sectionId: null
+    };
+  }
+  const previousSections = PLAN_STAGES
+    .slice(0, stageIdx)
+    .reduce((sum, stage) => sum + stage.sections.length, 0);
+  const current = Math.min(total, previousSections + sectionIdx + 1);
+  return {
+    current,
+    total,
+    percent: Math.round((current / total) * 100),
+    stage: focus.stage,
+    sectionId: focus.sectionId
+  };
+}
+
 // LANES: do champion poola
 export const LANES = [
   { id: "top", label: "TOP" },
@@ -752,7 +862,7 @@ export const GOALS = {
   },
   game_settings: {
     label: "Ustawienia gry (jednorazowe)",
-    category: "micro", phase: 2, week: 8, order: 28,
+    category: "micro", phase: "ongoing", week: null, order: 28,
     short: "Smartcasty, F-keye, dźwięki skilli, mały HUD, AA off.",
     details: {
       what: "Ustawienia mają usuwać opóźnienia i poprawiać czytelność. Nie cel sam w sobie ale złe ustawienia blokują mechanikę i świadomość mapy.",
@@ -2871,7 +2981,7 @@ export const GOALS = {
       how: [
         "Trigger: enemy wraca na linię po recallu. TAB → patrz na itemy.",
         "Nowy spike (np. IE, Eclipse): change in damage profile, change in all-in calc.",
-        "Nowy Zhonya / Stopwatch: assassin może przegrać wejście.",
+        "Nowy item ratujący (Zhonya / Banshee / GA): assassin może przegrać wejście.",
         "Trinket count zmniejszony: postawił warda gdzieś — gdzie?",
         "Control ward count zmniejszony: postawił pinka — w pobliżu wave/krzaku/jg.",
         "Nawet bez nowego itemu — informacja zerowa jest też informacją (nie kupił = mało golda)."
@@ -3097,8 +3207,7 @@ export const GOALS = {
         "Walka start, jakikolwiek dmg na ciebie → potion natychmiast.",
         "Nawet pełny HP — gdy zaraz dostaniesz dmg, potion zacznie regen wcześniej.",
         "Refillable potion: 4 stack? Klikaj 1 nawet przy małym dmg — uzupełnisz po walce.",
-        "Hold tylko gdy 100% pewny że walki za chwilę nie ma.",
-        "Corrupting Potion: stacki przed walką, dmg z passa też 'value'."
+        "Hold tylko gdy 100% pewny że walki za chwilę nie ma."
       ],
       when: "Każda walka / objective skirmish / dive.",
       success: "Wszystkie potki używane. Twoje HP w walkach wyższe niż enemy.",
@@ -3203,7 +3312,7 @@ export const GOALS = {
   },
   extra_game_settings: {
     label: "Ustawienia gry — pełna lista",
-    category: "micro", phase: 1, week: 1, order: 264,
+    category: "micro", phase: "ongoing", week: null, order: 264,
     short: "Smartcast+shift normal, Target Champions Only toggle, Smooth/Locked OFF, mouse speed sync.",
     details: {
       what: "Lista ustawień KTÓRE MUSISZ MIEĆ. Raz ustawisz i zapomnisz. Brak tych ustawień = stała kara w każdej grze.",
@@ -3238,7 +3347,7 @@ export const GOALS = {
   // ---------- SOLOQ_SYSTEM ----------
   mmr_understanding: {
     label: "MMR ukryte — fundament matchmaku",
-    category: "mindset", phase: "ongoing", week: null, order: 300,
+    category: "mindset", phase: "ongoing", week: null, order: 300, info_only: true,
     short: "System dobiera lobby po MMR, nie po widocznej randze. LP/dywizja to tylko ekran.",
     details: {
       what: "MMR (matchmaking rating) to ukryta wartość, według której system dobiera kogo z kim grasz. Widoczna ranga/LP to tylko warstwa prezentacji. Dwie osoby z różnych dywizji mogą być w jednym lobby jeśli mają podobne MMR.",
@@ -3258,7 +3367,7 @@ export const GOALS = {
   },
   lp_gains_explained: {
     label: "LP gains zdradzają MMR vs dywizja",
-    category: "mindset", phase: "ongoing", week: null, order: 301,
+    category: "mindset", phase: "ongoing", week: null, order: 301, info_only: true,
     short: "Niskie LP gains = MMR niżej niż dywizja. Wysokie = wyżej. System wyrównuje przez gry.",
     details: {
       what: "Jeśli za wygraną dostajesz dużo LP — twoje MMR jest WYŻEJ niż widoczna dywizja, system cię popycha do góry. Jeśli mało LP / dużo traci się — MMR jest niżej. Nierówne gainsy NIE są karą, tylko mechanizmem wyrównującym.",
@@ -3279,7 +3388,7 @@ export const GOALS = {
   },
   statistics_4v5: {
     label: "4 vs 5 niewiadomych — statystyka po twojej stronie",
-    category: "mindset", phase: "ongoing", week: null, order: 302,
+    category: "mindset", phase: "ongoing", week: null, order: 302, info_only: true,
     short: "Ty stała. 4 random u ciebie, 5 random u enemy. Trolle/AFK statystycznie częściej u nich.",
     details: {
       what: "W każdej grze jesteś jedyną stałą po swojej stronie. Po twojej stronie są 4 losowi sojusznicy, po stronie enemy 5 losowych graczy. Statystycznie troll/AFK/słaby gracz częściej trafia do enemy. Pod warunkiem że SAM nie generujesz tych problemów.",
@@ -3300,7 +3409,7 @@ export const GOALS = {
   },
   server_choice: {
     label: "EUW vs EUNE — wybór świadomy",
-    category: "mindset", phase: "ongoing", week: null, order: 303,
+    category: "mindset", phase: "ongoing", week: null, order: 303, info_only: true,
     short: "EUW lepsze dla high elo / esportu. EUNE wystarcza dla niższych/średnich. Decyzja raz.",
     details: {
       what: "Jeśli celujesz w high elo lub esport — EUW lepszy bo skupia mocnych graczy (pro/akademia/ERL). Jeśli cel to gold/plat/emerald — EUNE w pełni wystarcza. Różnica zaczyna się już w Diamond, nie dopiero w Challenger.",
@@ -3321,7 +3430,7 @@ export const GOALS = {
   },
   duo_value: {
     label: "Duo TYLKO z planem",
-    category: "mindset", phase: "ongoing", week: null, order: 304,
+    category: "mindset", phase: "ongoing", week: null, order: 304, info_only: true,
     short: "Duo bot+sup / mid+jg z planem = mocne. 'Bo online' = strata. System balansuje przeciw duo.",
     details: {
       what: "Duo zmniejsza random po twojej stronie (3 niewiadome vs 4 solo). ALE system to wie i kompensuje — daje silniejszych enemy LUB słabszych team mate'ów. Duo bez planu często neutralne lub negatywne. Z planem (bot+sup, mid+jg) — bardzo mocne.",
@@ -3342,7 +3451,7 @@ export const GOALS = {
   },
   dodge_decision: {
     label: "Dodge — LP traci się, MMR nie",
-    category: "mindset", phase: "ongoing", week: null, order: 305,
+    category: "mindset", phase: "ongoing", week: null, order: 305, info_only: true,
     short: "Dodge = -LP + czas. MMR NIE spada. Narzędzie ochrony jakości gier.",
     details: {
       what: "Dodge w champ select zabiera widoczne LP i nakłada timeout, ale NIE zabiera ukrytego MMR. Pojedynczy dodge to mały koszt który chroni przed grą o niskiej szansie wygrania. Powtarzający się dodge — większa kara.",
@@ -4105,7 +4214,7 @@ export const GOALS = {
   // ---------- SOLOQ_ERRORS (Pareto 8 + statystyki + bonus 5) ----------
   err_8_areas: {
     label: "Pareto 8 obszarów — wybierz NAJSŁABSZY",
-    category: "mindset", phase: "ongoing", week: null, order: 339,
+    category: "mindset", phase: "ongoing", week: null, order: 339, info_only: true,
     short: "Wave / tempo / fog / cooldowny / info / lekkie oddanie / off-team / mechaniki. Zacznij od dna.",
     details: {
       what: "8 obszarów które najczęściej blokują graczy poniżej Master. Praca nad najsłabszym daje największy zwrot. Nie wszystkie naraz — wybierz NAJSŁABSZY.",
@@ -4132,7 +4241,7 @@ export const GOALS = {
   },
   err_no_surrender: {
     label: "Niepoddawanie ma +EV",
-    category: "mindset", phase: "ongoing", week: null, order: 340,
+    category: "mindset", phase: "ongoing", week: null, order: 340, info_only: true,
     short: "Odwrócenie 2/100 'przegranych' gier = +2 WR = dywizja w sezonie. 0+ sytuacja.",
     details: {
       what: "Surrender = przegrana pewna. Nie-surrender = część gier wygrasz. Wystarczy odwrócić mały procent żeby się opłacało matematycznie.",
@@ -4155,7 +4264,7 @@ export const GOALS = {
   },
   stat_winrate_misleading: {
     label: "Wysoki WR ≠ mocna postać",
-    category: "mindset", phase: "ongoing", week: null, order: 341,
+    category: "mindset", phase: "ongoing", week: null, order: 341, info_only: true,
     short: "One-tricki, low pickrate, łatwy pick, brak kontry. WR jest interpretowany.",
     details: {
       what: "Winrate championa nie mówi że jest 'mocny' — mówi że W TEJ PRÓBCE WYGRYWA. Powody mogą być różne: gra nim głównie OTP, mało pickow więc tylko specjaliści, łatwy w obsłudze, soloQ nie karze słabości.",
@@ -4177,7 +4286,7 @@ export const GOALS = {
   },
   stat_kda_misleading: {
     label: "KDA nie mówi czy decyzje były dobre",
-    category: "mindset", phase: "ongoing", week: null, order: 342,
+    category: "mindset", phase: "ongoing", week: null, order: 342, info_only: true,
     short: "Bezpieczne KDA może być biernością. Czasem warto umrzeć za makro.",
     details: {
       what: "KDA mierzy śmierci, kille, assysty. Nie mierzy: czy decyzja była dobra, czy ryzyko było uzasadnione, czy bierność była rozsądna. Wysokie KDA może być biernością. Ryzykowne KDA może być właściwe.",
@@ -4199,7 +4308,7 @@ export const GOALS = {
   },
   stat_damage_misleading: {
     label: "Damage często pusty",
-    category: "mindset", phase: "ongoing", week: null, order: 343,
+    category: "mindset", phase: "ongoing", week: null, order: 343, info_only: true,
     short: "Poke nabija dmg. Wbiegający losowo też. Damage ≠ wartość.",
     details: {
       what: "Total damage to liczba. Damage może być pusty (poke przez wave, wbiegający bez sensu) lub wartościowy (skupione na decydujących walkach).",
@@ -4220,8 +4329,8 @@ export const GOALS = {
     }
   },
   stuck_no_discipline: {
-    label: "Bonus 1/ Brak dyscypliny",
-    category: "mindset", phase: "ongoing", week: null, order: 344,
+    label: "Dodatkowo: Brak dyscypliny",
+    category: "mindset", phase: "ongoing", week: null, order: 344, info_only: true,
     short: "Skacze role/champ, ARAM zamiast rank, granie w złym stanie, 'jeszcze jedna'.",
     details: {
       what: "Pierwszy z 5 powodów dlaczego gracze nie wbijają rangi. Wyrażony przez objawy: brak regularności, ciągła zmiana planów, kompromisy w celu rozrywki.",
@@ -4242,8 +4351,8 @@ export const GOALS = {
     }
   },
   stuck_no_comfort_exit: {
-    label: "Bonus 2/ Strach przed dyskomfortem",
-    category: "mindset", phase: "ongoing", week: null, order: 345,
+    label: "Dodatkowo: Strach przed dyskomfortem",
+    category: "mindset", phase: "ongoing", week: null, order: 345, info_only: true,
     short: "Rozwój wymaga gorszych gier. Krok wstecz dla 2 kroków naprzód.",
     details: {
       what: "Drugi powód braku awansu. Wiesz że X jest problem, znasz rozwiązanie, ale dyskomfort zmiany cię blokuje. Klasyk: locked camera. Wiadomo że szkodzi, ale przejście do unlocked = dyskomfort. Gracz zostaje przy lockedzie.",
@@ -4264,8 +4373,8 @@ export const GOALS = {
     }
   },
   stuck_blame_others: {
-    label: "Bonus 3/ Skupianie się na innych",
-    category: "mindset", phase: "ongoing", week: null, order: 346,
+    label: "Dodatkowo: Skupianie się na innych",
+    category: "mindset", phase: "ongoing", week: null, order: 346, info_only: true,
     short: "Ty stała w każdej grze. Sojusznicy zmienni. Pracuj nad sobą.",
     details: {
       what: "Trzeci powód. Skupianie się na sojusznikach jest psychicznie wygodne (winę przenosisz), ale długoterminowo nie rozwija. Sojusznicy z poprzedniej gry NIE BĘDĄ w następnej. Twoje błędy zostaną.",
@@ -4286,8 +4395,8 @@ export const GOALS = {
     }
   },
   stuck_simple_solutions: {
-    label: "Bonus 4/ Szukanie prostych odpowiedzi",
-    category: "mindset", phase: "ongoing", week: null, order: 347,
+    label: "Dodatkowo: Szukanie prostych odpowiedzi",
+    category: "mindset", phase: "ongoing", week: null, order: 347, info_only: true,
     short: "Jeden champion / build / zasada cię nie wyniesie. LoL = 'to zależy' + rozbicie.",
     details: {
       what: "Czwarty powód. LoL jest złożony, prawdziwa odpowiedź zaczyna od 'to zależy' i wymaga rozbicia na czynniki. Proste hasła ('zawsze pushuj prio', 'one trick wyniesie') dają złudzenie rozwiązania.",
@@ -4308,8 +4417,8 @@ export const GOALS = {
     }
   },
   stuck_no_critical: {
-    label: "Bonus 5/ Brak krytycznego myślenia",
-    category: "mindset", phase: "ongoing", week: null, order: 348,
+    label: "Dodatkowo: Brak krytycznego myślenia",
+    category: "mindset", phase: "ongoing", week: null, order: 348, info_only: true,
     short: "Pytaj wszystko. Także siebie. Kontrargumenty > potwierdzenia.",
     details: {
       what: "Piąty powód braku awansu. Krytyczne myślenie = zadawanie pytań temu co słyszysz I temu co sam uważasz. Bez tego utrwalasz złe schematy.",

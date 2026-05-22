@@ -6,7 +6,13 @@
       "PowerShell(Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip=[System.IO.Compression.ZipFile]::OpenRead\\('C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\Micro-streszczenie.docx'\\); $entry=$zip.GetEntry\\('word/document.xml'\\); $reader=New-Object System.IO.StreamReader $entry.Open\\(\\); $xml=$reader.ReadToEnd\\(\\); $reader.Close\\(\\); $zip.Dispose\\(\\); [xml]$d=$xml; $d.GetElementsByTagName\\('w:p'\\) | ForEach-Object { $t = \\($_.GetElementsByTagName\\('w:t'\\) | ForEach-Object { $_.InnerText }\\) -join ''; if \\($t.Trim\\(\\)\\) { Write-Output $t } } | Out-File -FilePath 'C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\micro-streszczenie-extracted.txt' -Encoding utf8; Write-Output \"DONE: $\\(Get-Item 'C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\micro-streszczenie-extracted.txt' | Select-Object -ExpandProperty Length\\) bytes\")",
       "Bash(node -e ' *)",
       "Bash(node --input-type=module -e ' *)",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(ls \"C:\\\\Users\\\\mastu\\\\Downloads\\\\master-track-final-9a-assets\" 2>&1 | head -30)",
+      "Bash(mkdir -p public)",
+      "Bash(cp -v \"/c/Users/mastu/Downloads/master-track-final-9a-assets/master-track-icon-9a-32.png\" public/master-track-icon-32.png)",
+      "Bash(cp -v \"/c/Users/mastu/Downloads/master-track-final-9a-assets/master-track-icon-9a-16.png\" public/master-track-icon-16.png)",
+      "Bash(cp -v \"/c/Users/mastu/Downloads/master-track-final-9a-assets/master-track-icon-9a-64.png\" public/master-track-icon-64.png)",
+      "Bash(cp -v \"/c/Users/mastu/Downloads/master-track-final-9a-assets/master-track-icon-9a-128.png\" public/master-track-icon-128.png)"
     ]
   }
 }

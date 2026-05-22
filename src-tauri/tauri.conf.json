@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Master Track",
-    "version": "1.0.0"
+    "version": "2.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -43,7 +43,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "LoL Master Track",
+      "shortDescription": "Master Track",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
@@ -62,7 +62,7 @@
         "fullscreen": false,
         "height": 900,
         "resizable": true,
-        "title": "Master Track / LoL",
+        "title": "Master Track",
         "width": 1200,
         "minWidth": 900,
         "minHeight": 650,
