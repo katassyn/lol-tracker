@@ -96,7 +96,10 @@ const GOALS = Object.entries(REAL_GOALS).map(([id, g]) => {
     // new structural fields
     tab: g.tab || "macro",
     section: g.section || null,
-    info_only: !!g.info_only
+    // Cały tab SOLOQ traktujemy jako wiedzę do przyswojenia — sucha wiedza,
+    // której się nie trenuje. Indywidualne info_only z goals.js zostają,
+    // ale wszystkie SOLOQ są forsowane na info_only przez adapter.
+    info_only: !!g.info_only || g.tab === "soloq"
   };
   const localized = () => getLocalizedGoalDefinition(id, g, currentLanguage());
   Object.defineProperties(goal, {
@@ -183,7 +186,29 @@ const PLAN_STAGES = REAL_PLAN_STAGES.map(stage => {
 // ---------------------------------------------------------------
 // Stats: derived live from state.history
 // ---------------------------------------------------------------
+// Same rule as the GOALS adapter: every SOLOQ goal counts as info_only.
+function isInfoOnlyId(goalId) {
+  const g = REAL_GOALS[goalId];
+  if (!g) return false;
+  return !!g.info_only || g.tab === "soloq";
+}
+
 function computeGoalStats(goalId) {
+  // INFO-ONLY goals: knowledge to read. Level depends on whether user marked them as read.
+  if (isInfoOnlyId(goalId)) {
+    const isRead = Array.isArray(state.readGoals) && state.readGoals.includes(goalId);
+    return {
+      games: 0,
+      passed: 0,
+      rate: isRead ? 100 : 0,
+      status: localizeGoalStatus(isRead ? "OPANOWANE" : "NIE ROZPOCZĘTE", currentLanguage()),
+      level: isRead ? 1 : 0,
+      isInfoOnly: true,
+      isRead
+    };
+  }
+
+  // TRAINABLE goals: compliance from history.
   const games = state.history.filter(
     g => Array.isArray(g.focusGoals) && g.focusGoals.includes(goalId)
   );
@@ -321,7 +346,8 @@ function getPlanSectionGoalIds(sectionId) {
 function isDoneForPlan(goalId) {
   const goal = REAL_GOALS[goalId];
   if (!goal) return true;
-  if (goal.info_only) return state.readGoals.includes(goalId);
+  // Treat all SOLOQ tab goals as info_only (knowledge to read once).
+  if (isInfoOnlyId(goalId)) return state.readGoals.includes(goalId);
   return isMastered(goalId);
 }
 

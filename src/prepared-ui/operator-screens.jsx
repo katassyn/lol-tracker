@@ -23,8 +23,16 @@ import React from "react";
     const planMode = SAMPLE.mode === "plan";
     const currentPlanFocus = SAMPLE.getCurrentPlanFocus?.();
 
+    // Plan mode locks goals OUTSIDE the current section. Goals INSIDE the
+    // current plan section are freely clickable.
+    const isGoalLockedByPlan = (gid) => {
+      if (!planMode) return false;
+      const g = GOALS.find(x => x.id === gid);
+      return g?.section !== currentPlanFocus?.sectionId;
+    };
+
     const toggleActive = (gid) => {
-      if (planMode) return;
+      if (isGoalLockedByPlan(gid)) return;
       setActive(prev => {
         const next = prev.includes(gid) ? prev.filter(x => x !== gid) : [...prev, gid];
         persistActiveGoals(next);
@@ -32,6 +40,7 @@ import React from "react";
       });
     };
     const toggleRead = (gid) => {
+      if (isGoalLockedByPlan(gid)) return;
       persistToggleRead(gid);
       setRead([...(SAMPLE.readGoals || [])]);
       setActive([...(SAMPLE.activeGoals || [])]);
@@ -401,27 +410,59 @@ import React from "react";
                                       ? t.ui(`${st.games} gier · ${st.passed} zaliczone · ${st.rate}% compliance`, `${st.games} games · ${st.passed} passed · ${st.rate}% compliance`)
                                       : t.ui("Włącz aby zacząć trenować", "Enable it to start training")}
                                 </div>
-                                {isInfo ? (
-                                  <button onClick={(e) => {e.stopPropagation(); toggleRead(g.id);}} style={{
-                                    background: isRead ? "transparent" : t.accent,
-                                    color: isRead ? t.dim : t.bg,
-                                    border: isRead ? `1px solid ${t.line}` : "none",
+                                {(() => {
+                                  const locked = isGoalLockedByPlan(g.id);
+                                  const lockedLabel = t.ui("Plan wybiera", "Plan controls this");
+                                  const baseStyle = {
                                     padding: "8px 14px",
                                     fontFamily: OP_FONT_BODY, fontSize: 10.5, fontWeight: 700,
-                                    letterSpacing:"0.12em", textTransform:"uppercase",
-                                    cursor: planMode ? "not-allowed" : "pointer"
-                                  }}>{isRead ? t.ui("Cofnij przeczytanie", "Undo read") : t.ui("Oznacz jako przeczytane", "Mark as read")}</button>
-                                ) : (
-                                  <button onClick={(e) => {e.stopPropagation(); toggleActive(g.id);}} style={{
-                                    background: planMode ? t.line : (isActive ? "transparent" : t.accent),
-                                    color: planMode ? t.mute : (isActive ? t.dim : t.bg),
-                                    border: isActive || planMode ? `1px solid ${t.line}` : "none",
-                                    padding: "8px 14px",
-                                    fontFamily: OP_FONT_BODY, fontSize: 10.5, fontWeight: 700,
-                                    letterSpacing:"0.12em", textTransform:"uppercase",
-                                    cursor: planMode ? "not-allowed" : "pointer"
-                                  }}>{planMode ? t.ui("Plan wybiera", "Plan controls this") : isActive ? t.ui("Wyłącz trening", "Disable training") : t.ui("Włącz trening", "Enable training")}</button>
-                                )}
+                                    letterSpacing: "0.12em", textTransform: "uppercase"
+                                  };
+                                  if (locked) {
+                                    return (
+                                      <button
+                                        disabled
+                                        title={t.ui(
+                                          "Plan kontroluje wybór zadań. Zmień sekcję planu w Opcjach lub przełącz na tryb własny.",
+                                          "Plan controls task selection. Change plan section in Options or switch to custom mode."
+                                        )}
+                                        style={{
+                                          ...baseStyle,
+                                          background: t.line, color: t.mute,
+                                          border: `1px solid ${t.line}`,
+                                          cursor: "not-allowed",
+                                          opacity: 0.7
+                                        }}
+                                      >{lockedLabel}</button>
+                                    );
+                                  }
+                                  if (isInfo) {
+                                    return (
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); toggleRead(g.id); }}
+                                        style={{
+                                          ...baseStyle,
+                                          background: isRead ? "transparent" : t.accent,
+                                          color: isRead ? t.dim : t.bg,
+                                          border: isRead ? `1px solid ${t.line}` : "none",
+                                          cursor: "pointer"
+                                        }}
+                                      >{isRead ? t.ui("Cofnij przeczytanie", "Undo read") : t.ui("Oznacz jako przeczytane", "Mark as read")}</button>
+                                    );
+                                  }
+                                  return (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); toggleActive(g.id); }}
+                                      style={{
+                                        ...baseStyle,
+                                        background: isActive ? "transparent" : t.accent,
+                                        color: isActive ? t.dim : t.bg,
+                                        border: isActive ? `1px solid ${t.line}` : "none",
+                                        cursor: "pointer"
+                                      }}
+                                    >{isActive ? t.ui("Wyłącz trening", "Disable training") : t.ui("Włącz trening", "Enable training")}</button>
+                                  );
+                                })()}
                               </div>
                             </div>
                           )}
@@ -1022,19 +1063,49 @@ import React from "react";
 
   // ===== PROGRESS =====
   function Progress({t}){
-    const phases = [
-      {n:1, name:t.ui("Fundamenty", "Fundamentals"), weeks:t.ui("Tydzień 1-4", "Week 1-4"), goals: GOALS.filter(g=>g.phase===1)},
-      {n:2, name:"Bridges", weeks:t.ui("Tydzień 5-8", "Week 5-8"), goals: GOALS.filter(g=>g.phase===2)},
-      {n:3, name:t.ui("Konsolidacja", "Consolidation"), weeks:t.ui("Tydzień 9-12", "Week 9-12"), goals: GOALS.filter(g=>g.phase===3)},
-    ];
+    const PLAN_STAGES = (window.SAMPLE.PLAN_STAGES) || [];
+    const planCursor = window.SAMPLE.planCursor || { stageIdx: 0, sectionIdx: 0 };
+    const sectionsArr = window.SAMPLE.SECTIONS || [];
+    const mode = window.SAMPLE.mode || "custom";
+
+    // === Real mastery distribution over ALL goals ===
+    const stats = GOALS.map(g => ({ g, st: computeGoalStats(g.id) }));
+    const buckets = {
+      mastered:    stats.filter(x => x.st.level === 3).length,                      // OPANOWANE (trainable)
+      consolid:    stats.filter(x => x.st.level === 2).length,                      // UTRWALONE
+      initial:     stats.filter(x => x.st.level === 1 && !x.st.isInfoOnly).length,  // WSTĘPNIE
+      readInfo:    stats.filter(x => x.st.level === 1 && x.st.isInfoOnly).length,   // INFO: PRZECZYTANE
+      training:    stats.filter(x => x.st.level === 0 && x.st.games > 0).length,    // W TRENINGU
+      needsWork:   stats.filter(x => x.st.level === -1).length,                     // WYMAGA POPRAWY
+      notStarted:  stats.filter(x => x.st.level === 0 && x.st.games === 0).length   // NIE ROZPOCZĘTE
+    };
+    const totalGoals = GOALS.length;
+    const totalDone = buckets.mastered + buckets.consolid + buckets.initial + buckets.readInfo;
+    const overallRate = totalGoals ? Math.round((totalDone / totalGoals) * 100) : 0;
 
     const masteryStates = [
-      {label:t.ui("Opanowane", "Mastered"),       count: 2, color: t.good},
-      {label:t.ui("Utrwalone", "Consolidated"),       count: 1, color: t.accent},
-      {label:t.ui("Wstępnie opan.", "Initially mastered"),  count: 3, color: t.dim},
-      {label:t.ui("W treningu", "In training"),      count: 2, color: t.warn},
-      {label:t.ui("Wymaga poprawy", "Needs work"),  count: 1, color: t.bad},
+      {key: "mastered",   label: t.ui("Opanowane", "Mastered"),                count: buckets.mastered,   color: t.good},
+      {key: "consolid",   label: t.ui("Utrwalone", "Consolidated"),            count: buckets.consolid,   color: "oklch(0.65 0.16 150)"},
+      {key: "initial",    label: t.ui("Wstępnie opan.", "Initially mastered"), count: buckets.initial,    color: t.accent},
+      {key: "readInfo",   label: t.ui("Przeczytane (info)", "Read (info)"),    count: buckets.readInfo,   color: "oklch(0.62 0.13 220)"},
+      {key: "training",   label: t.ui("W treningu", "In training"),            count: buckets.training,   color: t.warn},
+      {key: "needsWork",  label: t.ui("Wymaga poprawy", "Needs work"),         count: buckets.needsWork,  color: t.bad},
+      {key: "notStarted", label: t.ui("Nie zaczęte", "Not started"),           count: buckets.notStarted, color: t.lineHi}
     ];
+
+    // === Per-stage progress ===
+    const stageProgress = PLAN_STAGES.map((stage, idx) => {
+      const stageGoals = stage.sections.flatMap(secId => GOALS.filter(g => g.section === secId));
+      const masteredCount = stageGoals.filter(g => computeGoalStats(g.id).level >= 1).length;
+      const rate = stageGoals.length ? Math.round((masteredCount / stageGoals.length) * 100) : 0;
+      return { stage, idx, stageGoals, masteredCount, rate };
+    });
+
+    const overallPlanRate = (() => {
+      const total = stageProgress.reduce((a, s) => a + s.stageGoals.length, 0);
+      const done  = stageProgress.reduce((a, s) => a + s.masteredCount, 0);
+      return total ? Math.round((done / total) * 100) : 0;
+    })();
 
     return (
       <div style={{padding: "20px 24px", display:"flex", flexDirection:"column", gap: 20, overflow:"auto"}}>
@@ -1043,34 +1114,52 @@ import React from "react";
             letterSpacing:"0.18em", textTransform:"uppercase"}}>{t.ui("Tracker postępu", "Progress tracker")}</div>
           <h1 style={{fontFamily: OP_FONT_DISP, fontSize: 28, color: t.text, fontWeight: 600,
             margin: "4px 0 0", letterSpacing:"-0.02em"}}>
-            {t.ui("12-tygodniowy plan · faza 1 · tydzień 4", "12-week plan · phase 1 · week 4")}
+            {t.ui(
+              `Plan nauki · ${totalDone} / ${totalGoals} (${overallRate}%)`,
+              `Learning plan · ${totalDone} / ${totalGoals} (${overallRate}%)`
+            )}
           </h1>
+          <p style={{fontFamily: OP_FONT_BODY, fontSize: 12, color: t.dim, marginTop: 6, lineHeight: 1.5, margin: "6px 0 0"}}>
+            {mode === "plan"
+              ? t.ui(
+                  `Tryb planu · etap ${planCursor.stageIdx + 1} / ${PLAN_STAGES.length} · sekcja ${planCursor.sectionIdx + 1} / ${PLAN_STAGES[planCursor.stageIdx]?.sections?.length || "?"}`,
+                  `Plan mode · stage ${planCursor.stageIdx + 1} / ${PLAN_STAGES.length} · section ${planCursor.sectionIdx + 1} / ${PLAN_STAGES[planCursor.stageIdx]?.sections?.length || "?"}`
+                )
+              : t.ui("Tryb własny — sam wybierasz co trenować.", "Custom mode — you pick what to train.")}
+          </p>
         </header>
 
         {/* Mastery distribution */}
         <section style={{background: t.surface, border: `1px solid ${t.line}`, padding: "18px 20px"}}>
-          <div style={{display:"flex", justifyContent:"space-between", marginBottom: 14, alignItems:"baseline"}}>
+          <div style={{display:"flex", justifyContent:"space-between", marginBottom: 14, alignItems:"baseline", flexWrap:"wrap", gap: 10}}>
             <div>
               <div style={{fontFamily: OP_FONT_BODY, fontSize: 10, color: t.mute,
                 letterSpacing:"0.16em", textTransform:"uppercase"}}>{t.ui("Dystrybucja masterowania", "Mastery distribution")}</div>
               <div style={{fontFamily: OP_FONT_DISP, fontSize: 17, color: t.text, fontWeight: 600, marginTop: 2}}>
-                {t.ui("9 zadań aktywnie trenowanych", "9 actively trained tasks")}
+                {totalGoals} {t.ui("zadań w bazie", "tasks in base")} · {totalDone} {t.ui("zaliczonych", "completed")}
               </div>
             </div>
-            <div style={{fontFamily: OP_FONT_BODY, fontSize: 11, color: t.dim}}>
-              {t.ui("ostatnie 30 dni", "last 30 days")}
+            <div style={{fontFamily: OP_FONT_DISP, fontSize: 22, color: t.text, fontWeight: 600}}>
+              {overallRate}%
             </div>
           </div>
-          <div style={{display:"flex", height: 28, border: `1px solid ${t.line}`}}>
-            {masteryStates.map(s => (
-              <div key={s.label} style={{
-                flex: s.count, background: s.color, position: "relative"
+          <div style={{display:"flex", height: 28, border: `1px solid ${t.line}`, overflow:"hidden"}}>
+            {masteryStates.filter(s => s.count > 0).map(s => (
+              <div key={s.key} style={{
+                flex: s.count, background: s.color, position: "relative", minWidth: 2
               }} title={`${s.label}: ${s.count}`}/>
             ))}
+            {totalDone === 0 && buckets.notStarted === totalGoals && (
+              <div style={{flex: 1, background: t.lineHi, display:"flex", alignItems:"center", justifyContent:"center",
+                fontFamily: OP_FONT_BODY, fontSize: 10, color: t.dim, letterSpacing:"0.12em", textTransform:"uppercase"}}>
+                {t.ui("Brak postępu — zacznij pierwszą grę / przeczytaj pierwszą sekcję", "No progress yet — start your first game or read a section")}
+              </div>
+            )}
           </div>
-          <div style={{display:"flex", flexWrap:"wrap", gap: 16, marginTop: 12}}>
+          <div style={{display:"flex", flexWrap:"wrap", gap: 14, marginTop: 12}}>
             {masteryStates.map(s => (
-              <div key={s.label} style={{display:"flex", alignItems:"center", gap: 7}}>
+              <div key={s.key} style={{display:"flex", alignItems:"center", gap: 7,
+                opacity: s.count === 0 ? 0.5 : 1}}>
                 <span style={{width: 10, height: 10, background: s.color}}/>
                 <span style={{fontFamily: OP_FONT_BODY, fontSize: 11, color: t.dim,
                   letterSpacing:"0.06em"}}>{s.label}</span>
@@ -1082,59 +1171,85 @@ import React from "react";
           </div>
         </section>
 
-        {/* Phases */}
-        <section style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12}}>
-          {phases.map(p => {
-            const total = p.goals.length;
-            const mastered = p.goals.filter(g => computeGoalStats(g.id).level >= 1).length;
-            const rate = total ? Math.round((mastered/total)*100) : 0;
-            const isCurrent = p.n === 1;
-            return (
-              <div key={p.n} style={{
-                background: t.surface, border: `1px solid ${isCurrent ? t.accent : t.line}`,
-                padding: "16px 18px", display:"flex", flexDirection:"column", gap: 12
-              }}>
-                <div style={{display:"flex", justifyContent:"space-between", alignItems:"baseline"}}>
-                  <div>
-                    <div style={{fontFamily: OP_FONT_BODY, fontSize: 9.5, color: t.mute,
-                      letterSpacing:"0.18em", textTransform:"uppercase"}}>{t.ui("Faza", "Phase")} {p.n}</div>
-                    <div style={{fontFamily: OP_FONT_DISP, fontSize: 18, color: t.text, fontWeight: 600,
-                      letterSpacing:"-0.01em", marginTop: 2}}>{p.name}</div>
-                    <div style={{fontFamily: OP_FONT_BODY, fontSize: 10.5, color: t.dim, marginTop: 2}}>
-                      {p.weeks}
-                    </div>
-                  </div>
-                  {isCurrent && <OpPill tone="accent" t={t}>{t.ui("Tu jesteś", "You are here")}</OpPill>}
-                </div>
-                <div>
-                  <div style={{display:"flex", justifyContent:"space-between", marginBottom: 5,
-                    fontFamily: OP_FONT_BODY, fontSize: 10.5, color: t.dim}}>
-                    <span>{mastered}/{total} {t.ui("opanowane", "mastered")}</span>
-                    <span style={{color: t.text, fontWeight: 600}}>{rate}%</span>
-                  </div>
-                  <OpBar value={rate} color={isCurrent ? t.accent : t.dim} bg={t.line} height={6}/>
-                </div>
-                <div style={{display:"flex", flexDirection:"column", gap: 4, marginTop: 2}}>
-                  {p.goals.map(g => {
-                    const st = computeGoalStats(g.id);
-                    const tone = st.level === -1 ? "bad" : st.level >= 1 ? "good" : st.games>0 ? "warn" : "dim";
-                    const col = tone==="good"?t.good : tone==="bad"?t.bad : tone==="warn"?t.warn : t.lineHi;
-                    return (
-                      <div key={g.id} style={{display:"flex", alignItems:"center", gap: 8, padding: "4px 0"}}>
-                        <span style={{width:8, height:8, background: col, flexShrink:0}}/>
-                        <span style={{flex:1, fontFamily: OP_FONT_BODY, fontSize: 11, color: t.text,
-                          whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis"}}>
-                          {g.label}
-                        </span>
-                        <span style={{fontFamily: OP_FONT_BODY, fontSize: 10, color: t.mute,
-                          letterSpacing:"0.08em"}}>{st.games}g</span>
+        {/* Plan stages */}
+        <section style={{display:"flex", flexDirection:"column", gap: 12}}>
+          <div style={{display:"flex", justifyContent:"space-between", alignItems:"baseline"}}>
+            <div style={{fontFamily: OP_FONT_BODY, fontSize: 10, color: t.mute,
+              letterSpacing:"0.16em", textTransform:"uppercase"}}>{t.ui("Etapy planu", "Plan stages")}</div>
+            <div style={{fontFamily: OP_FONT_BODY, fontSize: 11, color: t.dim}}>
+              {t.ui(`Łącznie: ${overallPlanRate}% planu`, `Overall: ${overallPlanRate}% of plan`)}
+            </div>
+          </div>
+          <div style={{display:"grid", gridTemplateColumns: `repeat(${Math.max(1, PLAN_STAGES.length)}, 1fr)`, gap: 12}}>
+            {stageProgress.map(({ stage, idx, stageGoals, masteredCount, rate }) => {
+              const isCurrent = mode === "plan" && idx === planCursor.stageIdx;
+              const isDone = rate === 100 && stageGoals.length > 0;
+              return (
+                <div key={stage.id} style={{
+                  background: t.surface,
+                  border: `1px solid ${isCurrent ? t.accent : isDone ? t.good : t.line}`,
+                  padding: "16px 18px", display:"flex", flexDirection:"column", gap: 12
+                }}>
+                  <div style={{display:"flex", justifyContent:"space-between", alignItems:"baseline", gap: 8}}>
+                    <div style={{minWidth: 0}}>
+                      <div style={{fontFamily: OP_FONT_BODY, fontSize: 9.5, color: t.mute,
+                        letterSpacing:"0.18em", textTransform:"uppercase"}}>
+                        {stage.short || `${t.ui("Etap", "Stage")} ${idx + 1}`}
                       </div>
-                    );
-                  })}
+                      <div style={{fontFamily: OP_FONT_DISP, fontSize: 17, color: t.text, fontWeight: 600,
+                        letterSpacing:"-0.01em", marginTop: 2}}>{stage.name}</div>
+                    </div>
+                    {isCurrent && <OpPill tone="accent" t={t}>{t.ui("Tu jesteś", "You are here")}</OpPill>}
+                    {isDone && !isCurrent && <OpPill tone="good" t={t}>{t.ui("Ukończone", "Done")}</OpPill>}
+                  </div>
+                  <div>
+                    <div style={{display:"flex", justifyContent:"space-between", marginBottom: 5,
+                      fontFamily: OP_FONT_BODY, fontSize: 10.5, color: t.dim}}>
+                      <span>{masteredCount}/{stageGoals.length} {t.ui("zaliczone", "completed")}</span>
+                      <span style={{color: t.text, fontWeight: 600}}>{rate}%</span>
+                    </div>
+                    <OpBar value={rate} color={isDone ? t.good : isCurrent ? t.accent : t.dim} bg={t.line} height={6}/>
+                  </div>
+                  {/* Sections inside stage */}
+                  <div style={{display:"flex", flexDirection:"column", gap: 8, marginTop: 2}}>
+                    {stage.sections.map((secId, secIdx) => {
+                      const sec = sectionsArr.find(s => s.id === secId);
+                      const secGoals = GOALS.filter(g => g.section === secId);
+                      const secDone = secGoals.filter(g => computeGoalStats(g.id).level >= 1).length;
+                      const secRate = secGoals.length ? Math.round((secDone / secGoals.length) * 100) : 0;
+                      const isSecCurrent = isCurrent && secIdx === planCursor.sectionIdx;
+                      const col = secRate === 100 && secGoals.length > 0 ? t.good
+                                 : isSecCurrent ? t.accent
+                                 : secDone > 0 ? t.warn : t.lineHi;
+                      return (
+                        <div key={secId} style={{
+                          padding: "8px 10px",
+                          background: isSecCurrent ? `${t.accent}10` : t.bg2,
+                          border: `1px solid ${isSecCurrent ? t.accent : t.line}`,
+                          display:"flex", flexDirection:"column", gap: 4
+                        }}>
+                          <div style={{display:"flex", justifyContent:"space-between", alignItems:"baseline", gap: 8}}>
+                            <div style={{
+                              fontFamily: OP_FONT_BODY, fontSize: 11.5, color: t.text, fontWeight: 600,
+                              overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"
+                            }}>{sec?.name || secId}</div>
+                            <div style={{display:"flex", gap: 8, alignItems:"baseline", flexShrink: 0}}>
+                              <span style={{fontFamily: OP_FONT_BODY, fontSize: 10, color: t.mute,
+                                letterSpacing:"0.1em"}}>{secDone}/{secGoals.length}</span>
+                              <span style={{fontFamily: OP_FONT_DISP, fontSize: 12, color: t.text, fontWeight: 600}}>
+                                {secRate}%
+                              </span>
+                            </div>
+                          </div>
+                          <OpBar value={secRate} color={col} bg={t.line} height={3}/>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </section>
 
       </div>
