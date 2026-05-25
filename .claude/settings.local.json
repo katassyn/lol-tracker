@@ -13,7 +13,9 @@
       "Bash(cp -v \"/c/Users/mastu/Downloads/master-track-final-9a-assets/master-track-icon-9a-16.png\" public/master-track-icon-16.png)",
       "Bash(cp -v \"/c/Users/mastu/Downloads/master-track-final-9a-assets/master-track-icon-9a-64.png\" public/master-track-icon-64.png)",
       "Bash(cp -v \"/c/Users/mastu/Downloads/master-track-final-9a-assets/master-track-icon-9a-128.png\" public/master-track-icon-128.png)",
-      "Bash(cd \"/c/Users/mastu/Desktop/Maks/lol-tracker\" && cat package.json | grep -A 1 dependencies 2>&1)"
+      "Bash(cd \"/c/Users/mastu/Desktop/Maks/lol-tracker\" && cat package.json | grep -A 1 dependencies 2>&1)",
+      "Bash(dir C:\\\\Users\\\\mastu\\\\Desktop\\\\Maks\\\\lol-tracker)",
+      "PowerShell(npm run build 2>&1)"
     ]
   }
 }

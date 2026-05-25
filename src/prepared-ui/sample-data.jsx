@@ -60,6 +60,7 @@ const state = {
   history: Array.isArray(stored.history) ? stored.history : [],
   activeGoals: Array.isArray(stored.activeGoals) ? stored.activeGoals : [],
   readGoals: Array.isArray(stored.readGoals) ? stored.readGoals : [],
+  masteredGoals: Array.isArray(stored.masteredGoals) ? stored.masteredGoals : [],
   preGameSnapshot: stored.preGameSnapshot || null,
   sessionStartedAt: stored.sessionStartedAt || null,
   // Plan / learning mode
@@ -208,6 +209,18 @@ function computeGoalStats(goalId) {
     };
   }
 
+  // Manually marked as mastered ("Skip — already mastered"): force 100% mastery.
+  if (Array.isArray(state.masteredGoals) && state.masteredGoals.includes(goalId)) {
+    return {
+      games: 0,
+      passed: 0,
+      rate: 100,
+      status: localizeGoalStatus("OPANOWANE", currentLanguage()),
+      level: 3,
+      isManuallyMastered: true
+    };
+  }
+
   // TRAINABLE goals: compliance from history.
   const games = state.history.filter(
     g => Array.isArray(g.focusGoals) && g.focusGoals.includes(goalId)
@@ -285,6 +298,23 @@ function toggleReadGoal(id) {
   const idx = state.readGoals.indexOf(id);
   if (idx >= 0) state.readGoals.splice(idx, 1);
   else state.readGoals.push(id);
+  if (state.mode === "plan") {
+    syncActiveGoalsToPlan();
+  } else {
+    persist();
+  }
+}
+function toggleMasteredGoal(id) {
+  if (!Array.isArray(state.masteredGoals)) state.masteredGoals = [];
+  const idx = state.masteredGoals.indexOf(id);
+  if (idx >= 0) {
+    state.masteredGoals.splice(idx, 1);
+  } else {
+    state.masteredGoals.push(id);
+    // No point training a goal you've declared mastered — drop it from active.
+    const activeIdx = state.activeGoals.indexOf(id);
+    if (activeIdx >= 0) state.activeGoals.splice(activeIdx, 1);
+  }
   if (state.mode === "plan") {
     syncActiveGoalsToPlan();
   } else {
@@ -370,6 +400,7 @@ function findNextPendingPlanCursor(cursor = state.planCursor) {
 }
 
 function isMastered(goalId) {
+  if (Array.isArray(state.masteredGoals) && state.masteredGoals.includes(goalId)) return true;
   const games = state.history.filter(
     g => Array.isArray(g.focusGoals) && g.focusGoals.includes(goalId)
   );
@@ -470,6 +501,7 @@ const SAMPLE = {
   get currentChampion() { return state.currentChampion; },
   get activeGoals() { return state.activeGoals; },
   get readGoals() { return state.readGoals; },
+  get masteredGoals() { return state.masteredGoals; },
   get mode() { return state.mode; },
   get firstRunDone() { return state.firstRunDone; },
   get preferences() { return state.preferences; },
@@ -488,6 +520,7 @@ const SAMPLE = {
   setActiveGoals,
   setPreferences,
   toggleReadGoal,
+  toggleMasteredGoal,
   completeFirstRun,
   setMode,
   advancePlanSection,

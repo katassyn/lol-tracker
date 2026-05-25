@@ -18,13 +18,13 @@ export const PHASES = {
     id: 2, name: "FAZA 2: LANING",
     subtitle: "Wave, trade, CS, recall",
     weeks: "Tydz 5-8",
-    description: "Faza linii to gdzie 80% gry się rozstrzyga w niskim/średnim elo. Slow push, freeze, recall na canon, trade patterny."
+    description: "Faza linii to miejsce, gdzie w niskim i średnim elo rozstrzyga się ogromna część gry. Slow push, freeze, recall na cannon wave i trade patterny dają przewagę zanim zacznie się pełne macro."
   },
   3: {
     id: 3, name: "FAZA 3: MACRO",
-    subtitle: "Prio, tempo, objektiwy, mapa",
+    subtitle: "Prio, tempo, objectives, mapa",
     weeks: "Tydz 9-12+",
-    description: "Macro buduje się NA fundamencie linii. Jak masz mecha + lanę - czas otwierać mapę. Prio → tempo → objektiwy → kończenie gry."
+    description: "Macro buduje się NA fundamencie linii. Gdy masz mechanikę i podstawy lane'u, zaczynasz otwierać mapę: prio → tempo → objectives → kończenie gry."
   },
   ongoing: {
     id: "ongoing", name: "UNIWERSALNE",
@@ -39,7 +39,7 @@ export const CATEGORIES = {
   micro: { name: "MICRO & MECHANIKI", subtitle: "Klikanie, animacje, skillshoty, spacing", icon: Wand2 },
   wave: { name: "WAVE MANAGEMENT", subtitle: "Fundament linii", icon: Activity },
   early: { name: "EARLY GAME", subtitle: "Wyjście, recall, trade, roam", icon: Crosshair },
-  macro: { name: "MACRO MID/LATE", subtitle: "Prio, tempo, objektiwy", icon: Map },
+  macro: { name: "MACRO MID/LATE", subtitle: "Prio, tempo, objectives", icon: Map },
   vision: { name: "WIZJA", subtitle: "Wardy, info, kontrola krzaków", icon: Eye },
   teamfight: { name: "WALKI DRUŻYNOWE", subtitle: "Pozycja, focus, mindset", icon: Swords },
   mindset: { name: "MINDSET & NAWYKI", subtitle: "Mental, dyscyplina, nauka", icon: Brain },
@@ -57,14 +57,14 @@ export const TABS = {
     id: "macro",
     name: "MACRO",
     subtitle: "Decyzje mapowe · mid/late · mindset",
-    description: "Co, gdzie i po co. Świadomość mapy, prio, tempo, objektiwy, wizja jako system info, walki drużynowe, mindset. Tu trenujesz DECYZJE — nie kliki.",
+    description: "Co, gdzie i po co. Świadomość mapy, prio, tempo, objectives, wizja jako system info, walki drużynowe, mindset. Tu trenujesz DECYZJE — nie kliki.",
     icon: Map
   },
   micro: {
     id: "micro",
     name: "MICRO",
     subtitle: "Wykonanie · faza linii · ustawienia",
-    description: "Jak. Klikanie, skillshoty, pozycje, lane trade'y, recall'e, mini-maksymalizacje, ustawienia. Tu trenujesz WYKONANIE — mała skala.",
+    description: "Jak. Klikanie, skillshots, pozycje, lane trades, recalls, mini-maksymalizacje, ustawienia. Tu trenujesz WYKONANIE — mała skala.",
     icon: Wand2
   },
   soloq: {
@@ -82,7 +82,7 @@ export const SECTIONS = {
   wave_macro:    { id: "wave_macro",    tab: "macro", name: "WAVE MACRO",           subtitle: "Slow/freeze/hard push, sync, recall jako tempo", icon: Activity, order: 2 },
   prio_tempo:    { id: "prio_tempo",    tab: "macro", name: "PRIO I TEMPO",         subtitle: "Pressure point, fog tracking, cross-map", icon: Map,       order: 3 },
   early_mid:     { id: "early_mid",     tab: "macro", name: "EARLY → MID",          subtitle: "Pierwsza T1, rotacje, off-team, shift", icon: Crosshair, order: 4 },
-  mid_late:      { id: "mid_late",      tab: "macro", name: "MID-LATE + OBJEKTIVY", subtitle: "Smoki, Herald, Baron, side, T2/T3, inhiby", icon: Map,       order: 5 },
+  mid_late:      { id: "mid_late",      tab: "macro", name: "MID-LATE + OBJECTIVES", subtitle: "Smoki, Herald, Baron, side, T2/T3, inhiby", icon: Map,       order: 5 },
   vision:        { id: "vision",        tab: "macro", name: "WIZJA JAKO SYSTEM",    subtitle: "Pinki vs wardy, lane ward, paradoks skanu", icon: Eye,       order: 6 },
   teamfight:     { id: "teamfight",     tab: "macro", name: "WALKI",                subtitle: "Engage/poke/disengage, front-to-back, kiedy NIE walczyć", icon: Swords,    order: 7 },
   mindset_meta:  { id: "mindset_meta",  tab: "macro", name: "MINDSET + DECYZJE META", subtitle: "Ocena 100×, tilt, komunikacja, study, reguły", icon: Brain,     order: 8 },
@@ -91,7 +91,7 @@ export const SECTIONS = {
   micro_basics:  { id: "micro_basics",  tab: "micro", name: "KLIK + KAMERA",        subtitle: "Continuous clicking, animation lock, AA cancel", icon: Wand2,     order: 1 },
   skills:        { id: "skills",        tab: "micro", name: "SKILLSHOTY + INPUT",   subtitle: "Kąty, input buffering, baitowanie",   icon: Crosshair, order: 2 },
   positioning:   { id: "positioning",   tab: "micro", name: "POZYCJONOWANIE",       subtitle: "Spacing, trójkąt, krzaki, tworzenie space",     icon: Wand2,     order: 3 },
-  laning_micro:  { id: "laning_micro",  tab: "micro", name: "FAZA LINII (EARLY)",   subtitle: "Trade patterns, CS pod wieżą, runy, value spelli, mechaniki", icon: Activity,  order: 4 },
+  laning_micro:  { id: "laning_micro",  tab: "micro", name: "FAZA LINII (EARLY)",   subtitle: "Trade patterns, CS pod wieżą, runy, spell value, mechaniki", icon: Activity,  order: 4 },
   max:           { id: "max",           tab: "micro", name: "MINI-MAKSYMALIZACJE",  subtitle: "Czas, recall, smartcast dash, fountain, 0+/0-", icon: Lightbulb, order: 5 },
   settings:      { id: "settings",      tab: "micro", name: "USTAWIENIA",           subtitle: "Smartcasty, F-keye, HUD, dźwięki (raz i zapomnij)", icon: Settings,  order: 6 },
 
@@ -138,7 +138,7 @@ export const PLAN_STAGES = [
       "micro_basics",   // Klik + kamera + animacje
       "skills",         // Skillshoty + input buffering
       "positioning",    // Spacing, trójkąt, krzaki
-      "laning_micro",   // Faza linii: trade, CS, runy, value spelli
+      "laning_micro",   // Faza linii: trade, CS, runy, spell value
       "max"             // Mini-maksymalizacje: czas, fountain, recall
     ]
   },
@@ -146,14 +146,14 @@ export const PLAN_STAGES = [
     id: "stage_macro",
     name: "Macro — decyzje",
     short: "Etap 3 / 3",
-    description: "Duża skala: świadomość mapy, wave macro, prio, tempo, rotacje, objektivy, wizja jako system, walki, mindset meta. Tutaj trenujesz CO i GDZIE robić.",
+    description: "Duża skala: świadomość mapy, wave macro, prio, tempo, rotacje, objectives, wizja jako system, walki, mindset meta. Tutaj trenujesz CO i GDZIE robić.",
     tab: "macro",
     sections: [
       "awareness",      // Świadomość mapy
       "wave_macro",     // Wave management
       "prio_tempo",     // Prio i tempo
       "early_mid",      // Early → mid
-      "mid_late",       // Mid-late + objektivy
+      "mid_late",       // Mid-late + objectives
       "vision",         // Wizja jako system
       "teamfight",      // Walki
       "mindset_meta"    // Mindset meta (ciągłe)
@@ -240,11 +240,11 @@ export const GOALS = {
     details: {
       what: "Nawyk patrzenia na minimapę co maksymalnie 3 sekundy. To NIE jest opcja, to fundament zbierania informacji. Bez tego nie ma macro.",
       how: [
-        "Trigger 1: każde dobicie CS (look PO ostatnim hicie, w bezruchu animacji).",
-        "Trigger 2: każdy cast spela (look PO cd, gdy bezpiecznie).",
-        "Trigger 3: każde wyjście z bazy / TP.",
-        "Pierwsze 2 tygodnie — świadomie sprawdzaj zegar, później automat.",
-        "Locked camera = zjeb. Wycentrowana raczej zawsze gorsza w macro."
+        "Po każdym dobiciu CS spójrz na minimapę w krótkim oknie animacji. Nie patrz w trakcie samego last hita, tylko od razu po nim.",
+        "Po użyciu spell sprawdź minimapę, jeśli nie grozi ci natychmiastowy trade. Cast daje krótką przerwę, którą możesz zamienić na informację.",
+        "Po każdym wyjściu z base albo TP najpierw sprawdź, gdzie są gracze i które linie mogą zaraz wymagać reakcji.",
+        "Przez pierwsze 2 tygodnie pilnuj tego świadomie: CS → minimapa, spell → minimapa, przejście przez spokojny moment → minimapa.",
+        "Ustaw HUD i minimapę tak, żeby wystarczył lekki ruch oczami. Jeśli musisz obracać głowę, setup utrudnia zbudowanie nawyku."
       ],
       when: "Zawsze. Cała gra. Bez wyjątków.",
       whenNot: "Nigdy.",
@@ -265,11 +265,12 @@ export const GOALS = {
     details: {
       what: "Sprawdzanie siły przeciwników przez TAB. Patrzymy na LEVEL i ITEMY (kluczowe defensywy: Zhonia, Maw, Edge of Night), NIE CS/KDA — to mit. Plus '?' przy enemy = łatwiej zobaczyć kto może roamować.",
       how: [
-        "TAB co ~30s lub po każdym recallu enemy.",
-        "Sprawdzasz: ITEMY (Zhonia/Maw/Rabadon/Hex Drinker), LEVEL, summonery.",
-        "'?' przy enemy = pomyśl czy nie roamuje.",
-        "Śledź CS junglera: 1 camp = 4 CS. Wiesz co mu wstaje i gdzie może być.",
-        "Sprawdzaj debuffy (heal na ADC), klony Ekko (ma/nie ma ulta)."
+        "Klikaj TAB mniej więcej co 30 sekund oraz zawsze, gdy enemy wraca po recall albo przed ważną walką.",
+        "Najpierw porównaj level i itemy: ukończone itemy, duże komponenty, Stopwatch/Zhonya, Hexdrinker/Maw, Banshee, GA i inne defensywy.",
+        "Nie oceniaj siły po KDA. Gracz 0/2 z dużym itemem i levelem może być groźniejszy niż gracz 3/0 bez spike'u.",
+        "Jeśli przy przeciwniku jest '?', potraktuj to jak roam alert: od razu sprawdź minimapę i czy twoja linia musi pingować danger.",
+        "Śledź CS junglera: 1 camp = 4 CS. Z CS + ostatniej pozycji wnioskujesz, które campy stoją i gdzie jungler może wejść.",
+        "Szukaj małych sygnałów: debuff po Healu na ADC, widoczny klon Ekko przy dostępnym R, brak many po leashu lub cooldown summonerów."
       ],
       when: "Co 30s i przy każdej istotnej decyzji (przed walką, przed objective).",
       success: "Wiesz kto kupił Zhonię → ostrożność z ult comboem. Wiesz że enemy mid 1 lvl za tobą → presja.",
@@ -287,11 +288,11 @@ export const GOALS = {
     details: {
       what: "Kiedy enemy znika z mapy — śledzisz przez dedukcję. Wyobrażasz sobie 'zasięg' zwiększający się co sekundę. Daje ci pojęcie gdzie MOŻE BYĆ z prawdopodobieństwem.",
       how: [
-        "Enemy cofnął do bazy → dodaj sekundy regen many/HP (~5s) + czas dojścia.",
-        "Enemy znika na rzece → 2 opcje: cofa / idzie gdzieś. Wyobrażasz oba zasięgi.",
-        "Śledź jg przez CS — 1 camp = 4 CS. Wiesz gdzie był (invade?) i co wstaje.",
-        "Dedukcja: 'A pusty, ja w B, więc enemy w C'.",
-        "Im więcej graczy widzisz = im mniej możliwości dla niewidzianych."
+        "Gdy enemy robi recall, licz 8 sekund recall, dodaj krótki czas na regen/kupno itemu i dopiero wtedy licz drogę z base.",
+        "Gdy enemy znika na rzece, rozpisz 2-3 realne opcje: recall, roam mid/bot/top, wejście do jungli albo setup wizji.",
+        "Przy junglerze łącz ostatnią pozycję, CS, buffy i czas potrzebny na campy. Dzięki temu zawężasz, gdzie może być zamiast zgadywać.",
+        "Eliminuj miejsca: jeśli A jest puste, ty jesteś w B, a enemy nie miał czasu dojść do D, najbardziej prawdopodobne zostaje C.",
+        "Im więcej graczy widzisz, tym mniej możliwości zostaje dla niewidzianych. Brak przeciwnika w jednym miejscu też jest informacją."
       ],
       when: "Cały czas. Każda decyzja wymaga 'gdzie są wszyscy enemy'.",
       success: "Twoje przewidywanie zgadza się 70%+ — enemy pojawiają się tam gdzie zakładałeś.",
@@ -333,11 +334,11 @@ export const GOALS = {
     details: {
       what: "Szybkie, częste klikanie blisko modelu utrzymuje rękę w tempie gry. Klik daleko od postaci wydłuża ruch potrzebny do uniku. Wejście na prędkość trwa — nie zdążysz przyspieszyć w momencie zagrożenia.",
       how: [
-        "Klikaj DUŻO przez całą grę, nie tylko w momencie zagrożenia.",
-        "Klikaj BARDZO BLISKO swojej postaci.",
-        "Practice Tool: bohater między dwoma wardami (mała odl), klik naprzemiennie TAK ABY POSTAĆ SIĘ NIE RUSZYŁA.",
-        "5-10 min dziennie cwiczenia + trenuj combo na swoim champie.",
-        "Auto-atakuj attack-move (A+klik), nie right-click."
+        "Utrzymuj szybkie, krótkie kliknięcia także przed walką. Jeśli zaczynasz klikać szybko dopiero przy skillshocie, reakcja jest spóźniona.",
+        "Klikaj blisko postaci. Krótszy ruch myszką oznacza szybszy skręt, łatwiejszy dodge i mniej panicznych komend.",
+        "Practice Tool: postaw dwa wardy blisko siebie, stań postacią między nimi i klikaj naprzemiennie tak, żeby postać prawie nie ruszała się z miejsca.",
+        "Ćwicz 5-10 minut dziennie: najpierw sam rytm kliknięć, potem ten sam rytm podczas combo na swoim championie.",
+        "Autoatakuj przez attack move (np. A + klik), żeby ograniczyć missclicki w miniony lub ziemię podczas walki."
       ],
       when: "Cała gra: laning, dodge, spacing, kite, teamfighty.",
       success: "Uniki są krótkie, ruch nie panicznie reaktywny, klikanie szybkie bez rozgrzewki.",
@@ -357,9 +358,10 @@ export const GOALS = {
       how: [
         "Locked camera OFF, smartcasty bez wskaźnika, attack move bind.",
         "F1=ty, F2-F5 sojusznicy. Spacja jako centrowanie szybkie.",
-        "Podczas lokowania (np. dobicie CS) — chwila na F-key check sojusznika/fragmentu mapy.",
-        "Wyzbyć się dyskomfortu że postać jest na rogach ekranu — przyjdzie z precyzją klikania.",
-        "Im lepsza wiedza o grze = im szybciej czytasz z ekranu (wiesz gdzie patrzeć)."
+        "Podczas animacji last hita, castu albo recall wykonaj krótki F-key check sojusznika lub obszaru, który zaraz może wpłynąć na twoją decyzję.",
+        "Jeśli unlocked camera jest niewygodna, zmniejsz zakres nauki: najpierw odblokowuj ją tylko w spokojnych momentach, potem w trade'ach i dopiero na końcu w walkach.",
+        "Nie sprawdzaj wszystkiego naraz. Jungler pathujący top → bot częściej sprawdza mid/bot, a ADC po pushu bota sprawdza mida i zejścia z rzeki.",
+        "Im lepiej rozumiesz grę, tym szybciej czytasz ekran, bo wiesz gdzie patrzeć: wave, HP/mana, pozycja junglera, objective timer."
       ],
       when: "Cała gra. Każde okno animacji = check.",
       success: "Czytasz mapę w 0.2s, F-key check daje info bez kosztu.",
@@ -375,9 +377,9 @@ export const GOALS = {
   animation_lock: {
     label: "Lokowanie w animacji",
     category: "micro", phase: 1, week: 2, order: 7,
-    short: "AA, skille, tower, miniony — blokują ruch. Trafiasz gdy enemy stoi.",
+    short: "AA, spells, tower, miniony — blokują ruch. Trafiasz gdy enemy stoi.",
     details: {
-      what: "Po AA lub użyciu spella postać przez krótki moment stoi w miejscu. To samo: towery, miniony, campy. Wykorzystujesz okno bezruchu enemy do pewnych skillshotów i trade'ów.",
+      what: "Po AA lub użyciu spell postać przez krótki moment stoi w miejscu. To samo: towery, miniony, campy. Wykorzystujesz okno bezruchu enemy do pewnych skillshots i trades.",
       how: [
         "Czekaj aż przeciwnik zacznie AA, last hit albo cast — wtedy ruch ograniczony.",
         "Rzucaj skillshot w momencie bezruchu, nie losowo na max range.",
@@ -387,7 +389,7 @@ export const GOALS = {
       when: "Trade'y, last hit enemy, pod towerem, chase z CC, śmierć z tower aggro.",
       success: "Skillshoty częściej trafiają w momentach gdy enemy realnie nie może odskoczyć.",
       mistakes: [
-        "Rzucanie spelli bez triggera animacji.",
+        "Rzucanie spells bez triggera animacji.",
         "AA podczas chase'u oddalające cię od CC range.",
         "Ignorowanie animacji towera przy krótkich trade'ach pod nim."
       ]
@@ -402,9 +404,9 @@ export const GOALS = {
     details: {
       what: "Skillshoty trafiają częściej gdy ustawisz POSTAĆ pod właściwy kąt. Prosto w enemy = 2 z 3 stron uniku. Pod kątem z boku = tylko 1 strona uniku. Liga ma 3 wymiary (x, y, h) — celuj w nogi.",
       how: [
-        "Obserwuj 'twarz' postaci — odwraca się w stronę ruchu/skilla.",
+        "Obserwuj 'twarz' postaci — odwraca się w stronę ruchu/spell.",
         "Liga 3D: niżej niż enemy = rzucaj lekko niżej. Wyżej = wyżej. Celuj w nogi.",
-        "Okrągłe (E Lux): enemy w środku skilla.",
+        "Okrągłe (E Lux): enemy w środku spell.",
         "Liniowe (Q Blitz): NIE na max range! Z boku = trudniej uniknąć.",
         "KONCEPT: Nie 'jak rzucić', tylko 'jak ustawić postać pod kąt'.",
         "Z fog of war prawie zawsze trafia (nikt się nie spodziewa)."
@@ -423,13 +425,13 @@ export const GOALS = {
     category: "micro", phase: 1, week: 3, order: 9,
     short: "Klik spell na enemy POZA range → Flash → spell INSTANT.",
     details: {
-      what: "Wiele speli direct (W TF, W Renektona) można kolejkować z Flashem. Klikasz spell zanim jesteś w zasięgu, potem Flash — spell odpala momentalnie po wejściu w range. Enemy nie ma czasu reagować.",
+      what: "Wiele direct spells (W TF, W Renektona) można kolejkować z Flashem. Klikasz spell zanim jesteś w zasięgu, potem Flash — spell odpala momentalnie po wejściu w range. Enemy nie ma czasu reagować.",
       how: [
-        "Klik spell na enemy mimo że POZA zasięgiem.",
-        "Postać zaczyna iść za targetem → Flash w zasięg.",
-        "Spell odpala natychmiast gdy wejdziesz w range.",
-        "Defensywne: ktoś goni, masz stun — klik W przed wejściem w jego range = leci od razu.",
-        "Można też kolejkować AA 'tańcząc' w zasięgu i czekając aż enemy wejdzie."
+        "Najpierw kliknij targetowany spell na enemy, mimo że cel jest jeszcze poza zasięgiem. Postać zacznie iść za celem.",
+        "Gdy widzisz, że po Flashu wejdziesz w range, użyj Flasha w kierunku celu. Spell powinien odpalić od razu po wejściu w zasięg.",
+        "Ćwicz na prostych przykładach: TF wybiera złotą kartę, klika W na cel poza range, Flashuje i karta leci bez dodatkowego kliku.",
+        "Defensywnie działa tak samo: jeśli ktoś z dashem zaraz wejdzie w twój range, kliknij stun wcześniej i wróć kursorem do ucieczki.",
+        "Nie trzymaj bufora za długo. Jeśli enemy się wycofał, anuluj ruch, bo inaczej postać będzie iść za nim bez sensu."
       ],
       when: "Engage, escape, last-hit assassyna na carry, niespodziewany kill setup.",
       success: "Twój flash + spell = brak czasu na reakcję enemy = zwykle kill.",
@@ -441,19 +443,20 @@ export const GOALS = {
     category: "micro", phase: 1, week: 3, order: 10,
     short: "Prosta linia w enemy → skręt w ostatniej chwili → WCHODŹ.",
     details: {
-      what: "Wymuszanie złego użycia speli enemy poprzez fałszywe ruchy. Idziesz w prostej linii (zachęcasz do casta), skręcasz w ostatnim momencie = enemy spalił spell na nic = ty wbiijasz.",
+      what: "Wymuszanie złego użycia enemy spells poprzez fałszywe ruchy. Idziesz w prostej linii, zachęcasz do casta, skręcasz w ostatnim momencie, enemy pali spell na nic i wtedy wchodzisz w trade.",
       how: [
-        "Idziesz w enemy prosta linia → w ostatnim momencie skręcasz → bait spella.",
-        "Po bicie spella → WCHODZISZ, trade wygrany.",
-        "Drobne ruchy prawo-lewo TYLKO gdy enemy MUSI zagrać spella (np. wychodzisz z range'a).",
-        "NIE tańcz 5s wcześniej jak low elo — taniec ma sens tylko w momencie konkretnego zagrożenia."
+        "Najpierw rozpoznaj kluczowy spell przeciwnika. Bait ma sens tylko wtedy, gdy zmarnowany key spell realnie otwiera ci trade albo all-in.",
+        "Podejdź linią, która wygląda dla enemy jak łatwy cast. W ostatniej chwili skręć krótkim kliknięciem blisko postaci.",
+        "Gdy spell poleci w pusto, od razu wejdź w cooldown window. Sam dodge bez punishu nie daje pełnej wartości.",
+        "Drobne ruchy prawo-lewo rób tylko w momencie, gdy przeciwnik musi rzucić spell, np. gdy wychodzisz z jego range'a albo grozisz wejściem.",
+        "Nie tańcz 5 sekund wcześniej bez powodu. Losowy ruch męczy rękę i często ustawia cię gorzej."
       ],
       when: "Laning trade, gank dodge, teamfight kite.",
-      success: "Enemy pali spell na nic → ty wbiijasz w okienku CD i zadajesz dmg.",
+      success: "Enemy pali spell na nic → ty wchodzisz w okienku CD i zadajesz dmg.",
       mistakes: [
         "Taniec losowy bez konkretnego momentu zagrożenia.",
         "Brak follow-upu po udanym baicie.",
-        "Bait gdy enemy widzi cię na max range — nie zagra spella tak czy siak."
+        "Bait gdy enemy widzi cię na max range — nie zagra spell tak czy siak."
       ]
     }
   },
@@ -462,18 +465,18 @@ export const GOALS = {
   spacing_ranges: {
     label: "Spacing — zasięgi w głowie",
     category: "micro", phase: 1, week: 4, order: 11,
-    short: "Wyobrażaj okręgi range AA/skili. Trzymaj się LEKKO poza zasięgiem enemy.",
+    short: "Wyobrażaj okręgi range AA/spells. Trzymaj się LEKKO poza zasięgiem enemy.",
     details: {
       what: "Spacing to balansowanie na granicy zasięgu swojego i przeciwnika. Wyobrażasz okręgi range i grasz na ich granicy. Stoisz tak, by ty mógł zagrać, a enemy nie miał łatwego wejścia.",
       how: [
-        "Wyobrażaj okręgi range: twoje AA/spelle, enemy engage, enemy poke.",
-        "Stój na granicy, gdzie TY możesz grozić akcją, ENEMY nie ma łatwego wejścia.",
-        "Syndra vs Viktor: E daje przewagę. Ale gdy ona użyje E, Viktor ma większy range = wykorzystaj.",
-        "ADC: range AA to ŻYCIE. Znaj co do piksela.",
-        "Wykorzystuj lokowanie w animacji — enemy ma efektywnie mniejszy zasięg gdy się loku."
+        "Wyobraź sobie trzy okręgi: twój autoatak/spells, enemy engage i enemy poke. Twoja pozycja ma być na krawędzi tych okręgów.",
+        "Stój tak, żebyś ty mógł zagrozić akcją, ale enemy musiał użyć dasha, summoner spell albo błędu pozycji, żeby do ciebie wejść.",
+        "Cooldowns zmieniają zasięgi: Syndra bez E nie ma tej samej strefy kontroli, więc Viktor może podejść agresywniej.",
+        "ADC musi znać swój range AA bardzo dokładnie. Jeden krok za blisko często oznacza darmowy engage przeciwnika.",
+        "Wykorzystuj animation lock: gdy enemy last hituje, autoatakuje albo castuje, jego realna możliwość wejścia i dodge'u jest mniejsza."
       ],
       when: "Laning, bot trade'y, ustawianie pod objective, kite w walce.",
-      success: "Wciskasz swoje skille bez biorenia dmg enemy.",
+      success: "Używasz swoich spells bez przyjmowania darmowego dmg od enemy.",
       mistakes: [
         "Wejście w zasięg enemy bez powodu.",
         "Brak świadomości WŁASNEGO range AA (ADC = śmierć).",
@@ -495,7 +498,7 @@ export const GOALS = {
         "Niewidoczni sojusznicy też tworzą space — enemy musi respect."
       ],
       when: "Laning, bot trade'y, walki 5v5, oblężenia.",
-      success: "Twój carry farmi/bije bez biorenia dmg dzięki twojej presji.",
+      success: "Twój carry farmi/bije bez przyjmowania darmowego dmg dzięki twojej presji.",
       mistakes: [
         "Wejście w krzak BEZ CC = darmowy zabity.",
         "Tank wbity ale carry nie idzie za nim = wasted.",
@@ -513,14 +516,14 @@ export const GOALS = {
         "Top: jeśli na tym samym poziomie i jeden bliżej krzaków, drugi bliżej rzeki = rzeka dogoni. Stoisz dalej od linii.",
         "Bot TRÓJKĄT: ADC+supp obok, enemy ADC lekko przed = matematycznie złapią.",
         "SZACHOWNICA: wyobraź szachownicę na linii, eliminacją zaznacz GDZIE stać.",
-        "NIE stój: blisko enemy jg, w minionach enemy, w swoich minionach (value spelli enemy)."
+        "NIE stój: blisko enemy jg, w minionach enemy, w swoich minionach (enemy spell value)."
       ],
       when: "Każdy laning, każda pozycja przed walką.",
       success: "Enemy nie ma łatwego wejścia na ciebie, ty masz wejścia na enemy.",
       mistakes: [
         "Stanie na środku linii bez analizy 'kto kogo złapie'.",
         "Bot pozycja przed supp.",
-        "ADC w minionach enemy → value spelli."
+        "ADC w minionach enemy → spell value."
       ]
     }
   },
@@ -535,7 +538,7 @@ export const GOALS = {
         "Blue wardy NA ADC i nie-mobilnych — face check = śmierć.",
         "Kite do krzaka = znikasz = enemy traci dystans, ty masz okno.",
         "Top mele w krzaku vs range = bicie i uciekanie = przewaga.",
-        "Predict enemy w danym miejscu (na ślepo unik skilla)."
+        "Predict enemy w danym miejscu (na ślepo unik spell)."
       ],
       when: "Laning, ganki, kite enemy, side lane.",
       success: "Nie facecheckujesz, ale wymuszasz face check enemy. Kite działa.",
@@ -555,17 +558,17 @@ export const GOALS = {
   slow_push: {
     label: "Slow push — 3-wave crash",
     category: "wave", phase: 2, week: 5, order: 15,
-    short: "Wyjście wcześnie, ustawienie HP nobków, 3. wave pod towerem enemy.",
+    short: "Wyjście wcześnie, ustawienie HP minionów, 3. wave pod towerem enemy.",
     details: {
       what: "Jak najwolniejsze pushowanie fali — enemy zbiera coraz większe stacki minionów pod swoim towerem. Trzecia fala uderza w jego tower, ty masz okno czasowe na akcję poza linią. Slow push to twoje główne narzędzie do tworzenia tempa na mapie.",
       how: [
-        "Dobijasz CS TYLKO ostatnim hitem. Nigdy nie wbijasz autoataka w pełne HP miniona.",
-        "W matchupie range vs melee — wyjdź WCZEŚNIE w fale enemy, ustaw slow push PRZED spotkaniem fal pod twoim towerem.",
-        "Szczególnie wartościowe vs mobilne carry typu Tristana/Yone — zonujesz, miniony są na różnych HP, max 1-2 CS ze spella enemy.",
-        "Przed rozbiciem fal zonuj enemy mida żeby nie mógł nawet expa złapać.",
-        "Po 3 stakach masz level difference + ~15 CS przewagi."
+        "Na pierwszej i drugiej fali dobijaj CS głównie ostatnim hitem. Nie bij pełnego HP miniona bez celu, bo przypadkiem zamienisz slow push w hard push.",
+        "Jeśli masz range vs melee, wyjdź wcześnie do fali i ustaw przewagę minionów zanim fale spotkają się bliżej twojego towera.",
+        "Pilnuj, żeby twoich minionów było lekko więcej i żeby ich HP było nierówne. Dzięki temu enemy nie czyści całej fali jednym spell.",
+        "Gdy trzecia fala z cannonem idzie do enemy towera, dopchnij ją mocniej i przygotuj akcję: recall, ward, roam, dive albo harass pod wieżą.",
+        "Po crashu od razu wykorzystaj okno tempa. Slow push bez kolejnej akcji jest tylko wolnym pushem, a nie przewagą mapową."
       ],
-      when: "Pod objektiw, pod dive bota, pod deep ward w enemy jg, pod roam, pod harass nobka pod jego towerem.",
+      when: "Pod objective, dive bota, deep ward w enemy jungle, roam albo harass przeciwnika pod jego towerem.",
       whenNot: "Jak ciebie duszą (przegrywasz MU mechanicznie) — wtedy MAX CS, min HP, info do teamu że nie schodzisz z linii.",
       success: "Trzecia fala stoi pod towerem enemy. Minimum 4 opcje: zejście top, bot, pomoc jg, harass nobka. Wybierasz najsilniejszą.",
       mistakes: [
@@ -584,41 +587,42 @@ export const GOALS = {
     details: {
       what: "Zatrzymanie fali blisko TWOJEGO towera. Enemy musi przyjść daleko po CS, wystawia się na ganki jg, ty bezpiecznie farmisz lub wymuszasz jego powrót/utratę zasobów.",
       how: [
-        "Trigger: bounce wave wraca do ciebie (po slow pushu enemy LUB po stracie linii).",
-        "Trzymaj 3+ caster minionów więcej niż enemy (2 = 50/50 niestabilne, 1 = freeze pęka).",
-        "Zabijaj enemy miniony PO twoich umierających — tylko wyrównujesz licznik.",
-        "Tankuj jednego enemy miniona swoim ciałem żeby nie odepchnął twoich.",
-        "CS tylko ostatnim hitem — bez harass z ręki (psujesz balans)."
+        "Trigger: enemy slow push scrashował pod twoim towerem albo przegrałeś linię i fala naturalnie wraca w twoją stronę.",
+        "Zostaw po stronie enemy minimum 3 caster miniony więcej niż u ciebie. Przy 1-2 minionach freeze łatwo pęka.",
+        "Dobijaj enemy miniony dopiero po tym, jak twoje miniony umierają. Twoim celem jest utrzymanie różnicy, nie szybkie czyszczenie.",
+        "Jeśli fala idzie za szybko pod twój tower, przyjmij kilka hitów minionów na postać i przeciągnij ją kawałek przed tower.",
+        "Nie harassuj autoatakami, jeśli przez to twoja fala zaczyna pushować. Podczas freeze'u CS i balans fali są ważniejsze niż losowy poke."
       ],
       when: "Przegrywasz MU, enemy ma summonery a ty nie, czekasz na powerspike, enemy mid roamuje.",
       whenNot: "Smok/herald aktywny, twój team intuje, enemy jg blisko (zaraz zniszczy freeze).",
       success: "Enemy musi przejść 2/3 lane po CS, sam się wystawia na gank, HP/mana pełne.",
       mistakes: [
         "Schodzenie na freezie (tracisz exp/gold = cały sens freeza umiera).",
-        "Freeze gdy są objektiwy (oddajesz mapę za bezpieczeństwo).",
+        "Freeze, gdy aktywny jest ważny objective i twoja drużyna potrzebuje prio.",
         "Trzymanie tylko 1-2 więcej minionów (freeze pęka).",
         "Bicie z ręki podczas freeze (psujesz balans)."
       ]
     }
   },
   hard_push: {
-    label: "Hard push — przed canon/roam/objective",
+    label: "Hard push — przed cannon/roam/objective",
     category: "wave", phase: 2, week: 5, order: 17,
     short: "Szybko czyścisz falę pod ważny cel. NIE nadużywaj — slow push lepszy.",
     details: {
       what: "Szybkie przepchnięcie pełnej fali. Daje natychmiastowe prio, pozwala dołączyć do junglera, ukarać roam enemy albo wymusić jego cofnięcie. Slow push prawie zawsze lepszy.",
       how: [
-        "AA + spelle żeby fala jak najszybciej weszła pod tower enemy.",
-        "Enemy znika z mida bez info → hard push fali, potem sprawdzasz mapę.",
-        "Przed recallem czyścisz przed cannonem — wracasz z itemami bez straty CS.",
-        "Po killu/mocnym obiciu — zostajesz przepchnąć falę, jeśli bezpiecznie."
+        "Użyj autoataków i spells na całą falę, żeby jak najszybciej wprowadzić ją pod tower enemy.",
+        "Jeśli enemy mid znika bez informacji, najpierw dopchnij falę. Wtedy przeciwnik traci CS albo musi wrócić, a ty masz czas sprawdzić mapę.",
+        "Przed recall czyść falę przed cannon wave. Wracasz z itemami, a cannon utrudnia przeciwnikowi zatrzymanie fali.",
+        "Po killu albo mocnym obiciu zostań tylko wtedy, gdy wiesz gdzie jest jungler/support enemy. Hard push bez info często kończy się odcięciem.",
+        "Po crashu wybierz konkretną akcję: recall, ward, roam, pomoc junglerowi albo przygotowanie objective."
       ],
-      when: "Przed recallem, przed dołączeniem do jg, gdy enemy roamuje, natychmiastowe prio pod objective.",
+      when: "Przed recall, przed dołączeniem do jg, gdy enemy roamuje, natychmiastowe prio pod objective.",
       whenNot: "Gdy możesz zbudować slow push. Hard push bez celu = bounce + utrata tempa.",
       success: "Fala weszła pod tower, masz wolne okno na recall/ward/roam/objective.",
       mistakes: [
         "Hard push bez planu po fali.",
-        "Zostawienie fali w połowie linii przed recallem.",
+        "Zostawienie fali w połowie linii przed recall.",
         "Push bez wizji gdy enemy jg/sup może odciąć."
       ]
     }
@@ -626,23 +630,23 @@ export const GOALS = {
 
   // ---- Tydzień 6: Recall + wardowanie + trade ----
   canon_recall: {
-    label: "Recall TYLKO na canon falę",
+    label: "Recall TYLKO na cannon wave",
     category: "wave", phase: 2, week: 6, order: 18,
-    short: "Hard push fali PRZED canonem → recall. Maksymalne tempo.",
+    short: "Hard push fali PRZED cannonem → recall. Maksymalne tempo.",
     details: {
-      what: "Hard push fali bezpośrednio przed canon minionem → natychmiastowy recall. Maks tempo: enemy nie zatrzyma canon fali sam (canon tankuje tower), więc wracasz z itemami i pełną falą bez utraty CS.",
+      what: "Hard push fali bezpośrednio przed cannon minionem → natychmiastowy recall. Maks tempo: enemy nie zatrzyma cannon wave łatwo samemu, bo cannon tankuje tower, więc wracasz z itemami i pełną falą bez dużej straty CS.",
       how: [
-        "Identyfikuj canon — co trzecia fala ma 6 nobków + 1 armorowanego.",
-        "Fala BEZPOŚREDNIO PRZED canonem — hard push wszystkim co masz do enemy towera.",
-        "Recall NA TEJ FALI (po push, ale przed pojawieniem się canona z bazy).",
-        "Po powrocie: canon fala bouncuje do ciebie albo stoi pod twoim towerem.",
-        "Cofamy ZAWSZE przed smokiem 3-4 (soul point) — wyjątek od reguły."
+        "Rozpoznaj cannon wave po dodatkowym cannon minionie. W obecnych timerach pojawia się na falach 4, 7, 10, 13 itd.",
+        "Fala bezpośrednio PRZED cannonem ma wejść pod enemy tower. Użyj wszystkiego, co bezpiecznie przyspiesza push.",
+        "Recall kliknij po crashu tej fali, zanim twój cannon minion dojdzie z base na linię.",
+        "Po powrocie cannon wave zwykle jeszcze żyje, bounce'uje do ciebie albo stoi bliżej twojej strony, więc tracisz mniej CS.",
+        "Wyjątek: przed smokiem 3-4, soulem albo inną kluczową walką możesz cofnąć wcześniej, bo objective setup jest ważniejszy niż idealny recall."
       ],
       when: "Każdy standardowy recall w early/mid gdy masz ~500-800 golda.",
       whenNot: "Cheat recall przez TP, po killu (zostajesz na cofce enemy), pod smoka 3-4.",
       success: "Wracasz z itemami a twoja fala pushuje się sama. Brak utraty CS.",
       mistakes: [
-        "Recall NA canon fali — enemy łatwo zatrzymuje canon ręcznie.",
+        "Recall NA cannon wave — enemy łatwo zatrzymuje cannona ręcznie.",
         "Recall na środku zwykłej fali — bounce gdy enemy chce.",
         "Zbyt późny recall (200 golda) — kupujesz nic."
       ]
@@ -653,7 +657,7 @@ export const GOALS = {
     category: "vision", phase: 2, week: 6, order: 19,
     short: "Raptory 1:15 lub po 2-3 fali. Pinki BLIŻEJ, wardy DALEJ.",
     details: {
-      what: "Wizja nie do bronienia siebie, ale do INFO o enemy. Każdy ward ma cel: pod objektiw, carry, akcję. Pinki bliżej (kontrola), wardy głębiej (info). Głębiej = szybsza info.",
+      what: "Wizja nie służy tylko do bronienia siebie, ale głównie do zdobywania informacji o enemy. Każdy ward ma cel: objective, ochrona carry, przygotowanie akcji albo wcześniejsze wykrycie pathingu. Control wardy stawiasz bliżej, zwykłe wardy głębiej.",
       how: [
         "Basic ward po 2-3 fali (kraniec krzaka, daje wizję bez krzaka).",
         "Raptory ward o 1:15 LUB po 2-3 fali — pathing enemy jg.",
@@ -662,7 +666,7 @@ export const GOALS = {
         "Lane ward jeśli mid T1 stoi (widzimy zejścia enemy mida).",
         "Sprawdzasz wizję enemy — lepiej gdy nic nie ma (wiesz że enemy nie wie) niż gdy zniszczysz (oddajesz info)."
       ],
-      when: "Cały czas. Pod objektiw, pod carry, pod akcję, pod ganka.",
+      when: "Cały czas. Pod objective, pod carry, pod akcję, pod ganka.",
       whenNot: "Wardy 'w pizdę' bez planu — strata golda.",
       success: "Wiesz gdzie jest enemy jg w >70% gry. Akcje informowane wizją.",
       mistakes: [
@@ -678,18 +682,18 @@ export const GOALS = {
     category: "early", phase: 2, week: 6, order: 20,
     short: "Każdy matchup ma swój schemat. Im więcej znasz = ORASZ.",
     details: {
-      what: "Każdy matchup ma optymalny pattern wymiany skilli. Np. Fiora vs Aatrox: Aatrox trzyma E na W Fiory (zawsze unik), Fiora trzyma Q żeby trafić w Aatroxa i nie zjeść pełnego Q. Ahri vs Tristana: Ahri poke, Tristana szuka all-ina.",
+      what: "Każdy matchup ma optymalny spell trade pattern. Np. Fiora vs Aatrox: Aatrox trzyma E na W Fiory (zawsze unik), Fiora trzyma Q żeby trafić w Aatroxa i nie zjeść pełnego Q. Ahri vs Tristana: Ahri poke, Tristana szuka all-ina.",
       how: [
         "Przed grą pomyśl: jakie skile enemy są największym zagrożeniem? Co trzymać?",
-        "Trzymaj key spelle defensywne (E Aatrox, E Fiora) na key ofensywne enemy.",
+        "Trzymaj key defensive spells (E Aatrox, E Fiora) na key offensive spells enemy.",
         "Określ czy wygrywasz długie trade'y (autosy, małe CD) czy gramy pod burst.",
-        "Mając tarczę/heal automatycznie zmniejszasz value spella enemy.",
+        "Mając tarczę/heal automatycznie zmniejszasz enemy spell value.",
         "Ucz się 3 trade patternów na każdy matchup czemu trafiłeś / nie."
       ],
       when: "Laning, każdy trade w matchupie.",
       success: "Wymieniasz HP korzystnie. Wiesz kiedy all-in, kiedy poke, kiedy pas.",
       mistakes: [
-        "Trade bez planu spelli enemy.",
+        "Trade bez planu na enemy spells.",
         "Spale defensywny gdy enemy nie miał ofensywnego.",
         "All-in w matchupie który wygrywa burstem mając long trade champa."
       ]
@@ -716,20 +720,20 @@ export const GOALS = {
       mistakes: [
         "Tower bije miniona na full HP = mało CS.",
         "Zbyt wczesne AA = caster minion umiera od towera.",
-        "Spalanie spella na falę pod towerem (push przez przypadek)."
+        "Spalanie spell na falę pod towerem (push przez przypadek)."
       ]
     }
   },
   value_spells: {
-    label: "Value spelli — gracz vs gracz+wave",
+    label: "Spell value — gracz vs gracz+wave",
     category: "micro", phase: 2, week: 7, order: 22,
     short: "Spell w gracza+fale > spell w gracza. Baituj złe użycia enemy.",
     details: {
-      what: "Ten sam spell ma różną wartość: trafić gracza, gracza i falę, samą falę albo wymusić złą odpowiedź enemy. Używaj spelli zgodnie z planem fali i trade'u.",
+      what: "Ten sam spell ma różną wartość: trafić gracza, gracza i falę, samą falę albo wymusić złą odpowiedź enemy. Używaj spells zgodnie z planem wave i trade.",
       how: [
         "Przed castem: chcę pushować, trafić gracza, utrzymać wave, czy bait?",
-        "Jeśli możesz — ustaw spell żeby trafił enemy I część wave'a.",
-        "Baituj enemy do użycia spella w wave (jeśli wave pójdzie do ciebie).",
+        "Jeśli możesz — ustaw spell żeby trafił enemy I część wave.",
+        "Baituj enemy do użycia spell w wave (jeśli wave pójdzie do ciebie).",
         "Nie pal defensywnego jeśli enemy może wymusić ważniejszy trade.",
         "Przykład E Viktora: 1) tylko gracza, 2) gracz+część wave, 3) gracz+cała fala.",
         "ADC: Ezreal Q w enemy pod kątem żeby trafić też fale. Miss enemy = value z fali."
@@ -739,7 +743,7 @@ export const GOALS = {
       mistakes: [
         "Pushowanie fali przypadkowym poke'iem.",
         "Heal/tarcza za wcześnie ponad realne value.",
-        "Spell użyty bez związku z planem wave'a."
+        "Spell użyty bez związku z planem wave."
       ]
     }
   },
@@ -750,18 +754,18 @@ export const GOALS = {
     details: {
       what: "Każda sekunda oszczędzona = więcej akcji w tej samej grze. Drobne nawyki dają ~1-2s każdy, ale × 100 razy w grze = znaczny zysk czasu.",
       how: [
-        "Po recallu — od razu na koniec fontanny (bliżej wyjścia).",
-        "Dashe/MS spelle używaj W POWROCIE na linię, nie tylko w walce.",
+        "Po recall — od razu na koniec fontanny (bliżej wyjścia).",
+        "Dash/MS spells używaj W POWROCIE na linię, nie tylko w walce.",
         "Plate: zostawiaj trochę HP — miniony go dobiją (twój zysk gold).",
         "Robiąc las — kituj moby w stronę celu (gdzie idziesz potem).",
         "Recall pod towerem gdy bezpiecznie (bliższa ścieżka).",
         "Mając zagranie po pushu (zejście top z mida) — dobijaj ostatniego CS już bliżej 'wyjścia'."
       ],
       when: "Cały czas. Każdy recall, każdy ruch.",
-      success: "Wracasz na linię 10-15s szybciej każdorazowo × 8-12 recalli = 1-2 min zysku.",
+      success: "Wracasz na linię 10-15s szybciej każdorazowo × 8-12 recalls = 1-2 min zysku.",
       mistakes: [
         "Stanie w środku fontanny.",
-        "Trzymanie dasha 'na walkę' (i tak nie użyjesz przed recallem).",
+        "Trzymanie dasha 'na walkę' (i tak nie użyjesz przed recall).",
         "Plate na 0 HP solo (oddajesz CS minionom)."
       ]
     }
@@ -771,12 +775,12 @@ export const GOALS = {
     category: "early", phase: 2, week: 7, order: 24,
     short: "0/5 = darmowy trade za tower. PLATE: resy od liczby graczy. Catch-up XP.",
     details: {
-      what: "Mechaniki które gra ci daje: bounty, plate gold sharing, catch up XP, lvl up po spellu, runy. Świadomość daje darmowy gold/xp/value.",
+      what: "Mechaniki które gra ci daje: bounty, plate gold sharing, catch up XP, lvl up po spell, runy. Świadomość daje darmowy gold/xp/value.",
       how: [
         "BOUNTY: 0/5 nie dajesz golda → śmierć za tower opłacalna. Enemy 0/5 = nie warto go zabijać.",
         "PLATE: gdy zbijesz, resy zależą od liczby graczy. Często supp powinien odejść = większy zysk dla ciebie.",
         "CATCH-UP XP: niższy lvl od średniego = exp boost. Nie panikuj jak jesteś 1 level z tyłu.",
-        "LEVEL UP PO spellu: jak masz spell w trakcie casta i pojawia się level → upgrade'ujesz → wyższy dmg za mniej many.",
+        "LEVEL UP PO spell: jak masz spell w trakcie casta i pojawia się level → upgrade'ujesz → wyższy dmg za mniej many.",
         "Pierwsza fala ma SŁABE agro — wyjdź przed nią, możesz stać przed minionami.",
         "BOUNTY na sobie? Enemy cię focusuje. Bounty na enemy? Celuj w niego."
       ],
@@ -822,14 +826,14 @@ export const GOALS = {
       how: [
         "Wiesz że cofasz → wave clear do max (mana niewykorzystana = strata).",
         "Cofasz → trade HP, nie ma sensu wracać z full HP.",
-        "Dive: nawet bez skili możesz przytrzymać tower hit jeśli HP zezwala.",
+        "Dive: nawet bez spells możesz przytrzymać tower hit jeśli HP zezwala.",
         "Mega do tyłu = nie kupuj pinka (i tak nie utrzymasz).",
         "Zaraz finalna walka = kup coś nawet sub-optimal niż trzymać gold.",
         "ZAWSZE używaj potek w walce (mają CD).",
         "Wave dobijasz pod towerem 'od tyłu' = łapiesz info."
       ],
       when: "Cały czas. Świadomość że zasoby się odnawiają.",
-      success: "Wracasz do bazy po realnym wykorzystaniu wszystkiego.",
+      success: "Wracasz do base po realnym wykorzystaniu wszystkiego.",
       mistakes: [
         "Recall z pełną maną przy push fali.",
         "Potki nigdy nieużyte (kup je dla zabawy?).",
@@ -841,21 +845,21 @@ export const GOALS = {
   chain_cc: {
     label: "Chain CC — wydłużanie bezruchu",
     category: "teamfight", phase: 2, week: 8, order: 27,
-    short: "Hard CC NIE stackuje się! CC kiedy enemy MA spele.",
+    short: "Hard CC NIE stackuje się! CC kiedy enemy MA spells.",
     details: {
-      what: "Chain CC to następujące po sobie skille CC wydłużające czas w którym gracz nic nie może. WIĘKSZOŚĆ hard CC NIE STACKUJE — nadpisuje. CC kiedy enemy ma spele (mage bez skili = bezbronny = CC mniej warty).",
+      what: "Chain CC to następujące po sobie CC spells wydłużające czas w którym gracz nic nie może. WIĘKSZOŚĆ hard CC NIE STACKUJE — nadpisuje. CC kiedy enemy ma spells (mage bez spells = bezbronny = CC mniej warty).",
       how: [
         "Pierwsze CC → poczekaj aż się skończy → DRUGIE CC (chain).",
         "Nie nakładaj 2 hard CC równocześnie — drugi nadpisuje pierwszy.",
         "Soft CC (slow) stackuje się z hard CC — można rzucać równocześnie.",
-        "Optymalne: CC gdy enemy mage MA spele do użycia.",
-        "Bez skili — mage bezbronny = CC mniej warty (zabijasz go tak czy siak)."
+        "Optymalne: CC gdy enemy mage MA spells do użycia.",
+        "Bez spells — mage bezbronny = CC mniej warty (zabijasz go tak czy siak)."
       ],
       when: "Walki 2v2+, ganki, all-iny, teamfighty.",
       success: "Enemy nic nie zagrał przez 3+ sekundy → łatwy kill.",
       mistakes: [
         "Dwa hard CC równocześnie (overlap).",
-        "CC na ADC bez skili (waste).",
+        "CC na ADC bez spells (waste).",
         "Brak follow-upu po CC."
       ]
     }
@@ -863,15 +867,15 @@ export const GOALS = {
   game_settings: {
     label: "Ustawienia gry (jednorazowe)",
     category: "micro", phase: "ongoing", week: null, order: 28,
-    short: "Smartcasty, F-keye, dźwięki skilli, mały HUD, AA off.",
+    short: "Smartcasty, F-keye, spell sounds, mały HUD, AA off.",
     details: {
       what: "Ustawienia mają usuwać opóźnienia i poprawiać czytelność. Nie cel sam w sobie ale złe ustawienia blokują mechanikę i świadomość mapy.",
       how: [
         "Smartcasty BEZ wskaźnika jako standard.",
         "F1-F4 sojusznicy, spacja na siebie.",
         "Champion target only jako TOGGLE (on/off), nie trzymany przycisk.",
-        "Grafika postaci + skili MAX (czytelność), teren MIN (mniej rozpraszania).",
-        "Dźwięki skili ON, muzyka OFF.",
+        "Grafika postaci + spells MAX (czytelność), teren MIN (mniej rozpraszania).",
+        "Spell sounds ON, muzyka OFF.",
         "HUD możliwie mały ale wygodny. Auto-ataki OFF.",
         "Attack-move bind na A (nie shift)."
       ],
@@ -897,18 +901,18 @@ export const GOALS = {
     details: {
       what: "Prio = przepchnięcie fali przed przeciwnikiem. Enemy traci gold/exp przy podejściu po CS = punkt presji. Automatyczne doliczenie do rozrachunku walki. Podstawowy łańcuch: wave → objective → wave → objective.",
       how: [
-        "Pushuj falę pierwszy = enemy traci CS pod towerem.",
-        "Schemat: wave → objective → wave → objective.",
-        "Push mid+bot → schodzimy na smoka. Enemy oddaje smoka albo fale.",
-        "Prio z 2 linii > prio z 1 (np. top + mid > tylko mid).",
-        "Pierwszy herald = często bot move: prio z bota → suport schodzi i wspiera."
+        "Najpierw dopchnij najważniejszą falę. Przeciwnik musi wtedy wybrać: zbiera miniony i spóźnia się na mapę albo ignoruje wave i traci gold/XP.",
+        "Dopiero po wave graj następny krok: ward, wejście do jungli, roam, objective albo ustawienie pozycji przed walką.",
+        "Przykład: push mid + bot przed smokiem. Enemy musi oddać smoka albo oddać fale, więc sama walka 5v5 przestaje być równa.",
+        "Prio z dwóch linii jest mocniejsze niż prio z jednej, bo przeciwnik ma więcej miejsc do naprawienia przed wejściem w akcję.",
+        "Przed każdym objective zapytaj: które wave muszą być dopchnięte, żeby przeciwnik był reaktywny?"
       ],
       when: "Każda decyzja przed objective, recall, roam.",
       success: "Wiesz na której linii masz prio TERAZ i wykorzystujesz to do zagrania.",
       mistakes: [
         "Pushowanie każdej fali bez celu.",
         "Oddanie fali i objective naraz.",
-        "Brak świadomości prio = przegrywasz objektiwy bez wiedzy że mogłeś wziąć."
+        "Brak świadomości prio = przegrywasz objectives bez wiedzy, że mogłeś je przygotować."
       ]
     }
   },
@@ -919,11 +923,11 @@ export const GOALS = {
     details: {
       what: "Tempo to przewaga czasu: możesz zrobić coś PRZED enemy. Indywidualne (recall przed lane opponentem) i drużynowe (cały team na mapie, enemy resetuje). NIE DA SIĘ mieć tempo cały czas.",
       how: [
-        "Recall przed enemy = ty pierwszy na mapie = tempo.",
-        "Tempo drużynowe: cały team gotowy, enemy resetuje = okno.",
-        "Śledź enemy w fog (gdzie jest, regen, dojście) = wyobrażalny obraz tempa.",
-        "Szybkie wykorzystanie czasu — tempo się traci jeśli nie zrobisz nic.",
-        "Tempo na chwilę do przodu = często wystarczy by zdążyć na cel."
+        "Recall przed enemy daje tempo, bo ty wychodzisz z base pierwszy i możesz wcześniej dojść do wave, wizji albo objective.",
+        "Tempo drużynowe powstaje, gdy kilku twoich graczy jest już na mapie, a enemy dopiero resetuje albo wychodzi z base.",
+        "Śledź enemy w fog: licz recall, czas kupowania/regenu i drogę z base. Bez tego nie wiesz, czy masz 3, 8 czy 15 sekund okna.",
+        "Użyj tempa od razu na konkretny cel: postaw wizję, zajmij rzekę, zacznij objective, wejdź po campy albo dopchnij kolejny wave.",
+        "Jeśli z tempem tylko stoisz, przewaga czasu znika. Tempo jest oknem, nie stałym stanem."
       ],
       when: "Każda decyzja: jak szybko można coś zrobić przed enemy?",
       success: "Pierwszy na każdej akcji. Enemy reaguje na ciebie, nie odwrotnie.",
@@ -941,11 +945,11 @@ export const GOALS = {
     details: {
       what: "Co robić gdy enemy ma tempo: jeśli mała różnica = graj cross-map (druga strona mapy). Mocno do tyłu = matchuj enemy (obrona, odbicie kontroli).",
       how: [
-        "Tempo na równo / mały minus = CROSS-MAP PLAY (zabranie czegoś na drugiej stronie mapy).",
-        "Enemy bierze drake → ty bierz heralda/tower top.",
-        "Mocno do tyłu w tempie → matchuj enemy: obrona + ponowne przejęcie kontroli.",
-        "Powoli wchodzisz, control wardy, obijasz enemy, czekasz na błąd.",
-        "Cheese tylko jeśli oba schematy zawiodą."
+        "Gdy różnica tempa jest mała, szukaj cross-mapa: enemy gra drake, ty bierzesz Heralda, top tower albo głęboką wizję po drugiej stronie.",
+        "Zanim wybierzesz cross-map, sprawdź czy zdążysz zacząć swoją akcję zanim enemy skończy swoją. Spóźniony cross-map jest tylko kolejną stratą.",
+        "Gdy jesteś mocno do tyłu, matchuj: wróć do bronionego obszaru, wejdź razem, postaw control wardy i odzyskuj teren małymi krokami.",
+        "Nie facecheckuj obszaru, który enemy już zajął. Najpierw wizja bliżej siebie, potem czerwony trinket, potem dopiero kolejny krok.",
+        "Cheese zostaw jako ostateczność, gdy cross-map i spokojne odzyskiwanie kontroli nie dają już realnej wartości."
       ],
       when: "Gdy enemy ma więcej tempa niż ty. Każda walka 'kto pierwszy'.",
       success: "Nie throwujesz odpowiedzi na zła pozycję. Zabierasz coś gdzie indziej.",
@@ -963,12 +967,12 @@ export const GOALS = {
     details: {
       what: "Nie zawsze chcesz prio. Czasem freeze daje więcej (presure point), czasem zostanie dłużej daje spike, czasem jesteś bliżej obj i tak zdążysz.",
       how: [
-        "Weak side (brak teamu, wizji) = oddaj prio.",
-        "Freeze bez objektivów = presja ale przykuwa do linii, brak prio ale enemy traci CS.",
-        "Nie pushuj fali od razu — wymusz na enemy decyzję (smok za 10s).",
-        "Zostanie dłużej da item spike (Rabadon, IE) = warto oddać tempo.",
-        "Bliżej objective niż enemy = nawet z tempem do tyłu zdążysz.",
-        "Po baronie/eldera/soul = wymuszony długi push, tempo jest twoje tak czy siak."
+        "Na weak side, bez wizji i coveru drużyny, oddaj prio zamiast umierać za falę. Lekkie oddanie jest lepsze niż śmierć.",
+        "Freeze bez aktywnego objective może być lepszy niż push, bo przykuwa przeciwnika do linii i zabiera mu CS/XP.",
+        "Przed objective czasem opłaca się opóźnić push, żeby wave crashował bliżej spawnu i zmusił enemy do trudnej decyzji.",
+        "Jeśli zostanie dłużej daje duży item spike, np. Rabadon albo IE, możesz świadomie oddać kilka sekund tempa za siłę w następnej walce.",
+        "Jeśli jesteś bliżej miejsca akcji niż enemy, globalne tempo może wyglądać gorzej, ale lokalnie nadal zdążysz pierwszy.",
+        "Po Baronie, Elderze albo soulu tempo często wymusza długi push. Wtedy nie musisz walczyć o każdą sekundę recall tak samo jak wcześniej."
       ],
       when: "Gdy alternatywa daje więcej niż utrzymanie prio.",
       success: "Świadomy wybór oddania prio za większy zysk gdzie indziej.",
@@ -980,7 +984,7 @@ export const GOALS = {
     }
   },
 
-  // ---- Tydzień 10: Rotacje + objektiwy + smoki + herald ----
+  // ---- Tydzień 10: Rotacje + objectives + smoki + herald ----
   rotation_t1: {
     label: "Rotacja po pierwszym T1",
     category: "macro", phase: 3, week: 10, order: 33,
@@ -1005,18 +1009,18 @@ export const GOALS = {
     }
   },
   objective_from_something: {
-    label: "Objektiwy Z CZEGOŚ — 5 czynników",
+    label: "Objectives Z CZEGOŚ — 5 czynników",
     category: "macro", phase: 3, week: 10, order: 34,
     short: "Prio + Tempo + Siła + Wygrana + Rotacje. Nigdy 'bo fajnie'.",
     details: {
-      what: "Każdy objektiw bierzesz Z CZEGOŚ — nigdy 'bo fajnie' lub 'bo spawned'. 5 czynników: prio, tempo, siła w walce (fed), wygrana walka, rotacja silnego herosa.",
+      what: "Każdy objective bierzesz Z CZEGOŚ — nigdy 'bo fajnie' albo 'bo się zrespił'. 5 czynników: prio, tempo, siła w walce, wygrana walka i rotacja silnego championa.",
       how: [
-        "Schemat early: WAVE → WIZJA → WAVE → OBJ.",
-        "Z prio mid+bot: pushuj obie linie → schodzimy 4-5 → enemy oddaje fale albo obj.",
-        "Z tempo: enemy poza mapy (zabity, recall) → twoje okno.",
-        "Z wygranej walki: enemy 2+ down → obj za darmo.",
-        "Z rotacją: nafedowany champ rotuje → enemy musi odpuścić.",
-        "Wizja pod obj: pinki bliżej, wardy głębiej."
+        "Najpierw policz 5 czynników: czy mamy prio, tempo, siłę w 5v5, świeżo wygraną walkę albo rotację silnego championa.",
+        "Używaj schematu z kursu: wave → wizja → wave → objective. Najpierw dopchnij fale, potem ustaw teren, potem odśwież prio i dopiero zaczynaj cel.",
+        "Jeśli masz prio mid + bot, dopchnij obie linie i zejdź 4-5 osób. Enemy musi wtedy oddać fale albo oddać objective.",
+        "Jeśli masz tempo, bo enemy jest martwy, po recall albo dopiero wychodzi z base, zrób objective w tym oknie, zanim wróci na mapę.",
+        "Po wygranej walce sprawdź death timery i HP/mana drużyny. Enemy 2+ down zwykle daje objective, ale tylko jeśli zdążycie go skończyć.",
+        "Wizja pod objective: control wardy bliżej siebie i w miejscach do bronienia, zwykłe wardy głębiej na wejściach enemy."
       ],
       when: "Gdy masz minimum 2 czynniki. 1 = ryzyko. 0 = throw.",
       whenNot: "Enemy ma prio + tempo + wizję = oddaj i graj cross-map.",
@@ -1032,16 +1036,16 @@ export const GOALS = {
   dragon_protocol: {
     label: "Smoki — wizja, prio, schemat",
     category: "macro", phase: 3, week: 10, order: 35,
-    short: "Bliżej bazy pinki, dalej wardy. Push mid+bot → smok.",
+    short: "Bliżej base control wardy, dalej wardy. Push mid+bot → smok.",
     details: {
       what: "Smoka bierzesz Z CZEGOŚ. Wizja bliżej nas (pinki), głębiej zwykłe wardy. Mając prio mid+bot — schodzimy → enemy oddaje smoka albo fale.",
       how: [
-        "Wizja: pinki bliżej naszej bazy (na rzece), czyścimy enemy wardy. Głębiej zwykłe wardy.",
-        "Push mid i bot → schodzimy → enemy musi wybrać: oddać smoka albo fale (dzięki prio).",
-        "Z dużym tempem = nie trzeba wizji.",
-        "Z prio z topa i bota / mida = jak top schodzi 2 enemy muszą bronić.",
-        "Silniejsi w walce = nie oddaj prio, weź smoka.",
-        "Schemat: rotacje → branie prio → wizja → prio → smok."
+        "Na 60-90 sekund przed smokiem zapytaj, czy chcecie o niego grać. Jeśli tak, zaplanuj reset, żeby wrócić z itemami i wardami.",
+        "Najpierw dopchnij mid i bot. Gdy te fale wchodzą, enemy musi wybrać między minionami a wejściem na rzekę.",
+        "Control wardy stawiaj bliżej swojej strony rzeki, gdzie możesz ich bronić. Zwykłe wardy dawaj głębiej, żeby widzieć wejścia enemy wcześniej.",
+        "Jeśli macie duże tempo, bo enemy jest poza mapą, możesz zacząć smoka szybciej, ale nadal sprawdź czy da się go skończyć przed wejściem przeciwnika.",
+        "Jeśli przegrywacie walkę 5v5 i enemy jest ustawiony pierwszy, oddaj smoka i od razu graj cross-map: Herald, tower, campy albo deep vision po drugiej stronie.",
+        "Pełny schemat: rotacja → prio → wizja → odświeżenie prio → smok. Nie zaczynaj od samego smoka."
       ],
       when: "Każdy smok. Szczególnie 3-4 (soul point).",
       whenNot: "Enemy ma 5 pod smokiem z pełnym HP + my przegrywamy walkę → oddaj za inny cel.",
@@ -1060,11 +1064,11 @@ export const GOALS = {
     details: {
       what: "Herald gra się POD OTWARCIE MAPY, nie pod golda. Pierwszy herald to często bot move (prio z bota → suport schodzi).",
       how: [
-        "Mobilny mid (Akali, Talon, Yasuo) → herald na BOT tower (mid wraca z TP).",
-        "Niemobilny mid (Anivia, Veigar) → herald na MID tower (krótkie ścieżki).",
-        "TOP tower z heralda → NIE (możesz przegrać topa niszcząc swoją T1 = swap).",
-        "Drugi herald — niska wartość (brak platów). Idzie na T2.",
-        "Pierwszy herald = często z bot mova (prio + suport schodzi)."
+        "Przed puszczeniem Heralda zapytaj, która T1 najbardziej otworzy mapę. Mid T1 zwykle daje najwięcej, bo skraca przejścia i ułatwia wizję.",
+        "Jeśli mid enemy jest niemobilny i trudny do przesunięcia na side, Herald na mid może złamać najważniejszą warstwę mapy.",
+        "Jeśli twój mid jest mobilny, a bot tower jest realny, Herald na bot może otworzyć dół mapy i późniejsze smoki.",
+        "Nie puszczaj Heralda na top tylko dlatego, że tam go wziąłeś. Zniszczenie top T1 może popsuć freeze, dive setup albo korzystny matchup twojego topa.",
+        "Drugi Herald bez plate'ów ma niższą wartość. Używaj go pod konkretny T2/T3 albo presję mapową, nie jako losowy gold."
       ],
       when: "Po killu w jg lub gdy bot prio jest dobre.",
       whenNot: "Nie puszczaj heralda solo dla golda. Czekaj na okno z teamem.",
@@ -1085,11 +1089,11 @@ export const GOALS = {
     details: {
       what: "Baron daje empower fali (push deep) ale NIE zmienia twojego macro. Pushujesz tak samo, tylko łatwiej. Cel: zakończenie gry albo wpakowanie golda w carry.",
       how: [
-        "Wardy jak pod smoki: pinki bliżej, wardy głębiej.",
-        "Bierzemy prio z mida/bota, presure point, przykuwamy enemy do linii.",
-        "Baron buff: 1 linia z buffem = enemy nie obroni gdy push.",
-        "Empower się skończy = i tak push do T2/T3 zostawia coś.",
-        "Wykorzystaj na: kończenie gry albo gold w carry (przegrana walka u nas)."
+        "Przed Baronem dopchnij mid i side, żeby enemy musiał naprawiać fale zanim wejdzie do rzeki.",
+        "Control wardy postaw bliżej wejść, które możesz bronić, a zwykłe wardy głębiej na ścieżkach dojścia junglera i supporta.",
+        "Nie zaczynaj Barona, jeśli nie wiesz gdzie jest enemy jungler albo enemy ma pełne HP i może wejść pięcioma osobami.",
+        "Po Baronie graj tym samym macro co bez Barona: zsynchronizuj fale, ustaw 1-3-1 lub 4-1 i pushuj tam, gdzie enemy musi wybierać.",
+        "Cel Barona to zakończenie gry, T2/T3/inhibitory albo wpakowanie golda w carry przed następną walką. Sam buff bez pushu jest zmarnowany."
       ],
       when: "Gdy masz info że enemy nie kontestuje, lub po wygranej walce.",
       whenNot: "Bez info gdzie enemy mid/jg, full HP enemy 5 = throw.",
@@ -1126,16 +1130,16 @@ export const GOALS = {
   splitpush_structures: {
     label: "4-1 setup i T2 push",
     category: "macro", phase: 3, week: 11, order: 39,
-    short: "Toplaner sajt, JG+supp między, carry mid. Enemy 5 mid = supp+JG do topa = 3v1.",
+    short: "Toplaner side, JG+supp między, carry mid. Enemy 5 mid = supp+JG do topa = 3v1.",
     details: {
       what: "4-1 to struktura presji na 2 liniach. NIE oznacza dosłownie 4 osób na fali — to kontrola przestrzeni, wizji, synchronizacja. 1-3-1 wymaga większej przewagi.",
       how: [
         "Wizja w enemy JG (pinki + czerwona soczewka).",
-        "Toplaner na sajt, JG+supp między mid a sajtem, carry mid.",
+        "Toplaner na side lane, JG+supp między mid a side lane, carry mid.",
         "Enemy 5 mid → supp+JG schodzą do topa → tower 3v1 albo kill.",
         "Enemy 3 top + 2 mid → supp+JG do mida → tower za darmo.",
         "Synchronizacja fal: albo 2 fale naraz, albo stack jedna i zejście 5.",
-        "1-3-1: tylko z dużą przewagą (carry na obu sajtach)."
+        "1-3-1: tylko z dużą przewagą (carry na obu side lanes)."
       ],
       when: "Po T1, przy grze o T2.",
       whenNot: "Bez wizji w enemy jg, bez side threatu.",
@@ -1152,13 +1156,13 @@ export const GOALS = {
     category: "macro", phase: 3, week: 11, order: 40,
     short: "2-3 inhib'y nie jeden. 2 linie + baron = 2 inhib. Najlepszy: naprzeciw obj.",
     details: {
-      what: "Standardowy schemat zakończenia. Nie bierzemy 1 inhiba (enemy się obroni), bierzemy 2-3. Najbardziej wartościowy inhib: naprzeciw NASTĘPNEGO objectiva (nie mid).",
+      what: "Standardowy schemat zakończenia. Nie bierzemy 1 inhiba (enemy się obroni), bierzemy 2-3. Najbardziej wartościowy inhib: naprzeciw NASTĘPNEGO objective (nie mid).",
       how: [
         "2-3 inhib'y razem, nie jeden po jednym.",
         "2 linie + baron = nie trzeba 3 inhib.",
         "Po wygranej walce = jedną linią koniec gry.",
-        "Enemy nie chce wyjść z bazy / ma dobry push = czekaj na dusze/barona i z tym kończ.",
-        "Najlepszy inhib: NAPRZECIW kolejnego objectiva (nie mid — z mida wszędzie blisko).",
+        "Enemy nie chce wyjść z base / ma dobry push = czekaj na dusze/barona i z tym kończ.",
+        "Najlepszy inhib: NAPRZECIW kolejnego objective (nie mid — z mida wszędzie blisko).",
         "Inhib → super miniony → push → nexus turrets → nexus."
       ],
       when: "Gdy masz przewagę. Po wygranej walce/baronie/elderze.",
@@ -1174,17 +1178,17 @@ export const GOALS = {
 
   // ---- Tydzień 12: Side lane + carry + cheese ----
   side_resources: {
-    label: "Carry mindset — zbieraj sajt lane",
+    label: "Carry mindset — zbieraj side lane",
     category: "macro", phase: 3, week: 12, order: 41,
     short: "'Pieniądze leżą na ulicy'. Nie stoisz w 5 na midzie. Zbieraj.",
     details: {
-      what: "Mid jako win-con MUSI zbierać sajt lane gdy team gnije lub trzyma mid. Stanie w 5 = team za plecami, nie zbierasz nic. Strach że team padnie = ty też padasz.",
+      what: "Mid jako win-con MUSI zbierać side lane, gdy team gnije lub trzyma mid. Stanie w 5 = team za plecami, nie zbierasz nic. Strach, że team padnie, często kończy się tym, że ty też nie masz itemów i nie możesz wygrać kolejnej walki.",
       how: [
-        "Po zniszczeniu T1 mid → side lane farm (top albo bot).",
-        "Nie stoisz w 5 na midzie i nie flipujesz walki.",
-        "TP gotowy do zejścia do teamu jeśli zacznie się walka.",
-        "Stanie w 5 = team comp za plecami, ty masz być win-conem.",
-        "Carry mindset: nawet jak team padnie — ty robisz różnicę swoim levelami/itemami."
+        "Po zniszczeniu T1 mid przejmij side lane, jeśli twoja postać może bezpiecznie zebrać falę i wrócić do drużyny.",
+        "Zanim pójdziesz na side, sprawdź TP, summoner spells, pozycję enemy i to, czy twoja drużyna nie zaczyna zaraz Barona/smoka.",
+        "Zbieraj wave, które i tak umarłyby bez wartości. To jest darmowy gold/XP, który zamienia cię w realny win condition.",
+        "Nie stój bezczynnie jako piąta osoba na midzie, jeśli nie ma natychmiastowej walki ani objective.",
+        "Po zebraniu side lane wracaj w timing: przed objective, po crashu fali albo gdy team potrzebuje twojego damage."
       ],
       when: "Mid game od pierwszego T1.",
       whenNot: "Team gnije i potrzebuje cię na obronie barona.",
@@ -1200,15 +1204,15 @@ export const GOALS = {
   side_lane_uses: {
     label: "Side lane — 3 sposoby gry",
     category: "macro", phase: 3, week: 12, order: 42,
-    short: "1) Mapa do side'a, 2) Side do mapy, 3) Splitpush (2 źródła presji).",
+    short: "1) Mapa do side lane, 2) Side do mapy, 3) Splitpush (2 źródła presji).",
     details: {
-      what: "Trzy sposoby grania side lane: (1) mapa gra do side'a, (2) side gra do mapy, (3) klasycznie split push - dwa źródła presji jednocześnie.",
+      what: "Trzy sposoby grania side lane: (1) mapa gra do side lane, (2) side gra do mapy, (3) klasycznie split push - dwa źródła presji jednocześnie.",
       how: [
-        "1) MAPA DO SIDE'A: gracz na sajdzie wytwarza presje (wave, nie 1v1 zabicie). Drużyna bierze prio mid + kontrola jg by splitpusher mógł pushować.",
-        "2) SIDE DO MAPY: wytworzenie prio na side → zejście do teamu na mid.",
-        "3) SPLITPUSH (2 źródła): nasza drużyna robi barona. Zmuszamy enemy do wybierania: side czy baron. Musi dziać się NARAZ.",
-        "Splitpusher musi sam zmusić CO NAJMNIEJ 2 enemy do zejścia.",
-        "Synchronizacja: fale weszą naraz lub jedna po drugiej."
+        "Mapa do side lane: side laner tworzy presję wave, a drużyna bierze prio mid i kontrolę jungli, żeby mógł pushować bez bycia złapanym.",
+        "Side do mapy: najpierw dopchnij side, potem zejdź do mid/teamu w oknie, gdy enemy musi odpowiedzieć na falę.",
+        "Split push: side i Baron/smok działają naraz. Enemy musi wybrać, czy broni side lane, czy contestuje główny objective.",
+        "Splitpusher musi wymusić reakcję co najmniej 2 enemy albo realnie grozić strukturą. Samo stanie daleko na side lane nie jest presją.",
+        "Synchronizacja: fale wchodzą naraz lub jedna po drugiej tak, żeby enemy nie zdążył odpowiedzieć na wszystko."
       ],
       when: "Po T1, mid-late game.",
       success: "Enemy traci towera/obj na jednej linii.",
@@ -1226,13 +1230,12 @@ export const GOALS = {
     details: {
       what: "Jak grać przeciwko side lane presji enemy. Klucz: usuń falę graczowi splitpushującemu = enemy musi czekać na następną. Odbieranie wizji zmusza go do cofnięcia.",
       how: [
-        "Zabranie mid prio → zejście w fog na side lane.",
-        "Zawsze chcesz USUNĄĆ falę splitpusherowi.",
-        "'Nie ma fali nie ma problemu'.",
-        "Matchup nam przegrywa 1v1? Zamień się liniami (chyba że wygrywa wszystkim).",
-        "Granie dookoła wizji (odbieranie jej) zmusza do cofnięcia.",
-        "Strong side na DRUGIEJ stronie mapy — splitpusher się nie rozdwoi.",
-        "Odcięcie enemy na side: po zabraniu mida schodzimy = enemy bez powrotu do drużyny."
+        "Najpierw zabierz mid prio, żeby zejście na side nie było widoczne i spóźnione.",
+        "Twoim pierwszym celem jest wave splitpushera. Bez fali nie bije wieży i musi czekać na następną.",
+        "Jeśli przegrywasz 1v1, nie próbuj honorowego pojedynku. Zamień matchup albo wyczyść falę z pomocą supporta/junglera.",
+        "Odbieraj wizję w jungli obok side lane. Splitpusher bez informacji musi grać wolniej albo cofnąć się z presji.",
+        "Graj strong side po drugiej stronie mapy, jeśli splitpusher nie może jednocześnie bronić team i pushować side lane.",
+        "Jeśli enemy jest zbyt głęboko na side, najpierw dopchnij mid, potem zejdź w fog i odetnij mu drogę powrotu."
       ],
       when: "Enemy ma split pushera. Mid game.",
       success: "Splitpusher nie pushuje (brak fali) albo traci wave.",
@@ -1246,15 +1249,15 @@ export const GOALS = {
   map_sync: {
     label: "Synchronizacja mapy i fal",
     category: "macro", phase: 3, week: 12, order: 44,
-    short: "Fale + objektive + item spike + jungler + pozycja teamu = razem.",
+    short: "Fale + objective + item spike + jungler + pozycja teamu = razem.",
     details: {
       what: "Synchronizacja = ustawienie fal i ruchu graczy tak, by enemy musiał wybierać między stratami. Dobra akcja makro dzieje się w tym samym czasie co presja na fali/obj.",
       how: [
-        "Synchronizuj fale: wchodzą naraz lub jedna po drugiej.",
-        "Pushuj w timing gdzie enemy nie odpowie naraz na falę i smoka.",
-        "Opóźnij push jeśli brakuje golda do spike'a i nadal zdążysz.",
-        "Jungler chce akcję → fala tworzy punkt presji w innym miejscu.",
-        "Linia po sojusznikach: nie bądź zbyt głęboko, nie zbyt daleko (off-team)."
+        "Ustaw fale tak, żeby wchodziły naraz albo jedna po drugiej. Enemy ma wtedy kilka problemów w tym samym czasie.",
+        "Przed objective crashuj wave bliżej spawn timera, a nie minutę wcześniej. Za wczesny push daje enemy czas na wyczyszczenie.",
+        "Jeśli brakuje ci golda do dużego spike'a i nadal zdążysz, opóźnij reset/push tak, żeby wejść w walkę z itemem.",
+        "Gdy jungler chce akcję, fala powinna tworzyć punkt presji gdzie indziej. Sama obecność junglera bez wave często nic nie wymusza.",
+        "Pilnuj odległości od drużyny: zbyt głęboko giniesz sam, zbyt daleko nie wpływasz na play."
       ],
       when: "Mid/late, objective setup, splitpush, obrona.",
       success: "Ruchy spójne z falami i teamem. Enemy reaguje na presję.",
@@ -1322,8 +1325,8 @@ export const GOALS = {
       how: [
         "Granie fogiem aby wytwarzać presję = enemy nie widzi, musi przewidywać.",
         "Dedukcja: A pusty, ja w B = enemy w C. Pomyśl co byłoby najgorsze, nie co najlepsze.",
-        "Backdoor: szybki teleport do bazy, jedna linia inhib.",
-        "All-in 1v3 z spella co rzadko trafia (Veigar E).",
+        "Backdoor: szybki teleport do base, jedna linia inhib.",
+        "All-in 1v3 z spell, który rzadko trafia (Veigar E).",
         "Niepoprawne pozycje (assassin w teamfighcie z poke comp)."
       ],
       when: "Tylko gdy przegrywamy i schemat zawiódł. Last resort.",
@@ -1408,11 +1411,11 @@ export const GOALS = {
     }
   },
   timers: {
-    label: "Timery — fale, levele, objektiwy",
+    label: "Timery — fale, levele, objectives",
     category: "info", phase: "ongoing", week: null, order: 51,
     short: "Cannon co 3. 2lv=7CS solo, 3lv=14. Smok/Herald w głowie.",
     details: {
-      what: "Fale są w określonych timerach. Levele, objektiwy, recall windows — wszystko można przewidzieć. Myśl 2 minuty przed objective: gramy? oddajemy? co w zamian?",
+      what: "Fale są w określonych timerach. Levele, objectives i recall windows można przewidywać. Myśl 2 minuty przed objective: gramy, oddajemy, czy robimy cross-map?",
       how: [
         "SOLO LINIA: 2lv = 7 CS, 3lv = 14 CS, 4lv = 24 CS. 6lv = po fali 8.",
         "BOT: 2lv = 9 CS (1 fala + 3 mele), 3lv = 21 CS.",
@@ -1439,7 +1442,7 @@ export const GOALS = {
     details: {
       what: "Mamy 2 opcje gdy nie znamy limitów: wejść lub nie. Wejść = ryzyko że przegramy. Nie wejść = nie poznamy limitów, fakt zmniejszysz ryzyko, ale również nic nie zyskasz. Więc lepiej próbować niż nic nie robić.",
       how: [
-        "Mamy podobne levele, itemy, brak negatywnych interakcji skili (W Yasuo na Veigara), runy bez diffa, summonery nie znaczą — WARTO testować.",
+        "Mamy podobne levele, itemy, brak negatywnych interakcji spells (W Yasuo na Veigara), runy bez diffa, summonery nie znaczą — WARTO testować.",
         "Po testach (3 gry tego samego matchupu) = czujesz limity.",
         "By to poprawić: 2-3 championy i 1 linia i ich się trzymaj.",
         "Każda gra jest inna — limity trzeba CZUĆ.",
@@ -1508,11 +1511,11 @@ export const GOALS = {
   pre_first_wave: {
     label: "Wyjście PRZED 1. falą",
     category: "early", phase: 2, week: 5, order: 100,
-    short: "Pierwsza fala ma słabe agro. Wyjdź z bazy 0:25-0:30.",
+    short: "Pierwsza fala ma słabe agro. Wyjdź z base 0:25-0:30.",
     details: {
-      what: "Wychodzisz z bazy PRZED pierwszą falą. Pierwsza fala ma osłabione agro — możesz stać przed nią, zabrać aktywności (invade, line ward, lvl 1 walka, scouting).",
+      what: "Wychodzisz z base PRZED pierwszą falą. Pierwsza fala ma osłabione agro — możesz stać przed nią, zabrać aktywności (invade, line ward, lvl 1 walka, scouting).",
       how: [
-        "Wyjście z bazy o 0:25-0:30 (nie po fali, przed).",
+        "Wyjście z base o 0:25-0:30 (nie po fali, przed).",
         "Pozycja w buszu przed minionami lub na trójkącie.",
         "Możesz wziąć: cheese invade z jg, line ward na rzece, lvl 1 walka, scouting enemy jg startu."
       ],
@@ -1526,12 +1529,12 @@ export const GOALS = {
     category: "max", phase: 2, week: 7, order: 101,
     short: "Każdy dash kiedy CD up, w drodze na linię.",
     details: {
-      what: "Spele dające dash/MS używasz ZAWSZE w powrocie na linię, nie tylko w walce. Wracasz 10-15s szybciej × liczba recalli = duża oszczędność.",
+      what: "Spells dające dash/MS używasz ZAWSZE w powrocie na linię, nie tylko w walce. Wracasz 10-15s szybciej × liczba recalls = duża oszczędność.",
       how: [
         "Smartcasty bez wskaźnika.",
-        "Pierwszy dash zaraz po wyjściu z bazy.",
+        "Pierwszy dash zaraz po wyjściu z base.",
         "Każdy kolejny dash gdy CD się odnawia podczas powrotu.",
-        "Trzymanie spelle 'na walkę' = strata 10s na recall."
+        "Trzymanie spells 'na walkę' = strata 10s na recall."
       ],
       when: "Powrót na linię, między akcjami w jg, każde przemieszczenie >5s.",
       success: "Wracasz szybciej, masz więcej CS, częściej dostępny dla teamu.",
@@ -1561,13 +1564,13 @@ export const GOALS = {
   fountain_end: {
     label: "Regen na końcu fontanny",
     category: "max", phase: 2, week: 7, order: 103,
-    short: "Po recallu od razu na koniec fontanny — bliżej wyjścia.",
+    short: "Po recall od razu na koniec fontanny — bliżej wyjścia.",
     details: {
-      what: "Po recallu nie stoisz w środku fontanny — przesuwasz się od razu do końca. Mała oszczędność 1-2s × 8-12 recalli = 15-25s.",
+      what: "Po recall nie stoisz w środku fontanny — przesuwasz się od razu do końca. Mała oszczędność 1-2s × 8-12 recalls = 15-25s.",
       how: [
-        "Po pojawieniu w bazie → klik na koniec fontanny (najbliżej wyjścia).",
+        "Po pojawieniu w base → klik na koniec fontanny (najbliżej wyjścia).",
         "Sklep otwiera się przez P niezależnie od pozycji.",
-        "Wyjście z bazy = już jesteś przygotowany."
+        "Wyjście z base = już jesteś przygotowany."
       ],
       when: "Każdy recall.",
       success: "Auto-nawyk — nigdy nie czekasz w środku.",
@@ -1592,17 +1595,17 @@ export const GOALS = {
     }
   },
   burn_pre_recall: {
-    label: "Spal manę/HP przed recallem",
+    label: "Spal manę/HP przed recall",
     category: "max", phase: 2, week: 7, order: 105,
     short: "Wave clear do max, harass, trade — zaraz recall.",
     details: {
-      what: "Spal manę i HP tuż przed recallem. Manę odzyskasz, HP też. Każda mana niewykorzystana = strata wartości.",
+      what: "Spal manę i HP tuż przed recall. Manę odzyskasz, HP też. Każda mana niewykorzystana = strata wartości.",
       how: [
         "Wave clear do max.",
         "Harass enemy jeśli wraca.",
         "Trade HP — bez sensu wracać z full HP gdy recall za 5s."
       ],
-      when: "Tuż przed planowanym recallem.",
+      when: "Tuż przed planowanym recall.",
       success: "Wracasz po wykorzystaniu zasobów.",
       mistakes: ["Recall z pełną maną gdy fala mogła być dopchnięta."]
     }
@@ -1721,7 +1724,7 @@ export const GOALS = {
     category: "early", phase: 2, week: 8, order: 111,
     short: "Solo: 2lv=7CS, 3lv=14, 4lv=24. Bot: 2lv=9, 3lv=21.",
     details: {
-      what: "Wiedza kiedy enemy/ty dostaje level spike. Cannon = ostatnia szansa na trade przed recallem. Plan 2 min przed obj.",
+      what: "Wiedza kiedy enemy/ty dostaje level spike. Cannon = ostatnia szansa na trade przed recall. Plan 2 min przed obj.",
       how: [
         "SOLO LANE: level 2 po 7 CS, 3 po 14, 4 po ~24, 6 po 8. fali.",
         "BOT: level 2 po 9 CS (fala + 3 mele), 3 po 21.",
@@ -1912,7 +1915,7 @@ export const GOALS = {
       how: [
         "Po grze NIE pytasz 'czy wyszło?'. Pytasz: 'czy miałem info które wystarczało?'.",
         "Nie widziałeś enemy jg i odpuściłeś trade — to dobra decyzja nawet jak replay pokaże że jg był top.",
-        "Decyzja vs wykonanie: zła decyzja może wyjść (enemy popełnił błąd), dobra może nie wyjść (ty miss skilla).",
+        "Decyzja vs wykonanie: zła decyzja może wyjść (enemy popełnił błąd), dobra może nie wyjść (ty miss spell).",
         "VOD review checklist: (1) jakie info miałem? (2) co MOGŁEM wywnioskować? (3) statystycznie dobra?",
         "Nie usprawiedliwiaj złego procesu dobrym wynikiem."
       ],
@@ -1984,14 +1987,14 @@ export const GOALS = {
         "Crashuj wave 5-15s przed spawn obj.",
         "Enemy musi wybrać: czyścić wave (traci obj) albo iść na obj (traci wave + platy).",
         "Tak samo z Baronem/Heraldem.",
-        "Wyjątek: ogromne tempo — timing wave'a mniej ważny."
+        "Wyjątek: ogromne tempo — timing wave mniej ważny."
       ],
       when: "Każdy objective. Smok, Baron, Herald.",
       whenNot: "Brak prio (enemy wyrówna wave szybciej niż ty obj).",
       success: "Pressure point dokładnie wtedy gdy drugi cel staje się ważny.",
       mistakes: [
         "Hard push 90s przed smokiem — enemy odpcha i przyjdzie czysto.",
-        "Brak wave'a przy obj — żaden pressure point.",
+        "Brak wave przy obj — żaden pressure point.",
         "Push w środek mapy gdy potrzebny crash przy wieży enemy."
       ]
     }
@@ -1999,20 +2002,20 @@ export const GOALS = {
   early_recall_tempo: {
     label: "Wcześniejszy recall = tempo",
     category: "wave", phase: 3, week: 9, order: 206,
-    short: "Nie stój przy oczywistym celu który padnie bez ciebie. Recalluj.",
+    short: "Nie stój przy oczywistym celu który padnie bez ciebie. Zrób recall.",
     details: {
       what: "Słabsi gracze stoją za długo przy obj/wieży która i tak padnie. Tracą tempo. Wcześniejszy recall = szybciej na mapie = pierwszy na kolejnym ruchu.",
       how: [
         "Wieża padnie bez ciebie? Recall zamiast 2 dodatkowych AA.",
         "Twój wave i tak się wyczyści (kolega clear'uje)? Recall.",
         "Po wygranej walce: nie zostawaj po wszystkie wardy enemy jg. Wystarczy kluczowe → recall.",
-        "Cel: być na mapie zanim enemy wyjdzie z bazy po jego recallu.",
+        "Cel: być na mapie zanim enemy wyjdzie z base po swoim recall.",
         "Recall 1-2s wcześniej × 8-12 razy w grze = znaczne tempo."
       ],
       when: "Każdy moment 'jeszcze 2 AA' / 'jeszcze 1 ward'.",
       success: "Wracasz na mapę przed enemy. Pierwszy ruch na nowym wave/obj.",
       mistakes: [
-        "Bicie wieży po wygranej walce w 10. Brak recallu = enemy wyjdzie pierwszy.",
+        "Bicie wieży po wygranej walce w 10. Brak recall = enemy wyjdzie pierwszy.",
         "Wardowanie 4 miejsc kiedy 1 wystarcza.",
         "Czekanie żeby zobaczyć padnięcie wieży 'bo zasłużyłem'."
       ]
@@ -2023,18 +2026,18 @@ export const GOALS = {
   tempo_to_place: {
     label: "Tempo na KONKRETNE miejsce",
     category: "macro", phase: 3, week: 9, order: 207,
-    short: "Tempo to nie 'kto z bazy pierwszy'. To 'kto pierwszy GDZIE się dzieje'.",
+    short: "Tempo to nie 'kto z base pierwszy'. To 'kto pierwszy GDZIE się dzieje'.",
     details: {
-      what: "Tempo nie zawsze oznacza 'kto wyszedł z bazy pierwszy'. Liczy się też kto pierwszy będzie w danym miejscu. Drużyna może wyjść 5s później, ale mieć bliżej do obj = tam pierwsza.",
+      what: "Tempo nie zawsze oznacza 'kto wyszedł z base pierwszy'. Liczy się też kto pierwszy będzie w danym miejscu. Drużyna może wyjść 5s później, ale mieć bliżej do obj = tam pierwsza.",
       how: [
         "Przy decyzji: 'kto pierwszy będzie na MIEJSCU X' (smok/baron/wave/obj).",
-        "Twoja baza bliżej smoka? Możesz mieć tempo nawet z 5s opóźnionym recallem.",
+        "Twój base jest bliżej smoka? Możesz mieć tempo nawet z 5s opóźnionym recall.",
         "Enemy wyszedł 8s przed tobą ale ty masz TP top → na bocie ty pierwszy.",
         "Cross-map: zbieraj miejsca gdzie TY masz tempo, oddawaj te gdzie enemy.",
         "Wave: jeśli oba teamy zdążą na ten sam mid wave, kilka sekund nie ma znaczenia."
       ],
       when: "Każda decyzja typu 'kto pierwszy?'. Cross-map vs match.",
-      success: "Wybierasz cele tam gdzie ty pierwszy, niezależnie od kto wyszedł z bazy.",
+      success: "Wybierasz cele tam gdzie ty pierwszy, niezależnie od kto wyszedł z base.",
       mistakes: [
         "Założenie 'enemy wyszedł pierwszy więc wszędzie jest pierwszy'.",
         "Match zamiast cross-map bo nie pomyślałeś o dystansie.",
@@ -2049,7 +2052,7 @@ export const GOALS = {
     details: {
       what: "Żeby wykorzystać tempo, musisz wiedzieć ILE sekund okna masz. Bez śledzenia enemy w fogu nie wiesz czy masz 3s, 8s, czy 15s — a od tego zależy co możesz zrobić.",
       how: [
-        "Enemy zginął → death timer + dojście z bazy = pełne tempo dla ciebie.",
+        "Enemy zginął → death timer + dojście z base = pełne tempo dla ciebie.",
         "Enemy zaczął recall (zniknął bezpiecznie): 8s recall + ~5s regen + dojście.",
         "Wyobraź mentalnie zasięg rosnący co sekundę od miejsca gdzie zniknął.",
         "Im więcej widzisz graczy = mniej możliwości dla niewidzialnych.",
@@ -2059,7 +2062,7 @@ export const GOALS = {
       success: "Twoje przewidywania zgadzają się 70%+. Enemy pojawia się gdzie zakładałeś.",
       mistakes: [
         "Założenie 'enemy cofnął więc nie ma go 30s'.",
-        "Brak liczenia regen czasu po recallu.",
+        "Brak liczenia regen czasu po recall.",
         "Próba zrobienia 10s akcji w 3s oknie."
       ]
     }
@@ -2080,7 +2083,7 @@ export const GOALS = {
         "Każde T2 po prio T1 = pełna nagroda. Każde T2 bez T1 = często strata czasu."
       ],
       when: "Po zniszczeniu pierwszej T1. Decyzja 'co dalej?'.",
-      success: "Bierzesz drugie T1 → mapa szeroko otwarta → smoki/baron/sajt naturalne.",
+      success: "Bierzesz drugie T1 → mapa szeroko otwarta → smoki/baron/side naturalne.",
       mistakes: [
         "T2 mid bo 'spróbujmy zobaczyć'.",
         "Brak pomysłu na drugą T1 po pierwszej.",
@@ -2148,7 +2151,7 @@ export const GOALS = {
       when: "Każdy samotny ruch w mid/late game.",
       success: "Twoje ruchy wspierają plan teamu. Nie giniesz w enemy jg jako jeden.",
       mistakes: [
-        "Invade jg gdy reszta jest przy bazie.",
+        "Invade jg gdy reszta jest przy base.",
         "Wardowanie strony pod którą team NIE gra.",
         "Push mid gdy team gnije w obronie."
       ]
@@ -2165,7 +2168,7 @@ export const GOALS = {
         "Wave naprzeciw enemy = enemy czeka 30-40s na kolejny → ma okno.",
         "Enemy już bije T2 trzeciej linii — najpierw odpowiedz, potem 4-1.",
         "Trade 2-za-1 (my inhib, oni T2) często akceptowalny.",
-        "Shift to NIE musi być clean — można recallować i wrócić na inną linię."
+        "Shift to NIE musi być clean — można zrobić recall i wrócić na inną linię."
       ],
       when: "Setup do 4-1 / siege T2.",
       success: "4-1 działa bo enemy nie ma kontry na trzeciej linii.",
@@ -2177,7 +2180,7 @@ export const GOALS = {
     }
   },
 
-  // ---------- MID-LATE + OBJEKTIVY ----------
+  // ---------- MID-LATE + OBJECTIVES ----------
   winning_state_no_obj: {
     label: "Push + wizja + campy = OBJECTIVE",
     category: "macro", phase: 3, week: 12, order: 214,
@@ -2186,7 +2189,7 @@ export const GOALS = {
       what: "Nie każdy objective to wieża/smok/Baron. Utrzymywanie enemy w zamknięciu (push + wizja + odbieranie campów) jest samo w sobie objective. Zmusza enemy do facecheck'a własnej jungli, traci campy, gold, XP. Po 2-3 minutach takiego stanu jesteś znacznie silniejszy bez podejmowania ryzykownego dive'a.",
       how: [
         "Push wszystkich linii głęboko + deep wardy w enemy jg + zabieranie campów.",
-        "Enemy w bazie/własnej połowie = traci campy + reaktywny.",
+        "Enemy w base/własnej połowie = traci campy + reaktywny.",
         "NIE wymuszaj ryzykownej T2 / smoka. Trzymaj stan.",
         "Czekaj na Barona / soul / błąd enemy.",
         "Po wygranej walce miałbyś już T2/inhib. Po przegranej enemy musi odpushować — wartość przegranej walki mniejsza."
@@ -2209,7 +2212,7 @@ export const GOALS = {
       how: [
         "Przed każdym obj: policz czynniki na palcach.",
         "Prio: mid+bot pushuje? Mid+top?",
-        "Tempo: enemy w bazie / poza mapy / death timer?",
+        "Tempo: enemy w base / poza mapy / death timer?",
         "Siła: team comp wygrywa 5v5?",
         "Wygrana walka: 2+ enemy down? Niemal darmowy obj.",
         "Rotacja: nafedowany top schodzi pod smoka?"
@@ -2238,7 +2241,7 @@ export const GOALS = {
         "Top prio może 'doprowadzić' do smoka jeśli top schodzi w rotacji."
       ],
       when: "Przygotowanie smoka, Heralda, Barona.",
-      success: "Enemy nie może oddać obj bez utraty wave'ów. Obj prawie darmowy.",
+      success: "Enemy nie może oddać obj bez utraty kilku wave. Obj prawie darmowy.",
       mistakes: [
         "1 prio + brak drugiego czynnika = forced obj.",
         "Push tylko sam (bez sojusznika na drugiej linii).",
@@ -2270,7 +2273,7 @@ export const GOALS = {
     }
   },
   non_obj_objectives: {
-    label: "Nietypowe objective'y",
+    label: "Nietypowe objectives",
     category: "macro", phase: 3, week: 12, order: 218,
     short: "Item spike carry / shutdown / walka jako objective (smok = przynęta).",
     details: {
@@ -2279,7 +2282,7 @@ export const GOALS = {
         "Item spike: carry potrzebuje 500g do IE → grasz pod jego farmę.",
         "Shutdown: enemy 5/0 → drużyna potrzebuje go zatrzymać; obj = jego śmierć.",
         "Walka: silniejsi 5v5 → setup smoka jest TYLKO żeby enemy weszło na rzekę.",
-        "Złapanie feedowanego enemy w jg / na recallu.",
+        "Złapanie feedowanego enemy w jg / na recall.",
         "Cel mały: utrzymanie wizji w enemy jg przez 3 min."
       ],
       when: "Gdy klasyczne obj nie pasują do stanu gry.",
@@ -2298,7 +2301,7 @@ export const GOALS = {
     details: {
       what: "Najczęstszy macro-problem w low elo: 5 osób stoi mid, a side wave + enemy campy giną za darmo. Konsekwentne zbieranie tych zasobów = silny carry mindset.",
       how: [
-        "Top/mid/ADC: szukaj zasobów które inni ignorują (side wave po 15 min, campy, wave po złym recallu enemy).",
+        "Top/mid/ADC: szukaj zasobów które inni ignorują (side wave po 15 min, campy, wave po złym enemy recall).",
         "Nie stoisz w 5 na midzie.",
         "Pingi nieskuteczne → po prostu rób swoje.",
         "Mini-rule: 4 sojuszników mid + bot wave stoi → idę po wave.",
@@ -2552,11 +2555,11 @@ export const GOALS = {
       what: "Autoatak na max range podczas pościgu = lockujesz się w animacji, enemy robi kolejny krok, tracisz dystans. Czasem lepiej dalej biec i poczekać na ważny cooldown niż wbić AA dla 50 dmg.",
       how: [
         "TF goniący z W na 3s do gotowości karty: nie AA, biegnij za nim.",
-        "Mając cd na CC spellu: nie lockuj się w AA. Podbiegnij, użyj CC, dopiero potem dmg.",
+        "Mając CC spell cooldown: nie lockuj się w AA. Podbiegnij, użyj CC, dopiero potem dmg.",
         "Pytanie przed AA: 'czy ten AA mnie nie wypchnie z range na ważniejszy spell za 2s?'",
         "Wyjątek: AA jest finishing blow LUB resetuje cd (Ezreal P, Vayne Q, Yasuo)."
       ],
-      when: "Każdy chase na max range gdy masz CC/dash na cooldownie.",
+      when: "Każdy chase na max range gdy masz CC/dash na cooldown.",
       whenNot: "AA = killing blow, AA resetuje cd, jesteś już w range na decydujący spell.",
       success: "Łapiesz chase'e które wcześniej uciekały. Twoje CC trafia bo nie wypchnąłeś się z range.",
       mistakes: [
@@ -2624,7 +2627,7 @@ export const GOALS = {
         "Mid wave: 'jeśli enemy mid roamuje → push i echo na top'.",
         "Trzymaj 2-3 if-then w głowie, nie 20."
       ],
-      when: "Każdy czas między akcjami. Wychodzenie z bazy. Walking do side. Spawn pod obj.",
+      when: "Każdy czas między akcjami. Wychodzenie z base. Walking do side. Spawn pod obj.",
       success: "Reagujesz wyraźnie szybciej. Twoje 'instynkty' to faktycznie wcześniej zaplanowane decyzje.",
       mistakes: [
         "Brak planu — czysty improv w chaosie.",
@@ -2640,7 +2643,7 @@ export const GOALS = {
     details: {
       what: "Rozpęd nie z marszu. Jeśli normalnie grasz wolno, a walka startuje nagle, zajmuje ci kilka sekund żeby rozpędzić rękę i uwagę. W tym czasie tracisz przewagę. Wysokie tempo musi być nawykiem ciągłym, nie tylko 'w walce'.",
       how: [
-        "Wychodząc z bazy: szybkie, krótkie kliki — nie jeden klik 'idę na top'.",
+        "Wychodząc z base: szybkie, krótkie kliki — nie jeden klik 'idę na top'.",
         "Farmienie: APM nie spada do 30 między AA. Klikasz pozycjonowanie, kamerę, TAB.",
         "Spacja, F1-F4, TAB między akcjami.",
         "Cel: średni APM 80-120+ przez cały mecz, nie 30 w farmie i 200 w walce.",
@@ -2650,7 +2653,7 @@ export const GOALS = {
       success: "Walka startuje, ty już jesteś w wysokim tempie — żadnej rozgrzewki.",
       mistakes: [
         "Wolny farm, próba wskoczenia w 200 APM w walce → chaos.",
-        "Klikanie ważnych cooldownów w pustkę 'dla APM' (anty-pattern).",
+        "Klikanie key cooldowns w pustkę 'dla APM' (anty-pattern).",
         "Wysokie APM bez kontroli — postać biega gdzie nie chciałeś."
       ]
     }
@@ -2666,12 +2669,12 @@ export const GOALS = {
       how: [
         "TF z kartą stuna, ktoś goni z dashem: klikasz w niego W zanim wejdzie. Karta poleci natychmiast po wejściu w range.",
         "UWAGA: uciekasz więc klikasz ZA SIEBIE. Ruch myszki: ucieczka → klik za siebie → ucieczka.",
-        "Działa dla każdego targetowanego spella (W TF, R Lux, E Lulu, Q Ashe).",
+        "Działa dla każdego targetowanego spell (W TF, R Lux, E Lulu, Q Ashe).",
         "Również dla AA jako baseline: 'taniec' w range AA + trzymanie attack-move.",
         "Nie działa dla skillshotów (Q Blitz nie da się targetnąć)."
       ],
       when: "Ucieczka z targetowanym CC. Engage enemy na ciebie.",
-      whenNot: "Bez targetowanego spella. Skillshoty wymagają innego buffera (predict).",
+      whenNot: "Bez targetowanego spell. Skillshots wymagają innego buffera (predict).",
       success: "Enemy zaraz wjeżdża → twój CC odpala w 0.1s po wejściu, on nie zdąży zareagować.",
       mistakes: [
         "Klik za siebie w panice → wbiegasz w enemy.",
@@ -2683,17 +2686,17 @@ export const GOALS = {
   champion_face_direction: {
     label: "Twarz championa zdradza ruch",
     category: "micro", phase: "ongoing", week: null, order: 236,
-    short: "Postać odwraca się PRZED animacją skilla. Patrz na twarz, nie na pocisk.",
+    short: "Postać odwraca się PRZED animacją spell. Patrz na twarz, nie na pocisk.",
     details: {
-      what: "Championi zawsze obracają się twarzą w stronę gdzie idą / rzucają spell. Twarz zdradza wcześniej niż animacja pocisku. Trening: patrz na twarz przeciwnika, nie czekaj na lot skilla.",
+      what: "Championi zawsze obracają się twarzą w stronę gdzie idą / rzucają spell. Twarz zdradza wcześniej niż animacja pocisku. Trening: patrz na twarz przeciwnika, nie czekaj na lot spell.",
       how: [
         "Enemy klika za siebie na ucieczkę → odwraca się tyłem do ciebie → szansa na slow.",
         "Enemy obrót w twoją stronę + zatrzymanie = zaraz spell. Bądź gotowy unik.",
         "Trening na customie: graj sam vs bot, patrz tylko na twarz, nie na pocisk.",
-        "Działa też dla twoich własnych skilli — jeśli widzisz że enemy odwraca twarz w bok od pocisku, zdąży uniknąć."
+        "Działa też dla twoich własnych spells — jeśli widzisz że enemy odwraca twarz w bok od pocisku, zdąży uniknąć."
       ],
       when: "Każdy moment 1v1 / małej skali walki.",
-      success: "Unikaš skilli o 0.2s wcześniej niż wcześniej.",
+      success: "Unikasz spells o 0.2s wcześniej niż wcześniej.",
       mistakes: [
         "Patrzenie tylko na pocisk po wylocie.",
         "Brak treningu — same wiedza nie wystarcza, oko musi się nauczyć.",
@@ -2706,7 +2709,7 @@ export const GOALS = {
     category: "micro", phase: "ongoing", week: null, order: 237,
     short: "Jesteś niżej → celuj w stopy enemy. Wyżej → w górę. Hitbox = podstawa, nie model.",
     details: {
-      what: "LoL ma 3 wymiary (x, y, h). Rzeka niżej, jungla wyżej, baza najwyżej. Skillshoty rzucane z różnicy wysokości wyglądają jakby trafiały model, ale trafiają teren. Hitbox jest powiązany z miejscem gdzie champion 'stoi', nie z każdym detalem modelu.",
+      what: "LoL ma 3 wymiary (x, y, h). Rzeka niżej, jungla wyżej, base najwyżej. Skillshots rzucane z różnicy wysokości wyglądają jakby trafiały model, ale trafiają teren. Hitbox jest powiązany z miejscem gdzie champion 'stoi', nie z każdym detalem modelu.",
       how: [
         "Jesteś niżej (rzeka) niż enemy (jungla) → celuj lekko niżej, w stopy.",
         "Jesteś wyżej → celuj lekko wyżej (w okolice głowy/górnej części).",
@@ -2738,7 +2741,7 @@ export const GOALS = {
         "Hierarchia metod: obserwacja twarzy > lockowanie animacji > kąt + teren > skrócenie dystansu > słabsze CC > PREDYKCJA (ostatnia opcja)."
       ],
       when: "Każdy combo z trudnym skillshotem do trafienia.",
-      success: "Twoje 'trudne' skille trafiają częściej. Mniej polegasz na predykcji.",
+      success: "Twoje 'trudne' spells trafiają częściej. Mniej polegasz na predykcji.",
       mistakes: [
         "Rzucanie Q Lux na predykcję (max range, no setup).",
         "Komboowanie 2 hard CC na raz (nakładają się).",
@@ -2747,7 +2750,7 @@ export const GOALS = {
     }
   },
   terrain_skillshot: {
-    label: "Ściany i chokepointy do skilli",
+    label: "Ściany i chokepointy do spells",
     category: "micro", phase: "ongoing", week: null, order: 239,
     short: "Chase'uj zanim rzucisz. Wymuś enemy w korytarz / pod ścianę.",
     details: {
@@ -2795,9 +2798,9 @@ export const GOALS = {
   not_on_enemy_line: {
     label: "Nie stój na linii wejścia enemy",
     category: "micro", phase: "ongoing", week: null, order: 241,
-    short: "Stoisz na linii prostej do bazy → enemy podchodzi bez dasha. Przesuń się w bok.",
+    short: "Stoisz na linii prostej do base → enemy podchodzi bez dasha. Przesuń się w bok.",
     details: {
-      what: "Słabszy gracz na linii często stoi w prostej linii do swojej bazy. Enemy wchodzi po skosie, skraca dystans, ty uciekasz w linii prostej = on dogoni. Rozwiązanie: stań bardziej cofnięty i PRZESUNIĘTY w bok.",
+      what: "Słabszy gracz na linii często stoi w prostej linii do swojej base. Enemy wchodzi po skosie, skraca dystans, ty uciekasz w linii prostej = on dogoni. Rozwiązanie: stań bardziej cofnięty i PRZESUNIĘTY w bok.",
       how: [
         "Top przegrywający: nie stój pośrodku linii. Stań bliżej rzeki / bliżej krzaków po jednej stronie.",
         "Twoja ucieczka po skosie tworzy enemy dłuższy dystans niż linia prosta.",
@@ -2817,11 +2820,11 @@ export const GOALS = {
   zone_thinking: {
     label: "Myślenie strefami — szachownica",
     category: "micro", phase: "ongoing", week: null, order: 242,
-    short: "Wyobraź pola wokół wave'a. Wyeliminuj złe. Z reszty wybieraj świadomie.",
+    short: "Wyobraź pola wokół wave. Wyeliminuj złe. Z reszty wybieraj świadomie.",
     details: {
-      what: "Optymalna pozycja na linii to nie jeden punkt. To kilka możliwych obszarów. Wyobraź sobie szachownicę wokół wave'a, wyeliminuj pola złe. Z pozostałych wybierz świadomie zależnie od celu (agresja, defensywa, push, trade).",
+      what: "Optymalna pozycja na linii to nie jeden punkt. To kilka możliwych obszarów. Wyobraź sobie szachownicę wokół wave, wyeliminuj pola złe. Z pozostałych wybierz świadomie zależnie od celu (agresja, defensywa, push, trade).",
       how: [
-        "Złe pola: za daleko od wave (nie wpłyniesz na miniony), zbyt blisko enemy wieży, za linią enemy minionów, w środku ich wave'a, strona enemy jg.",
+        "Złe pola: za daleko od wave (nie wpłyniesz na miniony), zbyt blisko enemy wieży, za linią enemy minionów, w środku ich wave, strona enemy jg.",
         "Pole gdzie enemy może trafić ciebie i wave 1 AoE = często złe.",
         "Po eliminacji: zostaje 2-4 sensowne strefy.",
         "Wybierz strefę zgodnie z planem: agresja → bliżej enemy; defensywa → bliżej siebie; pod gank ze strony jg → strefa przeciwna.",
@@ -2841,7 +2844,7 @@ export const GOALS = {
     category: "micro", phase: "ongoing", week: null, order: 243,
     short: "Renekton vs Darius. Garen vs Sett. Różne mele ranges = przewaga AA.",
     details: {
-      what: "Spacing to nie tylko ranged vs ranged. Melee championi mają różne AA i spell ranges. Sett ma dłuższy AA niż Garen. Renekton ma dłuższe Q niż Darius. Nadrabianie krótszego range'u: cooldowny, animation lock enemy, movement speed, timing wejścia.",
+      what: "Spacing to nie tylko ranged vs ranged. Melee championi mają różne AA i spell ranges. Sett ma dłuższy AA niż Garen. Renekton ma dłuższe Q niż Darius. Nadrabianie krótszego range: cooldowns, animation lock enemy, movement speed, timing wejścia.",
       how: [
         "Mele matchup: znaj range AA obu postaci (Sett 165, Garen 175, Darius 175, Mordekaiser 175...).",
         "Krótszy range: czekaj na animation lock enemy (AA na minion) → wejdź pod jego AA.",
@@ -2919,7 +2922,7 @@ export const GOALS = {
       ],
       when: "Setup freeze. Bicie się z ranged enemy. Pod swoją wieżą gdy enemy puchuje.",
       whenNot: "Low HP, jungler enemy nieaktywny (nie wiesz gdzie), wave dopchnięty do enemy.",
-      success: "Kontrolujesz tempo wave'a bez używania spelli.",
+      success: "Kontrolujesz tempo wave bez używania spells.",
       mistakes: [
         "Przyjmowanie AA enemy bez planu (po prostu trade na minus).",
         "Aggro swap pod własną wieżą gdy enemy nie pushuje (waste HP).",
@@ -2936,16 +2939,16 @@ export const GOALS = {
       how: [
         "Patrz na 3 caster miniony — wszystkie na 80 HP? Daj AA w jeden (sprowadź do 40 HP).",
         "Cel: HP rozjechane (40, 60, 80) → padają po kolei → dobijasz każdego AA.",
-        "Trening na Practice Tool: stań przy fali, próbuj nie używać spelli, tylko AA.",
+        "Trening na Practice Tool: stań przy fali, próbuj nie używać spells, tylko AA.",
         "Pułapka: za duże AA w jednego (sprowadź na ~ 10 HP) → wave się zatrzyma, last hit bez wpływu.",
         "Push wave: pomijasz setup, AA dużą część fali bez różnicowania."
       ],
       when: "Freeze setup. Sustain matchup. Każda lane gdzie liczy się każdy CS.",
-      whenNot: "Hard push (przyspieszanie wave'a). Pod własną wieżą (wieża decyduje agro).",
-      success: "Trzykrotnie last hit 3 castery pod rząd bez spella.",
+      whenNot: "Hard push (przyspieszanie wave). Pod własną wieżą (wieża decyduje agro).",
+      success: "Trzykrotnie last hit 3 castery pod rząd bez spell.",
       mistakes: [
         "Brak setupu — wszystkie miniony na 1 HP w jednej chwili.",
-        "Za mocny setup (miniony zatrzymują wave'a).",
+        "Za mocny setup (miniony zatrzymują wave).",
         "Setup pod wieżą (wieża zniweczy plan)."
       ]
     }
@@ -2977,9 +2980,9 @@ export const GOALS = {
     category: "early", phase: 2, week: 8, order: 249,
     short: "Enemy znika → wraca. ZAWSZE patrz TAB: kupił spike, control ward, pinka?",
     details: {
-      what: "Enemy wychodzi z fog of war po recallu / długim ruchu = mógł kupić item, mógł postawić pinka, mógł postawić warda. Sprawdzanie itemów ZAWSZE gdy wychodzi z fog = informacja przed walką.",
+      what: "Enemy wychodzi z fog of war po recall / długim ruchu = mógł kupić item, mógł postawić pinka, mógł postawić warda. Sprawdzanie itemów ZAWSZE gdy wychodzi z fog = informacja przed walką.",
       how: [
-        "Trigger: enemy wraca na linię po recallu. TAB → patrz na itemy.",
+        "Trigger: enemy wraca na linię po recall. TAB → patrz na itemy.",
         "Nowy spike (np. IE, Eclipse): change in damage profile, change in all-in calc.",
         "Nowy item ratujący (Zhonya / Banshee / GA): assassin może przegrać wejście.",
         "Trinket count zmniejszony: postawił warda gdzieś — gdzie?",
@@ -3024,8 +3027,8 @@ export const GOALS = {
     details: {
       what: "Bone Plating absorbuje pierwsze 3 hity od championa (skill lub AA). Przed all-inem warto zbić 3 'tanie' hity → potem cały combo dmg wchodzi pełną siłą. Działa też w drugą stronę — gdy ty masz BP gotowe, inicjuj wymianę.",
       how: [
-        "Vs enemy z BP: 3 AA w kanonów odległości = absorbed, ale BP idzie na cd 45s.",
-        "Lub: 3 słabe skille (Q Renektona, AA, AA) → następny burst combo bez absorpcji.",
+        "Vs enemy z BP: 3 AA z bezpiecznego dystansu = absorbed, ale BP idzie na cd 45s.",
+        "Lub: 3 słabe spells (Q Renektona, AA, AA) → następny burst combo bez absorpcji.",
         "Twoje BP gotowe (sprawdź ikonę): inicjuj wymianę — pierwsze 3 hity enemy absorbed.",
         "Twoje BP na cd: unikaj trade'u przez 45s, freeze defensywnie.",
         "Cooldown BP długi → wymiana z odzyskanym BP rzadko się zdarza w short trade."
@@ -3034,7 +3037,7 @@ export const GOALS = {
       success: "Twoje all-iny trafiają w pełnym dmg. Enemy all-iny absorbed przez twoje BP.",
       mistakes: [
         "All-in vs aktywne BP — twój burst absorbed.",
-        "Brak świadomości cooldownu BP (sprawdzaj ikonę).",
+        "Brak świadomości BP cooldown (sprawdzaj ikonę).",
         "Trade vs własne BP na cd."
       ]
     }
@@ -3108,7 +3111,7 @@ export const GOALS = {
     }
   },
   cd_around_play: {
-    label: "Graj dookoła cooldownów enemy",
+    label: "Graj dookoła enemy cooldowns",
     category: "max", phase: "ongoing", week: null, order: 255,
     short: "Spell użyty = okno. Przesuń spacing, zacznij trade, agresuj przed return cd.",
     details: {
@@ -3117,14 +3120,14 @@ export const GOALS = {
         "Yasuo użył Q3 (knock) → 5-10s okna na trade bez bania się knockup.",
         "Annie użyła R (Tibbers) → 90-120s okna na walki z normalną mocą Annie.",
         "Lee Sin użył ulta na cię → 90s bez R, możesz wracać na obj bez bania się 1-shotu.",
-        "Wiedza: znaj cooldowny kluczowych spelli. Lvl 11 R Annie ~80s; lvl 11 Q Riven ~7s; lvl 11 R Karthus ~110s.",
+        "Wiedza: znaj cooldowns key spells. Lvl 11 R Annie ~80s; lvl 11 Q Riven ~7s; lvl 11 R Karthus ~110s.",
         "Sprawdzaj kontekst: ability haste (Ionian boots, Cosmic Insight) skraca."
       ],
-      when: "Każdy moment po użyciu kluczowego spella enemy.",
+      when: "Każdy moment po użyciu key spell enemy.",
       success: "Liczysz okna i wchodzisz dokładnie gdy enemy bez broni.",
       mistakes: [
         "Brak świadomości że Annie ulci → walka jak gdyby miała.",
-        "Założenie 'wszystkie spelle wracają w 10s'.",
+        "Założenie 'wszystkie spells wracają w 10s'.",
         "Pomijanie ability haste enemy."
       ]
     }
@@ -3139,15 +3142,15 @@ export const GOALS = {
         "Cannon timer (sezon 15): wave 4, 7, 10, 13...",
         "JG gank pod cannon wave: jeśli enemy ucieka, traci cannon = ~60g + XP.",
         "Cannon dla dive setup: jest tankiem aggro wieży, possibly survival kluczowy.",
-        "Twój recall: nie recalluj gdy cannon wchodzi (oddasz 60g). Lepiej zostać.",
+        "Twój recall: nie rób recall gdy cannon wchodzi (oddasz 60g). Lepiej zostać.",
         "Push pod tower z cannonem: cannon zbije plate sam bez twojego dmg."
       ],
       when: "Każda 3-cia (sezon 14) / 3-cia od 4-tej (sezon 15) wave.",
-      success: "Twoje recall'e i ganki sync'owane z cannon wave.",
+      success: "Twoje recalls i ganki sync'owane z cannon wave.",
       mistakes: [
         "Recall na cannon wave (oddaj 60g).",
         "Push bez cannona pod wieżą (ty bijesz, miniony ginie szybko).",
-        "Brak liczenia wave'ów."
+        "Brak liczenia wave count."
       ]
     }
   },
@@ -3162,7 +3165,7 @@ export const GOALS = {
         "Margin: powyżej 1 tower hit = bezpiecznie przyjmij dalsze.",
         "Drop aggro: idź za wieżę na chwilę → tower zmienia cel na miniona → wróć.",
         "Świadomość że tower escalates: 1-2-3 hit dmg coraz większy. Trzeci hit może zabić jeśli pierwszy był niski.",
-        "Po użyciu wszystkich spelli — twój hit jest najtańszą wymianą."
+        "Po użyciu wszystkich spells — twój hit jest najtańszą wymianą."
       ],
       when: "Dive z support/tank. Dive jako secondary engage.",
       whenNot: "Twoje HP < 1 tower hit. Carry pozycja (giniesz = mniej dmg).",
@@ -3225,9 +3228,9 @@ export const GOALS = {
     details: {
       what: "Yellow trinket (warding totem) maks 2 stacki. Trzeci nie ładuje się dopóki nie użyjesz jednego. Siedzenie długo na 2 stackach = w trakcie gry stawiasz MNIEJ wardów = mniej info = niższe winrate.",
       how: [
-        "Sprawdzaj stacki przy recall / wychodzeniu z bazy / przed roamem.",
+        "Sprawdzaj stacki przy recall / wychodzeniu z base / przed roamem.",
         "Masz 2 stacki? Postaw jeden ZARAZ przy najbliższej okazji.",
-        "Pierwsza akcja po wyjściu z bazy: krzak przy rzece / wejście jg = ward.",
+        "Pierwsza akcja po wyjściu z base: krzak przy rzece / wejście jg = ward.",
         "Nie czekaj 'na idealny moment'. Mały suboptymalny ward > brak stawiania.",
         "Wyjątek: planowany teamfight za 30s, chcesz stack na obronę."
       ],
@@ -3317,17 +3320,17 @@ export const GOALS = {
     details: {
       what: "Lista ustawień KTÓRE MUSISZ MIEĆ. Raz ustawisz i zapomnisz. Brak tych ustawień = stała kara w każdej grze.",
       how: [
-        "Smartcast: domyślnie ON dla wszystkich skilli. Pod Shift = normal cast (zobacz zasięg). Trinket pod normal cast (precyzja wardu).",
+        "Smartcast: domyślnie ON dla wszystkich spells. Pod Shift = normal cast (zobacz zasięg). Trinket pod normal cast (precyzja wardu).",
         "Target Champions Only: na wygodnym klawiszu (np. ~ albo `). USTAWIONE NA TOGGLE, nie hold.",
         "Attack Move: pod A. Attack Move on Cursor: ON (cel bliżej kursora, nie postaci).",
         "Auto-attack: OFF. Każdy AA wynika z twojej komendy.",
         "F-keys: F1-F4 = sojusznicy 1-4. Self pod SPACJĄ (nie F5).",
         "Camera: Smooth OFF. Camera on Revive OFF. Locked Camera OFF (NIGDY).",
         "Mouse speed: Windows speed = in-game speed (spójne).",
-        "Grafika: postacie+spelle MAX, environment LOW, screen shake OFF, FPS lock na Hz monitora.",
-        "Dźwięk: spelle/SFX ON, muzyka OFF.",
+        "Grafika: postacie+spells MAX, environment LOW, screen shake OFF, FPS lock na Hz monitora.",
+        "Dźwięk: spells/SFX ON, muzyka OFF.",
         "HUD: czytelny, ale minimalny. Czat OFF lub mute all (poza pingami).",
-        "Show Mana Costs ON. Cooldowny w minutach:sekundach (precyzja)."
+        "Show Mana Costs ON. Cooldowns w minutach:sekundach (precyzja)."
       ],
       when: "Raz. Po większym patch'u sprawdź czy nic się nie cofnęło.",
       success: "Wszystko z listy ustawione. Reagujesz szybciej, mniej misklików.",
@@ -3476,7 +3479,7 @@ export const GOALS = {
   pre_game_physical: {
     label: "Stan psychofizyczny przed grą",
     category: "mindset", phase: "ongoing", week: null, order: 306,
-    short: "Sen / jedzenie / zdrowie / brak natrętnych myśli. Bez bazy = nie graj rank.",
+    short: "Sen / jedzenie / zdrowie / brak natrętnych myśli. Bez zasobów = nie graj rank.",
     details: {
       what: "Decyzje w grze wymagają zasobów intelektualnych. Brak snu, głód, ból, tilt → mózg zużywa zasoby na podstawy, brakuje na grę. Stan psychofizyczny daje największy boost do koncentracji.",
       how: [
@@ -3726,7 +3729,7 @@ export const GOALS = {
     details: {
       what: "Ósma zasada. LoL jest sytuacyjny. Hasła typu 'na soloQ zawsze X', 'low elo trzeba inaczej' omijają KONKRETNE warunki gry. Analiza = rozbijanie sytuacji na czynniki, nie sklejanie w hasło.",
       how: [
-        "Pytanie 'jak grać X?' → odpowiedź zaczyna od warunków: champion / matchup / cooldowny / wave / jg / itemy.",
+        "Pytanie 'jak grać X?' → odpowiedź zaczyna od warunków: champion / matchup / cooldowns / wave / jg / itemy.",
         "'Soloq mantra' jako poradnik → pułapka.",
         "Każda akcja = pytaj 'dlaczego TUTAJ?'.",
         "Krytyczne myślenie: dlaczego to działa? jakie założenia stoją za tym?",
@@ -3749,7 +3752,7 @@ export const GOALS = {
       what: "Mit że low elo i high elo to różne gry. Jeśli stan gry identyczny, optymalne zagranie jest identyczne. Różni się TYLKO to jak często enemy karze błędy. Granie 'pod low elo' = uczenie się złych nawyków blokujących wyższe elo.",
       how: [
         "Wave management na bronze = wave management na master. To samo.",
-        "Tempo, fog tracking, cooldowny — uniwersalne.",
+        "Tempo, fog tracking, cooldowns — uniwersalne.",
         "Różnica: low elo enemy NIE KARZE błędu. To nie znaczy że błąd nie jest błędem.",
         "Nie ucz się 'trików pod low elo'. Ucz się podstaw.",
         "Świetny high elo gracz radzi sobie w low elo. Świetny 'low elo specjalista' nie awansuje."
@@ -3774,7 +3777,7 @@ export const GOALS = {
       how: [
         "Wciśnij mute all od razu w loadingu.",
         "Jeśli ktoś czerwony już w lobby → dodge (lekcja dodge).",
-        "Pingi nadal działają (cooldowny, danger, on my way).",
+        "Pingi nadal działają (cooldowns, danger, on my way).",
         "Pisanie samemu też ogranicz — bilans nadal ujemny.",
         "Czat OFF jako goal (już istniejący 'chat_off')."
       ],
@@ -3836,10 +3839,10 @@ export const GOALS = {
     category: "mindset", phase: "ongoing", week: null, order: 322,
     short: "Smurf ~60-65% WR zazwyczaj. Gra do wygrania. Lekcja warta > 1 LP.",
     details: {
-      what: "Smurf wpływa na grę bardziej niż AFK, ale jego winrate nie jest 100%. Najczęstsze smurfy: Diamond/Emerald gracze na nizszym MMR z ~60% WR. Nie panika — gra do wygrania w 35-40% przypadków.",
+      what: "Smurf wpływa na grę bardziej niż AFK, ale jego winrate nie jest 100%. Najczęstsze smurfy to gracze Diamond/Emerald na niższym MMR z ~60% WR. Nie panikuj — część takich gier nadal jest do wygrania.",
       how: [
         "Mentalnie: smurf to człowiek z lepszą grą, nie cheat.",
-        "Smurf też jest ograniczony championem / cooldownami / pozycją mapy.",
+        "Smurf też jest ograniczony championem / cooldowns / pozycją mapy.",
         "Twoja gra: nie panika, gra własna, szukaj okna.",
         "Po przegranej ze smurfem: review co robił inaczej. Lekcja > strata LP.",
         "Najwyższe smurfy (Master+) szybko uciekają z niskiego MMR — mało prawdopodobne że spotkasz."
@@ -3906,11 +3909,11 @@ export const GOALS = {
     details: {
       what: "Po każdej grze pierwszy krok: sprawdź czy zrealizowałeś cel treningowy. Cel zależy od ciebie nie od wyniku gry. Buduje nawyki, utrwala uwagę.",
       how: [
-        "1. Wpisz w apce: zrealizowałem (T/N).",
-        "2. Jeśli częściowo: w jakim X% sytuacji.",
-        "3. Co przeszkodziło? (świadoma analiza, nie wymówki).",
-        "4. Po sesji: 3-5 gier z celem zrealizowanym → ten cel staje się nawykiem.",
-        "5. NIE oceniaj się po wyniku gry. Wygrałeś ale nie zrealizowałeś celu? Strata. Przegrałeś ale zrealizowałeś? Postęp."
+        "Od razu po grze, zanim klikniesz następną kolejkę, odpowiedz: czy cel został wykonany w większości sytuacji?",
+        "Jeśli cel był częściowy, oszacuj procent: np. 'śledziłem junglera przy 12 z 20 okazji'. To daje konkretny pomiar, nie nastrój.",
+        "Zapisz jedną przeszkodę: brak triggera, tilt, za trudny cel, za dużo walk, zły matchup albo zwykłe zapomnienie.",
+        "Po sesji sprawdź trend. Jeśli przez kilka gier realizujesz cel stabilnie, zaczyna przechodzić w nawyk i można dobrać kolejny mały element.",
+        "Nie oceniaj treningu po wyniku gry. Win bez celu = słaby trening. Loss z wykonanym celem = realny postęp."
       ],
       when: "Po każdej grze. Pierwszy krok rutyny.",
       success: "Trenujesz świadomie. Wiesz po sesji co poszło dobrze.",
@@ -3924,15 +3927,15 @@ export const GOALS = {
   post_break_3_5: {
     label: "Przerwa 3-5 min między grami",
     category: "mindset", phase: "ongoing", week: null, order: 326,
-    short: "Wstań od komputera. Fizyczny reset. Mniejsza szansa tilltu w next.",
+    short: "Wstań od komputera. Fizyczny reset. Mniejsza szansa tiltu w next.",
     details: {
       what: "Krótka przerwa po grze: emocjonalny reset, mniejsza szansa trafienia tych samych graczy, moment na rozliczenie celu. Koszt mały, zysk realny.",
       how: [
-        "Wstań od komputera — fizycznie.",
-        "Przejdź się po pokoju, wypij wodę.",
-        "Nie sięgaj po telefon (dodaje rozproszenia).",
-        "3-5 min wystarczy. 10+ rozprasza sesję.",
-        "Wyższy MMR: ważniejsze (te same lobby częściej)."
+        "Po ekranie końcowym wstań fizycznie od komputera. Samo siedzenie w lobby nie resetuje emocji.",
+        "Przejdź się po pokoju, wypij wodę i rozluźnij ręce. To ma być krótki reset układu nerwowego, nie nowa aktywność.",
+        "Nie sięgaj po telefon ani social media, bo dokładacie kolejny bodziec zamiast odpoczynku.",
+        "Po 3-5 minutach wróć, rozlicz cel i dopiero wtedy zdecyduj, czy klikasz następną grę.",
+        "Im wyższy MMR, tym ważniejsze, bo szybkie auto-queue częściej trafia tych samych ludzi z emocjami z poprzedniej gry."
       ],
       when: "Po każdej grze.",
       success: "Wchodzisz w next grę z czystą głową.",
@@ -3972,11 +3975,11 @@ export const GOALS = {
     details: {
       what: "Auto-queue od razu po grze ma minusy: wyższy MMR oznacza częste trafienie tych samych graczy (z ich emocjami z poprzedniej gry). Brak resetu mentalnego. Brak rozliczenia celu.",
       how: [
-        "Po wciśnięciu 'Continue' → przerwa.",
-        "NIE klikaj 'Find Match' od razu.",
-        "Rozliczenie celu + przerwa 3-5 min.",
-        "DODATKOWO: jeśli last gra miała ostrego tox → dłuższa przerwa (uniknięcie tej osoby).",
-        "Limit gier na sesję — nie 'jeszcze jedna' bez końca."
+        "Po wciśnięciu 'Continue' zatrzymaj się. Następna decyzja to nie 'Find Match', tylko 'czy jestem gotowy na kolejną grę?'.",
+        "Najpierw rozlicz cel treningowy, potem zrób krótką przerwę 3-5 minut.",
+        "Jeśli poprzednia gra miała mocny tox, AFK albo duży tilt, wydłuż przerwę, żeby nie wejść z tym samym stanem w kolejne lobby.",
+        "Ustal limit sesji przed startem, np. 3-5 gier. Limit usuwa pułapkę 'jeszcze jedna'.",
+        "Klikaj kolejkę dopiero, gdy stan fizyczny, emocje i cel treningowy są gotowe."
       ],
       when: "Każda gra.",
       success: "Sesje krótsze ale jakościowsze.",
@@ -3990,11 +3993,11 @@ export const GOALS = {
   post_universal_lessons: {
     label: "Wnioski uniwersalne, nie sytuacyjne",
     category: "mindset", phase: "ongoing", week: null, order: 329,
-    short: "Nie 'tu zepsułem'. TYLKO 'źle operowałem cooldownem' / 'nie trackowałem JG'.",
+    short: "Nie 'tu zepsułem'. TYLKO 'źle operowałem cooldown' / 'nie trackowałem JG'.",
     details: {
       what: "Wniosek z review ma mieć wartość dla PRZYSZŁYCH gier. 'Zepsułem tę walkę' = waste, walka się nie powtórzy. 'Wszedłem w walkę bez wizji JG' = uniwersalne, przyda się 100 razy.",
       how: [
-        "Każdy błąd: spróbuj sprowadzić do PODSTAWY GRY (wave / tempo / fog / cooldowny / spacing / pozycja).",
+        "Każdy błąd: spróbuj sprowadzić do PODSTAWY GRY (wave / tempo / fog / cooldowns / spacing / pozycja).",
         "'Zła walka' → 'wszedłem na max range z F flash CD'.",
         "'Zła rotacja' → 'nie sprawdziłem TAB itemów enemy przed ruchem'.",
         "Im bardziej uniwersalny wniosek tym więcej wart.",
@@ -4038,7 +4041,7 @@ export const GOALS = {
     category: "mindset", phase: "ongoing", week: null, order: 331,
     short: "Bronze-Plat: 1-2 picks. Wyżej: 3-4 max. Mniej zmiennych = więcej focusu.",
     details: {
-      what: "Mały pool championów = automat na obsługę postaci, więcej zasobów na grę. Niskie elo: matchup mało ważny, można 1 pick. Wyżej: 3-4 dla counter pickowania, ale nie więcej.",
+      what: "Mały pool championów = automat na obsługę postaci i więcej zasobów na grę. W niskim elo matchup jest mniej ważny, więc można grać 1-2 picki. Wyżej trzymaj 3-4 picki dla kontrpicków, ale nie więcej.",
       how: [
         "Bronze-Gold: 1-2 picks na rolę.",
         "Plat-Emerald: 2-3 picks.",
@@ -4047,7 +4050,7 @@ export const GOALS = {
         "Każdy nowy pick = ~50 gier zanim ma sens trzymać."
       ],
       when: "Decyzja co grać. Decyzja czy uczyć się nowego.",
-      success: "Każda gra fokusem na grę, nie na obsługę postaci.",
+      success: "Każda gra ma focus na grę, nie na obsługę postaci.",
       mistakes: [
         "10 championów po 5 gier każdy.",
         "Nauka nowego picka co tydzień.",
@@ -4084,11 +4087,11 @@ export const GOALS = {
     details: {
       what: "Konsumpcja wiedzy bez praktyki = brak progresu. Proporcja zależna od poziomu: niżej więcej grania, wyżej można dokładniej analizować.",
       how: [
-        "Bronze-Gold: 10 gier : 1 edu (~30 min edu na sesję).",
-        "Plat-Emerald: 8:1.",
-        "Diamond+: 5:1 (więcej detali warto analizować).",
-        "Master+: 3:1 minimum (wciąż praktyka dominuje).",
-        "Edu = aktywne oglądanie / VOD review / kurs. Stream w tle = nie liczy się."
+        "Bronze-Gold: celuj w ok. 8-10 gier na jedną aktywnie obejrzaną grę, lekcję albo analizę.",
+        "Plat-Emerald: możesz zejść bliżej 8:1, bo więcej detali zaczyna mieć znaczenie, ale praktyka nadal dominuje.",
+        "Diamond+: 5:1 jest rozsądne, jeśli analiza jest aktywna i kończy się konkretnym celem treningowym.",
+        "Nie schodź poniżej 3:1 bez mocnego powodu. Sama teoria bez gier przeciąża i nie buduje automatyzmów.",
+        "Edu oznacza aktywne oglądanie, VOD review albo kurs z pytaniami. Stream w tle nie liczy się jako trening."
       ],
       when: "Plan tygodniowy. Decyzja 'oglądać czy grać'.",
       success: "Praktyka dominuje. Wiedza wdrażana w grze.",
@@ -4104,7 +4107,7 @@ export const GOALS = {
     category: "mindset", phase: "ongoing", week: null, order: 334,
     short: "Kosztują czas + utrwalają inne nawyki. Świadom kosztu jeśli celujesz w rank.",
     details: {
-      what: "Tryby poboczne nie są neutralne treningowo. ARAM uczy 5v5 walk ale nie wave / macro. URF łamie cooldowny. Granie 30% ARAM 70% rank = wolniejszy progres rank.",
+      what: "Tryby poboczne nie są neutralne treningowo. ARAM uczy 5v5 walk ale nie wave / macro. URF łamie cooldowns. Granie 30% ARAM 70% rank = wolniejszy progres rank.",
       how: [
         "Cel = rank? Większość czasu = rank.",
         "ARAM/URF: dla zabawy, świadomie ile czasu inwestujesz.",
@@ -4128,11 +4131,11 @@ export const GOALS = {
     details: {
       what: "Po obejrzeniu kursu / coachingu instynkt: 'teraz wszystko inaczej'. To pułapka — mózg przeciążony, nic się nie utrwala. Metoda małych kroczków: 1-3 rzeczy → 30-50 gier → automatyzacja → następne.",
       how: [
-        "Wybór: 1-3 elementy z review.",
-        "Trening: 30-50 gier z fokusem na nie.",
-        "Sygnały utrwalenia: automatycznie pamiętasz, mniej zasobów na to.",
-        "Dopiero wtedy: nowy element.",
-        "NIE dokładaj kolejnego elementu po 5 grach 'bo łatwe'."
+        "Po kursie, review albo coachingu wybierz 1-3 elementy, nie całą listę rzeczy do poprawy.",
+        "Zamień każdy element na prosty trigger: 'po recall pytam o wave plan', 'przed objective sprawdzam prio', 'po CS patrzę na minimapę'.",
+        "Graj 30-50 gier z tym samym celem treningowym. To jest blok nauki, nie jednorazowy test.",
+        "Nowy element dodaj dopiero, gdy pamiętasz o starym automatycznie i nie czujesz dużego kosztu mentalnego.",
+        "Jeśli po 5 grach wydaje się łatwe, nie dokładaj od razu. Sprawdź, czy działa również w trudnych grach, po tilcie i w przegranym matchupie."
       ],
       when: "Każde 'co teraz trenuję'.",
       success: "Po 6 miesiącach masz 10-15 utrwalonych nawyków, nie 50 powierzchownie nauczonych.",
@@ -4146,15 +4149,15 @@ export const GOALS = {
   focus_resource_mgmt: {
     label: "Automatyzuj triggery, nie odpowiedzi",
     category: "mindset", phase: "ongoing", week: null, order: 336,
-    short: "Trigger ('po recallu pytam wave plan') — automat. Odpowiedź — świadoma, sytuacyjna.",
+    short: "Trigger ('po recall pytam wave plan') — automat. Odpowiedź — świadoma, sytuacyjna.",
     details: {
       what: "Zarządzanie zasobami intelektualnymi: nawykowe powinno być PYTANIE (trigger), nie odpowiedź. Mózg się przypomina sam 'pomyśl o wave plan' — ale konkretny plan zależy od sytuacji.",
       how: [
-        "Wychodzisz z bazy: trigger 'co teraz robię?'. Odpowiedź = sytuacyjna.",
-        "Wracasz na linię po recall: trigger 'wave plan?'.",
-        "JG: każdy camp → trigger 'spójrz na linię X' (rotuje).",
-        "Po śmierci: trigger 'co źle?' bez emocji.",
-        "Nie automatyzuj 'zawsze pushuję' — to nie sytuacyjne."
+        "Automatyzuj pytanie, nie gotową odpowiedź. 'Po recall pytam o wave plan' jest dobre, 'po recall zawsze pushuję' jest złe.",
+        "Po wyjściu z base trigger brzmi: 'co teraz robię i pod jaki timer?'. Odpowiedź zależy od mapy.",
+        "Po powrocie na linię trigger brzmi: 'jaki jest plan fali: slow push, freeze, hard push czy reset?'.",
+        "Jungler po każdym campie może mieć trigger: 'którą linię sprawdzam teraz kamerą i dlaczego?'.",
+        "Po śmierci trigger brzmi: 'jaki uniwersalny błąd tu wystąpił?'. Odpowiadasz bez emocji, dopiero po chwili."
       ],
       when: "Trening nawyków. Decyzja co ma być automatem.",
       success: "Twoje przypomnienia działają same. Decyzje świadome.",
@@ -4172,12 +4175,11 @@ export const GOALS = {
     details: {
       what: "Praktyczna metoda utrzymania koncentracji: prowadź w głowie rozmowę. Zadawanie pytań kieruje uwagę na grę i zmusza mózg do szukania odpowiedzi.",
       how: [
-        "'Co teraz powinienem zrobić?'",
-        "'Co jest najlepsze dla gry?'",
-        "'Jak mogę wygrać tę grę?'",
-        "'Dlaczego idę w to miejsce?'",
-        "'Plan na najbliższą minutę?'",
-        "Powtarzaj co kilka chwil. Każda odpowiedź = aktywna decyzja."
+        "W spokojnych momentach pytaj: 'co teraz powinienem zrobić?' i wymuś konkretną odpowiedź, np. wave, reset, ward, roam.",
+        "Przed ruchem po mapie pytaj: 'dlaczego idę w to miejsce i co zyskam, jeśli enemy odpowie poprawnie?'.",
+        "Przed objective pytaj: 'jaki jest plan na najbliższą minutę: prio, wizja, reset, fight czy cross-map?'.",
+        "Gdy gra idzie źle, pytaj: 'co teraz daje największą szansę wygrania?', a nie 'kto zawinił?'.",
+        "Pytanie bez odpowiedzi nie pomaga. Dialog ma kończyć się decyzją, choćby prostą."
       ],
       when: "Każdy spokojny moment gry. Trigger autopilot.",
       success: "Nie odpływasz w autopilot. Każda akcja świadoma.",
@@ -4191,7 +4193,7 @@ export const GOALS = {
   focus_environment: {
     label: "Otoczenie pod skupienie",
     category: "mindset", phase: "ongoing", week: null, order: 338,
-    short: "Notyfikacje OFF. Discord nieigrowy zamknięty. Social media zamknięte.",
+    short: "Notyfikacje OFF. Discord niegrowy zamknięty. Social media zamknięte.",
     details: {
       what: "Łatwiej poprawić warunki zewnętrzne niż siłą woli oczekiwać koncentracji w chaosie. Każdy bodziec walczy o uwagę.",
       how: [
@@ -4215,20 +4217,19 @@ export const GOALS = {
   err_8_areas: {
     label: "Pareto 8 obszarów — wybierz NAJSŁABSZY",
     category: "mindset", phase: "ongoing", week: null, order: 339, info_only: true,
-    short: "Wave / tempo / fog / cooldowny / info / lekkie oddanie / off-team / mechaniki. Zacznij od dna.",
+    short: "Wave / tempo / fog / cooldowns / info / lekkie oddanie / off-team / mechaniki. Zacznij od dna.",
     details: {
       what: "8 obszarów które najczęściej blokują graczy poniżej Master. Praca nad najsłabszym daje największy zwrot. Nie wszystkie naraz — wybierz NAJSŁABSZY.",
       how: [
-        "1. Wave management (slow/freeze/hard push, sync z obj).",
-        "2. Tempo (kto pierwszy gdzie, recall jako tempo, cross-map).",
-        "3. Fog of war i wizja (tracking, pinki, lazy ward, paradoks skanu).",
-        "4. Cooldowny i power spike'i (track enemy, twoje, item spike windows).",
-        "5. Zbieranie informacji (TAB, kamera, minimapa, dedukcja).",
-        "6. Lekkie oddanie (oddaj 4 CS zamiast umrzeć, recall na czas, opuść wave).",
-        "7. Off-team (spójność z drużyną, brak samotnych invadów).",
-        "8. Mechaniki (CS, skillshoty, animacje, kiting).",
-        "Self-assessment: oceń się 1-10 w każdym. Najniższy = focus.",
-        "30-50 gier z fokusem na ten obszar."
+        "Oceń 1-10 wave management: czy umiesz slow push, freeze, hard push i synchronizować fale z objective?",
+        "Oceń 1-10 tempo: czy wiesz kto pierwszy będzie w miejscu akcji, kiedy resetować i kiedy grać cross-map?",
+        "Oceń 1-10 fog/wizję: czy trackujesz enemy, stawiasz wardy z celem i nie facecheckujesz zajętego terenu?",
+        "Oceń 1-10 cooldowns i power spike'i: czy grasz inaczej, gdy enemy nie ma flasha, ulta, itemu albo gdy ty masz spike?",
+        "Oceń 1-10 zbieranie informacji: minimapa, TAB, F-keye, CS junglera, debuffy i dedukcja.",
+        "Oceń 1-10 lekkie oddanie: czy potrafisz oddać 4 CS, zrobić recall na czas albo odpuścić objective bez wizji?",
+        "Oceń 1-10 off-team: czy twoje ruchy są spójne z drużyną, czy sam invade'ujesz/pushujesz bez coveru?",
+        "Oceń 1-10 mechaniki: CS, skillshoty, animacje, kiting, spacing i input.",
+        "Najniższy obszar wybierz jako focus na 30-50 gier. Nie naprawiaj wszystkich ośmiu naraz."
       ],
       when: "Co miesiąc / sezon: review i wybór głównego obszaru.",
       success: "Dwa cykle = znacząco lepsze 2 obszary. Reszta podciągnięta.",
@@ -4267,7 +4268,7 @@ export const GOALS = {
     category: "mindset", phase: "ongoing", week: null, order: 341, info_only: true,
     short: "One-tricki, low pickrate, łatwy pick, brak kontry. WR jest interpretowany.",
     details: {
-      what: "Winrate championa nie mówi że jest 'mocny' — mówi że W TEJ PRÓBCE WYGRYWA. Powody mogą być różne: gra nim głównie OTP, mało pickow więc tylko specjaliści, łatwy w obsłudze, soloQ nie karze słabości.",
+      what: "Winrate championa nie mówi, że jest 'mocny' — mówi, że W TEJ PRÓBCE WYGRYWA. Powody mogą być różne: gra nim głównie OTP, ma niski pickrate, więc wybierają go specjaliści, jest łatwy w obsłudze albo soloQ nie karze jego słabości.",
       how: [
         "Przed wyborem 'silnego picka' sprawdź: pickrate, banrate, masterminds (kto gra).",
         "Wysokie WR + low pickrate = nisza, mogą być one-tricki.",

@@ -5,7 +5,8 @@ import React from "react";
   const { SAMPLE, OP_FONT_BODY, OP_FONT_DISP, OpPill, OpBar, OpIcon, getOpTokens } = window;
   const { GOALS, HISTORY, CATEGORIES, TABS, SECTIONS, computeGoalStats,
           setActiveGoals: persistActiveGoals,
-          toggleReadGoal: persistToggleRead } = SAMPLE;
+          toggleReadGoal: persistToggleRead,
+          toggleMasteredGoal: persistToggleMastered } = SAMPLE;
   const { useState, useMemo } = React;
   const Icon = OpIcon;
 
@@ -20,6 +21,7 @@ import React from "react";
     // Live active goals (persisted)
     const [activeGoals, setActive] = useState(() => SAMPLE.activeGoals || []);
     const [readGoals, setRead] = useState(() => SAMPLE.readGoals || []);
+    const [masteredGoals, setMastered] = useState(() => SAMPLE.masteredGoals || []);
     const planMode = SAMPLE.mode === "plan";
     const currentPlanFocus = SAMPLE.getCurrentPlanFocus?.();
 
@@ -43,6 +45,12 @@ import React from "react";
       if (isGoalLockedByPlan(gid)) return;
       persistToggleRead(gid);
       setRead([...(SAMPLE.readGoals || [])]);
+      setActive([...(SAMPLE.activeGoals || [])]);
+    };
+    const toggleMastered = (gid) => {
+      if (isGoalLockedByPlan(gid)) return;
+      persistToggleMastered(gid);
+      setMastered([...(SAMPLE.masteredGoals || [])]);
       setActive([...(SAMPLE.activeGoals || [])]);
     };
     const toggleSection = (sid) => {
@@ -259,6 +267,7 @@ import React from "react";
                       const isRead = readGoals.includes(g.id);
                       const isExp = expanded === g.id;
                       const isInfo = !!g.info_only;
+                      const isManuallyMastered = !!st.isManuallyMastered;
                       const statusTone = st.level === -1 ? "bad"
                                        : st.level >= 1  ? "good"
                                        : st.games > 0   ? "warn" : "dim";
@@ -296,7 +305,8 @@ import React from "react";
                                   <OpPill tone="dim" t={t}>F{g.phase}{g.week?` · t${g.week}`:""}</OpPill>
                                 )}
                                 {!isInfo && g.phase === "ongoing" && <OpPill tone="dim" t={t}>{t.ui("Ciągłe", "Ongoing")}</OpPill>}
-                                {!isInfo && st.games > 0 && <OpPill tone={statusTone} t={t}>{st.status}</OpPill>}
+                                {!isInfo && (st.games > 0 || isManuallyMastered) && <OpPill tone={statusTone} t={t}>{st.status}</OpPill>}
+                                {isManuallyMastered && <OpPill tone="dim" t={t}>{t.ui("Pominięte", "Skipped")}</OpPill>}
                               </div>
                               <div style={{
                                 fontFamily: OP_FONT_BODY, fontSize: 11.5,
@@ -310,6 +320,16 @@ import React from "react";
                                   color: isRead ? t.good : t.mute,
                                   letterSpacing:"0.1em", textTransform:"uppercase"
                                 }}>{isRead ? t.ui("Przeczytane", "Read") : t.ui("Do przeczytania", "To read")}</div>
+                              ) : isManuallyMastered ? (
+                                <>
+                                  <div style={{
+                                    fontFamily: OP_FONT_DISP, fontSize: 18, color: t.good, fontWeight: 500
+                                  }}>100%</div>
+                                  <div style={{
+                                    fontFamily: OP_FONT_BODY, fontSize: 10, color: t.mute,
+                                    letterSpacing:"0.12em", textTransform:"uppercase", marginTop: 2
+                                  }}>{t.ui("ręcznie", "manual")}</div>
+                                </>
                               ) : st.games > 0 ? (
                                 <>
                                   <div style={{
@@ -450,17 +470,43 @@ import React from "react";
                                       >{isRead ? t.ui("Cofnij przeczytanie", "Undo read") : t.ui("Oznacz jako przeczytane", "Mark as read")}</button>
                                     );
                                   }
+                                  if (isManuallyMastered) {
+                                    return (
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); toggleMastered(g.id); }}
+                                        style={{
+                                          ...baseStyle,
+                                          background: "transparent",
+                                          color: t.dim,
+                                          border: `1px solid ${t.line}`,
+                                          cursor: "pointer"
+                                        }}
+                                      >{t.ui("Cofnij opanowanie", "Undo mastered")}</button>
+                                    );
+                                  }
                                   return (
-                                    <button
-                                      onClick={(e) => { e.stopPropagation(); toggleActive(g.id); }}
-                                      style={{
-                                        ...baseStyle,
-                                        background: isActive ? "transparent" : t.accent,
-                                        color: isActive ? t.dim : t.bg,
-                                        border: isActive ? `1px solid ${t.line}` : "none",
-                                        cursor: "pointer"
-                                      }}
-                                    >{isActive ? t.ui("Wyłącz trening", "Disable training") : t.ui("Włącz trening", "Enable training")}</button>
+                                    <div style={{display:"flex", gap: 8, flexWrap:"wrap"}}>
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); toggleMastered(g.id); }}
+                                        style={{
+                                          ...baseStyle,
+                                          background: "transparent",
+                                          color: t.good,
+                                          border: `1px solid ${t.good}60`,
+                                          cursor: "pointer"
+                                        }}
+                                      >{t.ui("Pomiń — już opanowane", "Skip — already mastered")}</button>
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); toggleActive(g.id); }}
+                                        style={{
+                                          ...baseStyle,
+                                          background: isActive ? "transparent" : t.accent,
+                                          color: isActive ? t.dim : t.bg,
+                                          border: isActive ? `1px solid ${t.line}` : "none",
+                                          cursor: "pointer"
+                                        }}
+                                      >{isActive ? t.ui("Wyłącz trening", "Disable training") : t.ui("Włącz trening", "Enable training")}</button>
+                                    </div>
                                   );
                                 })()}
                               </div>

@@ -20,7 +20,7 @@ const CONTENT_EN = {
     },
     "macro": {
       "name": "MACRO MID/LATE",
-      "subtitle": "Prio, tempo, objectives"
+      "subtitle": "Prior, tempo, objectives"
     },
     "vision": {
       "name": "VISION",
@@ -50,13 +50,13 @@ const CONTENT_EN = {
       "name": "PHASE 2: LANING",
       "subtitle": "Wave, trade, CS, recall",
       "weeks": "Week 5-8",
-      "description": "The lane phase is where 80% of the game is resolved in low/medium elo. Slow push, freeze, recall on canon, trade patterns."
+      "description": "The lane phase is where a huge portion of the game is decided in low and medium elo. Slow push, freeze, cannon wave recall and trade patterns give you an advantage before the full macro starts."
     },
     "3": {
       "name": "PHASE 3: MACRO",
       "subtitle": "Prio, tempo, objectives, map",
       "weeks": "Week 9-12+",
-      "description": "Macro is built ON the foundation of lines. If you have mechanics + lane fundamentals - it's time to open the map. Prio → tempo → objectives → ending the game."
+      "description": "Macro is built ON the foundation of lines. Once you have the mechanics and basics of lane, you start opening the map: prio → tempo → objectives → end game."
     },
     "ongoing": {
       "name": "UNIVERSAL",
@@ -129,7 +129,7 @@ const CONTENT_EN = {
     },
     "laning_micro": {
       "name": "laning phase (EARLY)",
-      "subtitle": "Trade patterns, CS under the tower, runes, value spells, mechanics"
+      "subtitle": "Trade patterns, tower CS, runes, spell value, mechanics"
     },
     "max": {
       "name": "MINI-MAXIMIZATIONS",
@@ -185,7 +185,7 @@ const CONTENT_EN = {
       "id": "stage_macro",
       "name": "Macro - decisions",
       "short": "Stage 3 / 3",
-      "description": "Large scale: map awareness, wave macro, prio, tempo, rotations, objects, vision as a system, fights, meta mindset. Here you train WHAT and WHERE to do."
+      "description": "Large scale: map awareness, wave macro, prio, tempo, rotations, objectives, vision as a system, fights, mindset meta. Here you train WHAT and WHERE to do."
     }
   ],
   "goals": {
@@ -199,11 +199,11 @@ const CONTENT_EN = {
         "success": "You know where all 5 enemies are OR you consciously don't know and predict by deduction (back 15s ago, regen 5s, move 10s - may be in X).",
         "notes": "If the mini is too far away on the monitor - reduce the HUD or move the mini. Setup matters.",
         "how": [
-          "Trigger 1: every CS hit (look AFTER the last hit, in a still animation).",
-          "Trigger 2: every cast fails (look PO cd when it's safe).",
-          "Trigger 3: every exit from base/TP.",
-          "The first 2 weeks - consciously check the clock, then the automatic one.",
-          "Locked camera = fucked up. Centered rather always worse in macro."
+          "After each CS finish, look at the minimap in a short animation window. Don't look during the latest hit, but immediately after it.",
+          "After using the spell, check the minimap if you are not in danger of an immediate trade. Cast gives you a short break that you can turn into information.",
+          "After each exit from base or TP, first check where the players are and which lines may require immediate action.",
+          "For the first 2 weeks, keep an eye on it consciously: CS → minimap, spell → minimap, passing through a quiet moment → minimap.",
+          "Set the HUD and minimap so that a slight eye movement is enough. If you have to turn your head, the setup makes it harder to build the habit."
         ],
         "mistakes": [
           "Tunnel vision on CS in 1v1.",
@@ -221,11 +221,12 @@ const CONTENT_EN = {
         "when": "Every 30 seconds and at every important decision (before the fight, before the objective).",
         "success": "You know who bought Zhonia → be careful with the ult combo. You know that enemy mid lvl 1 is behind you → pressure.",
         "how": [
-          "TAB every ~30s or after each enemy recall.",
-          "You check: ITEMS (Zhonia/Maw/Rabadon/Hex Drinker), LEVEL, summoners.",
-          "'?' with enemy = think about roaming.",
-          "Track jungler CS: 1 camp = 4 CS. You know what's wrong with him and where he might be.",
-          "Check debuffs (ADC heals), Ekko clones (has/does not have an ult)."
+          "Click TAB approximately every 30 seconds and whenever the enemy returns after a recall or before an important fight.",
+          "First compare level and items: completed items, large components, Stopwatch/Zhonya, Hexdrinker/Maw, Banshee, GA and other defenses.",
+          "Don't judge strength by KDA. A 0/2 player with a large item and level can be more dangerous than a 3/0 player without a spike.",
+          "If there is a '?' next to your opponent, treat it as a roam alert: immediately check the minimap and whether your line needs to ping danger.",
+          "Track jungler CS: 1 camp = 4 CS. From CS + the last position you can determine which camps are located and where the jungler can enter.",
+          "Look for small signals: debuff after Heal on ADC, visible Ekko clone with R available, lack of mana after leash or cooldown of summoners."
         ],
         "mistakes": [
           "Looking at KDA (non-informative).",
@@ -242,11 +243,11 @@ const CONTENT_EN = {
         "when": "All the time. Every decision requires 'where are all the enemies'.",
         "success": "Your prediction is 70%+ correct - enemies appear where you expected.",
         "how": [
-          "Enemy moved back to the base → add mana/HP regen seconds (~5s) + arrival time.",
-          "Enemy disappears on the river → 2 options: retreats / goes somewhere. You can imagine both ranges.",
-          "Follow jg by CS - 1 camp = 4 CS. You know where he was (invade?) and what gets up.",
-          "Deduction: 'A is empty, I am in B, so the enemy is in C'.",
-          "The more players you see = the fewer opportunities for the unseen."
+          "When the enemy does a recall, count the recall for 8 seconds, add a short time to regen/buy the item and only then count the path from the base.",
+          "When the enemy disappears on the river, write down 2-3 real options: recall, roam mid/bot/top, entering the jungle or vision setup.",
+          "When it comes to jungler, combine last position, CS, buffs and time needed for camps. This helps you narrow down where it might be instead of guessing.",
+          "Eliminate places: if A is empty, you are in B and the enemy didn't have time to get to D, C is most likely.",
+          "The more players you see, the fewer opportunities there are for the unseen. The lack of an opponent in one place is also information."
         ],
         "mistakes": [
           "The assumption 'he rolled back so he's been gone for 5 minutes'.",
@@ -284,11 +285,11 @@ const CONTENT_EN = {
         "when": "The whole game: laning, dodge, spacing, kite, teamfights.",
         "success": "The dodges are short, the movement is not panic-reactive, the clicking is quick without any warm-up.",
         "how": [
-          "Click A LOT throughout the game, not just when you're in danger.",
-          "Click VERY CLOSE to your character.",
-          "Practice Tool: hero between two wards (small distance), click alternately SO THAT THE CHARACTER DOES NOT MOVE.",
-          "5-10 minutes of exercise a day + train combos on your Champ.",
-          "Auto-attack attack-move (A+click), not right-click."
+          "Keep your clicks quick and short before combat too. If you start clicking quickly only during skillshot, the reaction is delayed.",
+          "Click close to the character. A shorter mouse movement means faster turns, easier dodge and fewer panic commands.",
+          "Practice Tool: place two wards close to each other, stand between them and click alternately so that the character almost does not move from its place.",
+          "Practice 5-10 minutes a day: first just the click rhythm, then the same rhythm during a combo on your champion.",
+          "Auto-attack by attack move (e.g. A + click) to limit missclicks on minions or the ground during combat."
         ],
         "mistakes": [
           "Clicking away from the character.",
@@ -307,9 +308,10 @@ const CONTENT_EN = {
         "how": [
           "Locked camera OFF, smartcasts without indicator, attack move bind.",
           "F1=you, F2-F5 allies. Space as fast centering.",
-          "When placing (e.g. finishing CS) - a moment to F-key check an ally/map fragment.",
-          "Get rid of the discomfort that the character is on the corners of the screen - it will come with the precision of clicking.",
-          "The better your knowledge of the game = the faster you can read the screen (you know where to look)."
+          "During a last hit, cast or recall animation, perform a short F-key check of an ally or area that may influence your decision.",
+          "If the unlocked camera is inconvenient, reduce the scope of learning: first unlock it only in quiet moments, then in trades and only finally in fights.",
+          "Don't check everything at once. jungler pathing top → bot calls mid/bot more often, and ADC calls mid and river drops after the bot's push.",
+          "The better you understand the game, the faster you read the screen because you know where to look: wave, HP/mana, jungler position, objective timer."
         ],
         "mistakes": [
           "Locked camera 'because it's convenient'.",
@@ -320,7 +322,7 @@ const CONTENT_EN = {
     },
     "animation_lock": {
       "label": "Placement in animation",
-      "short": "AA, skills, tower, minions - they block movement. You hit when the enemy is standing.",
+      "short": "AA, spells, tower, minions - they block movement. You hit when the enemy is standing.",
       "details": {
         "what": "After AA or using a spell, the character stands still for a short moment. The same: towers, minions, camps. You use the enemy's still window for certain skillshots and trades.",
         "when": "Trades, last hit enemy, under the tower, chase with CC, death with tower aggro.",
@@ -346,9 +348,9 @@ const CONTENT_EN = {
         "when": "Laning, ganks setup, poke before objective, chase/escape.",
         "success": "You don't spam skillshots. You are waiting for the moment when the enemy has the least good dodges.",
         "how": [
-          "Watch the character's 'face' - it turns towards the movement/skill.",
+          "Watch the character's 'face' - it turns towards the movement/spell.",
           "3D League: lower than the enemy = throw slightly lower. Higher = higher. Aim for the legs.",
-          "Round (E Lux): enemy in the middle of the skill.",
+          "Round (E Lux): enemy in the middle of the spell.",
           "Linear (Q Blitz): NOT at max range! From the side = harder to avoid.",
           "CONCEPT: Not 'how to throw', but 'how to angle the character'.",
           "Fog of war almost always hits (no one expects it)."
@@ -364,15 +366,15 @@ const CONTENT_EN = {
       "label": "Input buffering - queuing with Flash",
       "short": "Click spell on enemy BEYOND range → Flash → spell INSTANT.",
       "details": {
-        "what": "Many direct spels (W TF, W Renektona) can be queued with Flash. You click the spell before you are in range, then Flash - the spell fires immediately after entering range. Enemy doesn't have time to react.",
+        "what": "Many direct spells (W TF, W Renektona) can be queued with Flash. You click the spell before you are in range, then Flash - the spell fires immediately after entering range. Enemy doesn't have time to react.",
         "when": "Engage, escape, last-hit assassin on carry, unexpected kill setup.",
         "success": "Your flash + spell = no time to react enemy = usually kill.",
         "how": [
-          "Click the spell on the enemy even though it is OUT OF range.",
-          "The character starts following the target → Flash into range.",
-          "Spell starts immediately when you enter range.",
-          "Defensive: someone is chasing you, you have a stun - click W before entering his range = he flies immediately.",
-          "You can also queue AA by 'dancing' in range and waiting for the enemy to enter."
+          "First, click the targeted spell on the enemy, even though the target is still out of range. The character will start following the target.",
+          "When you see that you will get into range after Flash, use Flash towards the target. Spell should fire immediately after entering range.",
+          "Practice with simple examples: TF selects a golden card, clicks W on a target outside the range, flashes and the card flies without any additional click.",
+          "Defensively it works the same way: if someone with dash is about to enter your range, click stun earlier and return the cursor to escape.",
+          "Don't hold the buffer for too long. If the enemy has retreated, cancel the move, otherwise the character will follow him pointlessly."
         ],
         "mistakes": [
           "Flash → click spell then = 0.3s for enemy reaction = miss."
@@ -383,35 +385,36 @@ const CONTENT_EN = {
       "label": "Baiting enemy skillshots",
       "short": "Straight line into enemy → last minute turn → ENTER.",
       "details": {
-        "what": "Forcing the wrong use of the enemy through fake moves. You go in a straight line (you encourage a cast), you turn at the last moment = the enemy burned the spell for nothing = you push.",
+        "what": "Forcing bad use of enemy spells through fake moves. You go in a straight line, encourage a cast, turn at the last moment, the enemy fires the spell for nothing and then you enter the trade.",
         "when": "Laning trade, gank dodge, teamfight kite.",
-        "success": "Enemy burns the spell for nothing → you hit CD in the window and deal damage.",
+        "success": "Enemy burns the spell for nothing → you enter the CD window and deal damage.",
         "how": [
-          "You walk into the enemy in a straight line → at the last moment you turn → bait spell.",
-          "After beating the spell → ENTER, trade won.",
-          "Small right-left movements ONLY when the enemy MUST play a spell (e.g. you are leaving the range).",
-          "DON'T dance 5 seconds earlier like low elo - dancing only makes sense when there is a specific threat."
+          "First, recognize your opponent's key spell. Bait only makes sense when the wasted key spell actually opens up a trade or all-in for you.",
+          "Approach the line that looks like an easy cast to the enemy. At the last moment, turn with a short click close to the character.",
+          "When the spell goes blank, immediately enter the cooldown window. Dodge itself without punish does not give full value.",
+          "Make small right-left movements only when your opponent needs to cast a spell, e.g. when you leave his range or threaten to enter.",
+          "Don't dance 5 seconds earlier for no reason. Random movement tires your hand and often sets you up worse."
         ],
         "mistakes": [
           "A random dance with no specific moment of danger.",
           "No follow-up after a successful bait.",
-          "Bait when the enemy sees you at max range - he won't play the spell anyway."
+          "Bait when the enemy sees you at max range - the spell won't play anyway."
         ]
       }
     },
     "spacing_ranges": {
       "label": "Spacing - ranges in the head",
-      "short": "Imagine range AA/skili circles. Stay SLIGHTLY out of enemy range.",
+      "short": "Imagine range AA/spells circles. Stay SLIGHTLY out of enemy range.",
       "details": {
         "what": "Spacing means balancing on the edge of your own and your opponent's range. You imagine range circles and play on their borders. You stand so that you can play and the enemy cannot easily enter.",
         "when": "Laning, bot trades, positioning for the objective, kite in combat.",
-        "success": "You press your skills without taking enemy dmg.",
+        "success": "You use your spells without receiving free dmg from the enemy.",
         "how": [
-          "Imagine range circles: your AA/spelle, enemy engage, enemy poke.",
-          "Stand on the border where YOU can threaten action, ENEMY has no easy entry.",
-          "Syndra vs Viktor: E gives the advantage. But when she uses E, Viktor has greater range = use it.",
-          "ADC: range AA is LIFE. Know down to the pixel.",
-          "Use positioning in animations - the enemy has effectively shorter range when it locks."
+          "Imagine three circles: your auto attack/spells, enemy engage and enemy poke. Your position is to be at the edge of these circles.",
+          "Stand so that you can threaten with an action, but the enemy has to use dash, summoner spell or position error to get to you.",
+          "Cooldowns Change Ranges: Syndra without E doesn't have the same zone of control, so Viktor can get more aggressive.",
+          "The ADC must know his AA range very precisely. One step too close often means a free engagement for the opponent.",
+          "Use animation lock: when enemy last hits, auto-attacks or casts, his real possibility of entering and dodging is lower."
         ],
         "mistakes": [
           "Entering enemy range for no reason.",
@@ -426,7 +429,7 @@ const CONTENT_EN = {
       "details": {
         "what": "Entering in a position so that the opponent has to move back - the ally gets free space. Towers, terrain, and objects also create space. The Assassin's flank forces the enemy to protect the backline = a lonely front.",
         "when": "Laning, bot trades, 5v5 fights, sieges.",
-        "success": "Your carry farms without taking dmg thanks to your pressure.",
+        "success": "Your carry farms without taking free dmg thanks to your pressure.",
         "how": [
           "Support with CC in the bot bush = forces the enemy to retreat = ADC has space for CS.",
           "Tank hitting enemy team = buys carry space on dmg.",
@@ -452,12 +455,12 @@ const CONTENT_EN = {
           "Top: if at the same level and one closer to the bushes, the other closer to the river = the river will catch up. You stand further from the line.",
           "Bot TRIANGLE: ADC+supp next to it, enemy ADC slightly in front = mathematically they will catch it.",
           "CHECKBOARD: imagine a checkerboard on the line, mark WHERE to stand by elimination.",
-          "DON'T stand: close to enemy jg, in enemy's minions, in your own minions (value spells of enemy)."
+          "DON'T stand: close to enemy jg, in enemy's minions, in your own minions (enemy spell value)."
         ],
         "mistakes": [
           "He will stand in the middle of the line without analyzing 'who will catch who'.",
           "Bot position before supp.",
-          "ADC in enemy minions → value spells."
+          "ADC in enemy minions → spell value."
         ]
       }
     },
@@ -473,7 +476,7 @@ const CONTENT_EN = {
           "Blue wards ON ADCs and non-mobiles - face check = death.",
           "Kite into the bush = you disappear = the enemy loses the distance, you have the window.",
           "Top mele in the bush vs range = hit and run = advantage.",
-          "Predict enemy in a given place (blindly dodge the skill)."
+          "Predict the enemy in a given location (blindly dodge the spell)."
         ],
         "mistakes": [
           "Face check 'because there's probably no one there' = classic 0-.",
@@ -484,19 +487,19 @@ const CONTENT_EN = {
     },
     "slow_push": {
       "label": "Slow push - 3-wave crash",
-      "short": "Leaving early, setting the HP of the nobs, 3. wave under the enemy tower.",
+      "short": "Leaving early, setting the minions' HP, 3rd wave under the enemy tower.",
       "details": {
         "what": "Push the wave as slowly as possible - the enemy collects larger and larger stacks of minions under his tower. The third wave hits his tower, you have a window of time for action outside the lane. Slow push is your main tool for creating pace on the map.",
-        "when": "Under objective, under dive bot, under deep ward in enemy jg, under roam, under harass enemy champion under his tower.",
+        "when": "Under objective, dive bot, deep ward in enemy jungle, roam or harass the opponent under his tower.",
         "whenNot": "If they choke you (you lose mechanically) - then MAX CS, min HP, inform the team that you are not leaving the line.",
         "success": "The third wave is under the enemy tower. At least 4 options: go top, bot, jg help, harass enemy champion. You choose the strongest one.",
         "notes": "A slow push is ALWAYS followed by a bounce wave - it comes back to you. After a roam kill, immediately backtrack.",
         "how": [
-          "You finish CS ONLY with the last hit. You never auto-attack a minion's full HP.",
-          "In the range vs melee matchup - go EARLY into the enemy waves, set slow push BEFORE the waves meet under your tower.",
-          "Particularly valuable vs. mobile carry like Tristana/Yone - you zone, minions have different HP, max 1-2 CS from the enemy spell.",
-          "Before breaking the waves, zone the enemy mid so that he can't even catch exp.",
-          "After 3 stakes you have a level difference + ~15 CS advantage."
+          "On the first and second wave, finish CS mainly with the last hit. Don't hit the minion's full HP aimlessly, otherwise you will accidentally turn slow push into hard push.",
+          "If you have range vs melee, get out to the wave early and set up a minion advantage before the waves meet closer to your tower.",
+          "Make sure that there are slightly more of your minions and that their HP is uneven. Thanks to this, the enemy does not clear the entire wave with one spell.",
+          "When the third wave with the cannon goes to the enemy tower, push it harder and prepare an action: recall, ward, roam, dive or harass under the tower.",
+          "After a crash, use the pace window immediately. A slow push without a follow-up action is just a slow push, not a map advantage."
         ],
         "mistakes": [
           "Hard push instead of slow (you give up the tempo).",
@@ -515,58 +518,59 @@ const CONTENT_EN = {
         "whenNot": "Dragon/herald active, your team is attacking, enemy JG is close (it will destroy Freeze soon).",
         "success": "Enemy has to go 2/3 lane after CS, he exposes himself to gank, HP/mana full.",
         "how": [
-          "Trigger: bounce wave comes back to you (after an enemy slow push OR after a lane loss).",
-          "Hold 3+ caster minions more than enemy (2 = 50/50 unstable, 1 = freeze cracks).",
-          "Kill enemy minions AFTER your dying ones - you just level up the counter.",
-          "Refuel one enemy minion with your body so that it doesn't push yours away.",
-          "CS only the last hit - without hand harass (you ruin the balance)."
+          "Trigger: enemy slow push crashed under your tower or you lost a lane and the wave naturally returns to you.",
+          "Leave at least 3 more minions on the enemy side than on yours. At 1-2 minions the freeze cracks easily.",
+          "Finish off enemy minions only after your minions die. Your goal is to maintain the difference, not clear it quickly.",
+          "If the wave is going too fast under your tower, take a few minion hits on your character and drag him a bit in front of the tower.",
+          "Don't harass with auto attacks if it causes your wave to push. During a freeze, CS and wave balance are more important than random poke."
         ],
         "mistakes": [
           "Descending on a freeze (you lose exp/gold = the whole point of the freeza dies).",
-          "Freeze when there are objectives (you give up the map for safety).",
+          "Freeze when an important objective is active and your team needs prio.",
           "Holding only 1-2 more minions (freeze breaks).",
           "Beating from the hand during freeze (you ruin the balance)."
         ]
       }
     },
     "hard_push": {
-      "label": "Hard push - before canon/roam/objective",
+      "label": "Hard push - before cannon/roam/objective",
       "short": "You quickly clear the wave for an important purpose. DON'T overuse it - slow push is better.",
       "details": {
         "what": "Quickly push through a full wave. It gives immediate prio, allows you to join a jungler, punish a roam enemy or force it to be withdrawn. Slow push is almost always better.",
-        "when": "Before the recall, before joining the jg, when the enemy is roaming, immediately apply to the objective.",
+        "when": "Before recall, before joining jg, when enemy is roaming, immediate prio to objective.",
         "whenNot": "When you can build slow push. Hard push without a goal = bounce + loss of momentum.",
         "success": "The wave entered under the tower, you have a free window for recall/ward/roam/objective.",
         "how": [
-          "AA + spells to make the wave reach the enemy tower as quickly as possible.",
-          "Enemy disappears from mid without info → hard push wave, then check the map.",
-          "Before the recall, you clean before the cannon - you come back with items without losing CS.",
-          "After a kill/bashing - you are left to push the wave, if safely."
+          "Use auto attacks and spells on the entire wave to get it under the enemy tower as quickly as possible.",
+          "If the enemy mid disappears without information, push the wave first. Then the opponent loses CS or has to come back, and you have time to check the map.",
+          "Before recall, clean the wave before the cannon wave. You come back with items, and the cannon makes it difficult for your opponent to stop the wave.",
+          "After a kill or a heavy beating, stay only if you know where the enemy's jungler/support is. Hard push without info often ends with being cut off.",
+          "After a crash, choose a specific action: recall, ward, roam, help the jungler or prepare an objective."
         ],
         "mistakes": [
           "Hard push without a plan after the wave.",
-          "Leaving a wave halfway down the line before the recall.",
+          "Leaving a wave halfway down the line before recall.",
           "Push without vision when enemy jg/sup can cut off."
         ]
       }
     },
     "canon_recall": {
-      "label": "Recall ONLY on canon wave",
-      "short": "Hard wave push BEFORE canon → recall. Maximum tempo.",
+      "label": "Recall ONLY on cannon wave",
+      "short": "Hard wave push BEFORE cannon → recall. Maximum tempo.",
       "details": {
-        "what": "Hard push wave directly in front of canon minion → instant recall. Max tempo: the enemy won't stop the canon wave on its own (canon tanks the tower), so you come back with items and a full wave without losing CS.",
+        "what": "Hard push wave directly in front of cannon minion → instant recall. Max tempo: the enemy won't stop the cannon wave easily on its own, because the cannon tanks the tower, so you come back with items and a full wave without much loss of CS.",
         "when": "Every standard recall in early/mid when you have ~500-800 gold.",
         "whenNot": "Cheat recall by TP, after a kill (you stay on the enemy back), under dragon 3-4.",
         "success": "You come back with items and your wave pushes itself. No CS loss.",
         "how": [
-          "Identify canon - every third wave has 6 nobs + 1 armored.",
-          "Wave DIRECTLY BEFORE the canon - hard push with everything you have to the enemy tower.",
-          "Recall ON THIS WAVE (after the push, but before the Canon appears from the database).",
-          "After returning: canon wave is bouncing towards you or standing under your tower.",
-          "We ALWAYS move back before the 3-4 dragon (soul point) - the exception to the rule."
+          "Recognize a cannon wave by its additional cannon minion. In current timers, it appears on waves 4, 7, 10, 13, etc.",
+          "The wave directly BEFORE the cannon is to enter the enemy tower. Use anything that safely speeds up the push.",
+          "Recall click after the crash of this wave, before your cannon minion reaches the base to the lane.",
+          "When you return, the cannon wave is usually still alive, bouncing back to you, or standing closer to your side, so you lose less CS.",
+          "Exception: before dragon 3-4, soul or other key fight, you can roll back earlier, because objective setup is more important than perfect recall."
         ],
         "mistakes": [
-          "Recall ON canon wave – enemy easily stops canon manually.",
+          "Recall NA cannon wave - enemy easily stops the cannon manually.",
           "Recall in the middle of a regular wave - bounce when the enemy wants.",
           "Too late recall (200 gold) - you buy nothing."
         ]
@@ -576,8 +580,8 @@ const CONTENT_EN = {
       "label": "Warding - basic, deep, raptors, pinks",
       "short": "Raptors 1:15 or after 2-3 waves. control wards CLOSER, wards FURTHER.",
       "details": {
-        "what": "The vision is not to defend yourself, but to INFO about the enemy. Each ward has a purpose: under the objective, carry, action. control wards closer (control), wards deeper (info). Deeper = faster info.",
-        "when": "All the time. Under the objective, under carry, under action, under the porch.",
+        "what": "Vision is not only used to defend yourself, but mainly to gain information about the enemy. Each ward has a purpose: objective, carry protection, action preparation or early detection of pathing. You place control wards closer, regular wards deeper.",
+        "when": "All the time. Under objective, under carry, under action, under porch.",
         "whenNot": "wards 'in the cunt' without a plan - waste of gold.",
         "success": "You know where enemy jg is in >70% of the game. Actions informed by vision.",
         "how": [
@@ -600,18 +604,18 @@ const CONTENT_EN = {
       "label": "Trade patterns - exchange matchup",
       "short": "Each matchup has its own pattern. The more you know = YOU SUCK.",
       "details": {
-        "what": "Each matchup has an optimal skill exchange pattern. E.g. Fiora vs Aatrox: Aatrox holds E to Fiora's W (always dodge), Fiora holds Q to hit Aatrox and not eat the full Q. Ahri vs Tristana: Ahri poke, Tristana looks all-in.",
+        "what": "Each matchup has an optimal spell trade pattern. E.g. Fiora vs Aatrox: Aatrox holds E to Fiora's W (always dodge), Fiora holds Q to hit Aatrox and not eat the full Q. Ahri vs Tristana: Ahri poke, Tristana looks all-in.",
         "when": "Laning, every trade in the matchup.",
         "success": "You exchange HP favorably. You know when to all-in, when to poke, when to pass.",
         "how": [
           "Before playing, think: what enemy skills pose the greatest threat? What to hold?",
-          "Keep defensive key spells (E Aatrox, E Fiora) on the enemy's offensive keys.",
+          "Keep key defensive spells (E Aatrox, E Fiora) on the enemy's key offensive spells.",
           "Determine whether you are winning long trades (autos, small CDs) or are playing for burst.",
-          "Having a shield/heal automatically reduces the value of the enemy spell.",
+          "Having a shield/heal automatically reduces the enemy spell value.",
           "Learn 3 trade patterns for each matchup why you hit/miss."
         ],
         "mistakes": [
-          "Trade without a plan and enemy spells.",
+          "Trade without a plan on enemy spells.",
           "It will burn defensively when the enemy has no offensive one.",
           "All-in in a matchup who wins with a burst with a long trade champion."
         ]
@@ -635,12 +639,12 @@ const CONTENT_EN = {
         "mistakes": [
           "Tower beats the minion at full HP = little CS.",
           "Too early AA = caster minion dies from the tower.",
-          "Spell burning in a wave under the tower (push by accident)."
+          "Burning spells on a wave under the tower (push by accident)."
         ]
       }
     },
     "value_spells": {
-      "label": "Value spells - player vs player+wave",
+      "label": "Spell value - player vs player+wave",
       "short": "Spell at player + waves > spell at player. Bait bad enemy uses.",
       "details": {
         "what": "The same spell has different values: to hit the player, the player and the wave, the wave itself, or to force a bad enemy response. Use spells according to your wave and trade plan.",
@@ -648,8 +652,8 @@ const CONTENT_EN = {
         "success": "Spell gives a specific map or lane value.",
         "how": [
           "Before the cast: do I want to push, hit the player, maintain the wave or bait?",
-          "If you can, set the spell to hit the enemy in the first part of the wave.",
-          "Bait the enemy to use the spell in the wave (if the wave goes to you).",
+          "If you can, set the spell to hit the enemy and the first part of the wave.",
+          "Bait the enemy to use a spell in the wave (if the wave goes to you).",
           "Don't be defensive if the enemy can force a more important trade.",
           "Viktor's E example: 1) player only, 2) player+part of the wave, 3) player+whole wave.",
           "ADC: Ezreal Q in the enemy at an angle to also hit the waves. Miss enemy = value from the wave."
@@ -670,15 +674,15 @@ const CONTENT_EN = {
         "success": "You return to the line 10-15 seconds faster each time × 8-12 recalls = 1-2 min of profit.",
         "how": [
           "After the recall - go straight to the end of the fountain (closer to the exit).",
-          "Use dashes/MS spells BACK to lane, not just in combat.",
-          "Plate: leave some HP - the minions will finish him off (your gold gain).",
+          "Use Dash/MS spells BACK to lane, not just in combat.",
+          "Plate: leave some HP - the minions will kill him (your gold gain).",
           "When making a forest - drive the mobs towards the target (where you go next).",
           "Recall under the tower when it's safe (closer path).",
           "When playing after a push (moving top from mid) - finish the last CS closer to the 'exit'."
         ],
         "mistakes": [
           "He will stand in the middle of the fountain.",
-          "Holding dash 'for combat' (you won't use it before the recall anyway).",
+          "Holding dash 'for combat' (you won't use it before recall anyway).",
           "Plate for 0 HP solo (you give CS to minions)."
         ]
       }
@@ -694,7 +698,7 @@ const CONTENT_EN = {
           "BOUNTY: 0/5 you don't give gold → dying for a tower is profitable. Enemy 0/5 = not worth killing.",
           "PLATE: when you capture, the results depend on the number of players. Often the supp should leave = more profit for you.",
           "CATCH-UP XP: lower lvl than average = exp boost. Don't panic if you are level 1 behind.",
-          "LEVEL UP AFTER the spell: if you have a spell during the cast and a level appears, you upgrade → higher dmg for less mana.",
+          "LEVEL UP PO spell: if you have a spell during the cast and the level appears → you upgrade → higher dmg for less mana.",
           "The first wave has WEAK aggro - get out in front of it, you may be standing in front of the minions.",
           "BOUNTY wearing? Enemy focuses you. Bounty on enemy? Aim at him."
         ],
@@ -732,11 +736,11 @@ const CONTENT_EN = {
       "details": {
         "what": "Every mana/HP/ward not used = loss of value. Rewind in 5 seconds and they will regenerate = wave clear to max. Dive: tower hit you can take if HP allows. Holding 2 stacks of wards = loss of info.",
         "when": "All the time. Awareness that resources are renewed.",
-        "success": "You return to the base after you have really used everything.",
+        "success": "You come back to base after you have really used everything.",
         "how": [
           "You know that you revert → wave clear to max (unused mana = loss).",
           "You reverse → trade HP, there is no point in returning with full HP.",
-          "Dive: even without skills you can hold tower hit if HP allows.",
+          "Dive: even without spells you can hold tower hit if HP allows.",
           "Mega backwards = don't buy the pink (you won't be able to maintain it anyway).",
           "The final fight is coming soon = buy something even sub-optimal rather than hold gold.",
           "ALWAYS use pots in combat (they have CD).",
@@ -752,28 +756,28 @@ const CONTENT_EN = {
     },
     "chain_cc": {
       "label": "Chain CC - extending stillness",
-      "short": "Hard CC does NOT stack! CC when the enemy has spele.",
+      "short": "Hard CC does NOT stack! CC when enemy MA spells.",
       "details": {
-        "what": "Chain CC is a series of CC skills that extend the time during which the player cannot do anything. MOST hard CC DOES NOT STACK - it overwrites. CC when the enemy has spele (mage without skills = defenseless = CC worth less).",
+        "what": "Chain CC is a series of CC spells that extend the time during which the player cannot do anything. MOST hard CC DOES NOT STACK - it overwrites. CC when the enemy has spells (mage without spells = defenseless = CC worth less).",
         "when": "2v2+ fights, ganks, all-ins, teamfights.",
         "success": "Enemy didn't play anything for 3+ seconds → easy kill.",
         "how": [
           "First CC → wait until it ends → SECOND CC (chain).",
           "Do not apply 2 hard CCs at the same time - the second one overwrites the first one.",
           "Soft CC (slow) stacks with hard CC - you can cast simultaneously.",
-          "Optimal: CC when the enemy mage has spels to use.",
-          "No skills - defenseless mage = CC worth less (you kill him anyway)."
+          "Optimal: CC when enemy mage has spells to use.",
+          "No spells - defenseless mage = CC worth less (you kill him anyway)."
         ],
         "mistakes": [
           "Two hard CC simultaneously (overlap).",
-          "CC on ADC without skills (waste).",
+          "CC on ADC without spells (waste).",
           "No follow-up after CC."
         ]
       }
     },
     "game_settings": {
       "label": "Game settings (one-time use)",
-      "short": "Smartcasts, F-key, skill sounds, small HUD, AA off.",
+      "short": "Smartcasts, F-key, spell sounds, small HUD, AA off.",
       "details": {
         "what": "The settings are intended to remove delays and improve readability. Not the goal itself, but bad settings block the mechanics and map awareness.",
         "when": "Pre-session setup. Correction when something really makes the game difficult.",
@@ -782,8 +786,8 @@ const CONTENT_EN = {
           "Smartcasts WITHOUT indicator as standard.",
           "F1-F4 allies, space on each other.",
           "Champion target only as TOGGLE (on/off), button not held.",
-          "Character graphics + skills MAX (readability), terrain MIN (less distraction).",
-          "Ski sounds ON, music OFF.",
+          "Character art + spells MAX (readability), terrain MIN (less distraction).",
+          "Spell sounds ON, music OFF.",
           "HUD as small as possible but comfortable. Auto-attacks OFF.",
           "Attack-move bind to A (not shift)."
         ],
@@ -802,16 +806,16 @@ const CONTENT_EN = {
         "when": "Every decision before objective, recall, roam.",
         "success": "You know which line you have NOW and you use it to play.",
         "how": [
-          "Push the wave first = enemy loses CS under the tower.",
-          "Scheme: wave → objective → wave → objective.",
-          "Push mid+bot → we go down to the dragon. Enemy captures a dragon or waves.",
-          "Prio from 2 lines > prio from 1 (e.g. top + mid > mid only).",
-          "Prio herald = often bot move: prio from the bot → the support comes down and supports."
+          "Push the most important wave first. The opponent must then choose: collect minions and arrive late on the map, or ignore the wave and lose gold/XP.",
+          "Only after the wave do you play the next step: ward, entering the jungle, roaming, objective or setting your position before the fight.",
+          "Example: push mid + bot in front of the dragon. Enemy has to give up the dragon or give up the waves, so the 5v5 fight itself is no longer equal.",
+          "Prio from two lines is stronger than prio from one line because the opponent has more places to repair before entering the action.",
+          "Before each objective, ask: which waves must be pushed for the opponent to be reactive?"
         ],
         "mistakes": [
           "Pushing each wave aimlessly.",
           "Firing a wave and an objective at the same time.",
-          "Lack of awareness prio = you lose objectives without knowing that you could have taken them."
+          "Lack of awareness prior = you lose the objectives without knowing that you could have prepared them."
         ]
       }
     },
@@ -823,11 +827,11 @@ const CONTENT_EN = {
         "when": "Every decision: how quickly can you do something before the enemy?",
         "success": "First on every action. Enemy reacts to you, not the other way around.",
         "how": [
-          "Recall before the enemy = you first on the map = tempo.",
-          "Team tempo: whole team ready, enemy resets = window.",
-          "Follow the enemy in fog (where is it, regen, access) = imaginable picture of the pace.",
-          "Quick use of time - the tempo is lost if you do nothing.",
-          "tempo forward for a moment = often enough to reach your destination."
+          "Recall before the enemy gives you the tempo, because you leave the base first and you can reach the wave, vision or objective earlier.",
+          "Team tempo is created when several of your players are already on the map and the enemy is just resetting or leaving the base.",
+          "Track enemy in fog: count recall, buy/regen time and path from base. Without this you don't know if you have a 3, 8 or 15 second window.",
+          "Use the momentum immediately for a specific goal: set a vision, capture a river, start an objective, go for camps or push another wave.",
+          "If you just stand still at the tempo, the time advantage disappears. tempo is a window, not a fixed state."
         ],
         "mistakes": [
           "Wasting tempo (I have tempo but I'm standing still).",
@@ -844,11 +848,11 @@ const CONTENT_EN = {
         "when": "When the enemy has more pace than you. Every fight 'who comes first'.",
         "success": "You don't throw the answer to the wrong position. You're taking something somewhere else.",
         "how": [
-          "Even tempo / small minus = CROSS-MAP PLAY (taking something on the other side of the map).",
-          "Enemy takes drake → you take herald/tower top.",
-          "Way back in pace → matchuj enemy: defense + taking control again.",
-          "You enter slowly, control wards, beat the enemy, wait for a mistake.",
-          "Cheese only if both schemes fail."
+          "When the pace difference is small, look for cross-map: enemy plays drake, you take Herald, top tower or deep vision on the other side.",
+          "Before you choose cross-map, check if you can start your action before the enemy finishes his. A late cross-map is just another loss.",
+          "When you are far behind, match: return to the defended area, enter together, place control wards and regain the area in small steps.",
+          "Don't facecheck an area that the enemy has already occupied. First the vision closer to you, then the red trinket, then the next step.",
+          "Leave cheese as a last resort when cross-map and calmly regaining control no longer provide real value."
         ],
         "mistakes": [
           "Forcing the fight against the enemy's strong tempo (throw).",
@@ -865,12 +869,12 @@ const CONTENT_EN = {
         "when": "When the alternative gives more than maintaining the prio.",
         "success": "A conscious choice to give up the prio for greater profit elsewhere.",
         "how": [
-          "Weak side (lack of team, vision) = give it back.",
-          "Freeze without objects = pressure but it forces you to the line, no prio but the enemy loses CS.",
-          "Don't push the wave right away - force the enemy to make a decision (dragon in 10s).",
-          "Staying longer will give item spike (Rabadon, IE) = it's worth giving up the tempo.",
-          "Closer to the objective than to the enemy = even with a backward pace you will make it.",
-          "After Baron/Elder/Soul = forced long push, tempo is yours either way."
+          "On the weak side, without vision and team cover, give the prio instead of dying for the wave. Light devotion is better than death.",
+          "Freeze without an active objective may be better than push, because it chains the opponent to the lane and takes away his CS/XP.",
+          "Before the objective, it is sometimes worth delaying the push so that the wave crashes closer to the spawn and forces the enemy to make a difficult decision.",
+          "If he stays longer he gives a large item spike, e.g. Rabadon or IE, you can consciously trade a few seconds of pace for strength in the next fight.",
+          "If you are closer to the action than the enemy, the global tempo may be worse, but locally you will still be first.",
+          "After Baron, Elder or soul, the tempo often requires a long push. Then you don't have to fight for every second of recall like before."
         ],
         "mistakes": [
           "Fight for prio at all costs.",
@@ -902,20 +906,20 @@ const CONTENT_EN = {
       }
     },
     "objective_from_something": {
-      "label": "objectives FROM SOMETHING - 5 factors",
+      "label": "Objectives FROM SOMETHING - 5 factors",
       "short": "Prio + Tempo + Strength + Win + Rotations. Never 'because it's cool'.",
       "details": {
-        "what": "You take each objective FROM SOMETHING - never 'because it's cool' or 'because it spawned'. 5 factors: prio, tempo, strength in the fight (fed), winning the fight, rotation of a strong hero.",
+        "what": "You take each objective FROM SOMETHING - never 'because it's cool' or 'because it's cool'. 5 factors: prio, tempo, strength in the fight, winning the fight and rotation of a strong champion.",
         "when": "When you have at least 2 factors. 1 = risk. 0 = throw.",
         "whenNot": "Enemy has prio + tempo + vision = give back and play cross-map.",
         "success": "Obj taken without loss, or the enemy gave something equivalent in exchange for obj.",
         "how": [
-          "Early diagram: WAVE → VISION → WAVE → VOLUME.",
-          "With prio mid+bot: push both lines → we go down 4-5 → enemy gives back waves or volume.",
-          "Z tempo: enemy outside the map (killed, recall) → your window.",
-          "From winning the fight: enemy 2+ down → obj for free.",
-          "With rotation: the fed champion rotates → the enemy must let go.",
-          "Vision under objective: control wards closer, wards deeper."
+          "Prio, count 5 factors: whether we have prio, tempo, strength in 5v5, a recently won fight or the rotation of a strong champion.",
+          "Use the pattern from the course: wave → vision → wave → objective. Prio push the waves, then set the terrain, then refresh the prio and then start the target.",
+          "If you have prio mid + bot, push both lines and get 4-5 people down. Enemy must then return the waves or return the objective.",
+          "If you have time because the enemy is dead, after a recall or just leaving the base, make an objective in this window before he returns to the map.",
+          "After winning the fight, check the team's death timers and HP/mana. Enemy 2+ down usually gives you an objective, but only if you manage to finish it.",
+          "Vision under objective: control wards closer to each other and in places to be defended, regular wards deeper in enemy entrances."
         ],
         "mistakes": [
           "Obj without vision because 'spawned'.",
@@ -927,19 +931,19 @@ const CONTENT_EN = {
     },
     "dragon_protocol": {
       "label": "Dragons - vision, principle, scheme",
-      "short": "Closer to the control wards base, further to the wards. Push mid+bot → dragon.",
+      "short": "Closer to base control wards, further wards. Push mid+bot → dragon.",
       "details": {
         "what": "You take the dragon FROM SOMETHING. Vision closer to us (control wards), deeper ordinary wards. Having prio mid + bot - we go down → the enemy gives back the dragon or the waves.",
         "when": "Every dragon. Especially 3-4 (soul point).",
         "whenNot": "Enemy has 5 under the dragon with full HP + we lose the fight → give it to another target.",
         "success": "Dragon taken without loss of combat/waves.",
         "how": [
-          "Vision: control wards closer to our base (on the river), we are clearing enemy wards. Deeper, regular wards.",
-          "Push mid and bot → we go down → the enemy must choose: give up the dragon or the waves (thanks prio).",
-          "Fast pace = no vision needed.",
-          "Prio of all, from top and bot/mid = when top comes down, 2 enemies have to defend.",
-          "Stronger in battle = don't give up the prio, take the dragon.",
-          "Scheme: rotations → taking prio → vision → prio → dragon."
+          "60-90 seconds before the dragon, ask if you want to play for it. If so, schedule a reset to come back with items and wards.",
+          "First push mid and bot. When these waves come in, the enemy must choose between the minions or entering the river.",
+          "Place control wards closer to your side of the river, where you can defend them. Place regular wards deeper to see enemy entrances earlier.",
+          "If you have a high tempo because the enemy is off the map, you can start the dragon faster, but still check if you can finish it before the enemy enters.",
+          "If you are losing a 5v5 fight and the enemy is placed first, give up the dragon and immediately play cross-map: Herald, tower, campy or deep vision on the other side.",
+          "Full pattern: rotation → prio → vision → prio refresh → dragon. Don't start with the dragon itself."
         ],
         "mistakes": [
           "A dragon without vision.",
@@ -957,11 +961,11 @@ const CONTENT_EN = {
         "whenNot": "Don't play the Herald solo for gold. Wait for the window with the team.",
         "success": "Tower fell, map open to this side, deep wards on enemy buffs.",
         "how": [
-          "Mobile mid (Akali, Talon, Yasuo) → herald on BOT tower (mid returns from TP).",
-          "Immobile mid (Anivia, Veigar) → herald on MID tower (short paths).",
-          "TOP tower with herald → NO (you can lose top by destroying your T1 = swap).",
-          "Second herald - low value (no plating). Goes to T2.",
-          "Prio herald = often with bot mova (prio + support goes down)."
+          "Before releasing the Herald, ask which T1 will open the map the most. Mid T1 usually gives the most because it shortens transitions and facilitates vision.",
+          "If the mid enemy is immobile and difficult to move to the side, the Herald in mid can break the most important layer of the map.",
+          "If your mid is mobile and the tower bot is viable, Herald on the bot can open the bottom of the map and later dragons.",
+          "Don't put Herald on top just because you took him there. Destroying a T1 top can ruin a freeze, dive setup or a favorable matchup for your top.",
+          "The second Herald without plates has a lower value. Use it for specific T2/T3 or map pressure, not as random gold."
         ],
         "mistakes": [
           "Herald 'anywhere' without a plan.",
@@ -979,11 +983,11 @@ const CONTENT_EN = {
         "whenNot": "No info where enemy mid/jg, full HP enemy 5 = throw.",
         "success": "Baron + push = T2/T3/inhibitor. Or gold in carry → next fight.",
         "how": [
-          "Wards like dragons: control wards closer, wards deeper.",
-          "We take prio from mid/bot, pressure point, chain the enemy to the line.",
-          "Baron buff: 1 line with buff = enemy will not defend when pushed.",
-          "Empower runs out = push to T2/T3 leaves something anyway.",
-          "Use it for: finishing the game or carrying gold (losing the fight for us)."
+          "In front of the Baron, push the mid and side so that the enemy has to repair the waves before he enters the river.",
+          "Place control wards closer to the entrances you can defend, and regular wards deeper in the jungler and support paths.",
+          "Don't start Baron if you don't know where the enemy jungler is or if the enemy has full HP and can enter with five people.",
+          "After Baron, play the same macro as without Baron: synchronize the waves, set 1-3-1 or 4-1 and push where the enemy must choose.",
+          "Baron's goal is to finish the game, T2/T3/inhibitors or get gold in carry before the next fight. A buff without a push is wasted."
         ],
         "mistakes": [
           "Pushing the baron without vision.",
@@ -1015,7 +1019,7 @@ const CONTENT_EN = {
     },
     "splitpush_structures": {
       "label": "4-1 setup and T2 push",
-      "short": "Toplaner sajt, JG+supp between, carry mid. Enemy 5 mid = supp+JG to top = 3v1.",
+      "short": "Toplaner side, JG+supp between, carry mid. Enemy 5 mid = supp+JG to top = 3v1.",
       "details": {
         "what": "4-1 is a 2-line pressure structure. It does NOT literally mean 4 people on the wave - it's space control, vision control, synchronization. 1-3-1 requires a greater advantage.",
         "when": "After T1, when playing for T2.",
@@ -1023,11 +1027,11 @@ const CONTENT_EN = {
         "success": "Enemy loses tower/obj on one of the lanes.",
         "how": [
           "Vision in enemy JG (pinks + red objective).",
-          "Toplaner on side, JG+supp between mid and side, carry mid.",
+          "Toplaner on side lane, JG+supp between mid and side lane, carry mid.",
           "Enemy 5 mid → supp+JG are on top → tower 3v1 or kill.",
           "Enemy 3 top + 2 mid → supp+JG to mid → tower for free.",
           "Wave synchronization: either 2 waves at a time, or stack one and go 5.",
-          "1-3-1: only with a big advantage (carry on both sides)."
+          "1-3-1: only with a large advantage (carry on both side lanes)."
         ],
         "mistakes": [
           "5 people in one line with no pace.",
@@ -1040,7 +1044,7 @@ const CONTENT_EN = {
       "label": "T3, inhibitors, nexus",
       "short": "2-3 inhibs, not one. 2 lines + baron = 2 inhib. Best: opposite objective.",
       "details": {
-        "what": "Standard ending pattern. We don't take 1 inhib (enemy will defend itself), we take 2-3. Most valuable inhib: opposite NEXT objective (not mid).",
+        "what": "Standard ending pattern. We don't take 1 inhib (enemy will defend itself), we take 2-3. Most valuable inhib: opposite the NEXT objective (not mid).",
         "when": "When you have the advantage. After winning the fight/baron/elder.",
         "whenNot": "Without info where enemy = you can throw with nexus.",
         "success": "Inhib is the only one = the enemy will not defend 1 line of super minions. 2-3 = win.",
@@ -1049,7 +1053,7 @@ const CONTENT_EN = {
           "2 lines + baron = no need for 3 inhib.",
           "After winning the fight = one line, game over.",
           "Enemy doesn't want to leave the base / has a good push = wait for the souls/baron and end it.",
-          "Best inhib: OPPOSITE to another objective (not mid - with mid close to everything).",
+          "Best inhib: OPPOSITE the next objective (not mid - from mid it's close to everything).",
           "Inhib → super minions → push → nexus turrets → nexus."
         ],
         "mistakes": [
@@ -1060,20 +1064,20 @@ const CONTENT_EN = {
       }
     },
     "side_resources": {
-      "label": "Carry mindset - collect the side lane",
+      "label": "Carry mindset - collect side lane",
       "short": "'The money is lying on the street.' You don't stand in 5 mid. Collect.",
       "details": {
-        "what": "Mid as a win-con MUST collect the side lane when the team is rotting or holding mid. Standing in 5 = team behind you, you collect nothing. Fear that the team will fail = you will fail too.",
+        "what": "Mid as a win-con MUST collect side lane when the team is rotting or holding mid. Standing in 5 = team behind you, you collect nothing. The fear that the team will collapse often ends with you also having no items and not being able to win the next fight.",
         "when": "Mid game from the first T1.",
         "whenNot": "The team is rotting and needs you to defend the Baron.",
         "success": "After side farming: leveled, new item, ready to change the fight.",
         "notes": "Your words: you are a source of damage. You have no right to flip a fight if you haven't collected the resources.",
         "how": [
-          "After destroying T1 mid → side lane farm (top or bot).",
-          "You don't stand in 5 mid and flip the fight.",
-          "TP ready to join the team if a fight starts.",
-          "Standing in 5 = team comp behind you, you have to be win-con.",
-          "Carry mindset: even if the team collapses - you make the difference with your levels/items."
+          "After destroying T1 mid, take over the side lane if your character can safely collect the wave and return to the team.",
+          "Before you go to the side, check TP, summoner spells, enemy position and whether your team is starting a Baron/dragon right away.",
+          "Collect waves that would die without value anyway. This is free gold/XP that turns you into a real win condition.",
+          "Don't stand idly by as the fifth person in mid if there is no immediate fight or objective.",
+          "After collecting the side lane, go back to timing: before the objective, after a wave crash or when the team needs your damage."
         ],
         "mistakes": [
           "He will stand with the team 'because we have to be together'.",
@@ -1084,17 +1088,17 @@ const CONTENT_EN = {
     },
     "side_lane_uses": {
       "label": "Side lane - 3 ways to play",
-      "short": "1) Map to side, 2) Side to map, 3) Splitpush (2 sources of pressure).",
+      "short": "1) Map to side lane, 2) Side to map, 3) Splitpush (2 sources of pressure).",
       "details": {
-        "what": "Three ways of playing side lane: (1) the map plays to the side, (2) the side plays to the map, (3) classic split push - two sources of pressure at the same time.",
+        "what": "Three ways of playing side lane: (1) map plays to side lane, (2) side plays to map, (3) classic split push - two sources of pressure at the same time.",
         "when": "After T1, mid-late game.",
         "success": "Enemy loses tower/obj in one lane.",
         "how": [
-          "1) SIDE MAP: the side player creates pressure (wave, not 1v1 kill). The team takes prio mid + jg control so that the splitpusher can push.",
-          "2) SIDE TO MAP: creating a prio on the side → going down to the team in the mid.",
-          "3) SPLITPUSH (2 sources): our team makes a baron. We force the enemy to choose: side or baron. It has to happen AT ONCE.",
-          "Splitpusher must force AT LEAST 2 enemies to dismount.",
-          "Synchronization: waves enter at once or one after the other."
+          "Side lane map: The side laner creates wave pressure and the team takes prio mid and jungle control so he can push without getting caught.",
+          "Side to the map: push the side first, then move to the mid/team in the window when the enemy needs to respond to the wave.",
+          "Split push: side and Baron/dragon work at the same time. Enemy must choose whether to defend the side lane or contest the main objective.",
+          "Splitpusher must force the reaction of at least 2 enemies or pose a real threat to the structure. Just standing far away in the side lane is not pressure.",
+          "Synchronization: waves enter at once or one after the other so that the enemy does not have time to respond to everything."
         ],
         "mistakes": [
           "Splitpush without vision in enemy jg.",
@@ -1111,13 +1115,12 @@ const CONTENT_EN = {
         "when": "Enemy has a split pusher. Midgame.",
         "success": "Splitpusher does not push (no wave) or loses wave.",
         "how": [
-          "Taking the mid prio → going into the fog to the side lane.",
-          "You always want to REMOVE the wave from the splitpusher.",
-          "'No wave, no problem'.",
-          "Matchup is losing 1v1? Swap lines (unless everyone wins).",
-          "Playing around the vision (taking it away) forces you to go back.",
-          "Strong side on the OTHER side of the map - splitpusher will not split.",
-          "Cutting off the enemy on the side: after taking the mid, we go down = enemy without returning to the team."
+          "Prio, take the mid-prio so that the descent to the side is not visible and late.",
+          "Your first target is the wave split pusher. Without a wave, he doesn't hit the tower and has to wait for the next one.",
+          "If you are losing 1v1, don't try an honorable duel. Swap the matchup or clear the wave with the support/jungler.",
+          "Receive a vision in the jungle next to the side lane. A splitpusher without information must play slower or step back from pressure.",
+          "Play strong side on the other side of the map if the splitpusher cannot defend the team and push the side lane at the same time.",
+          "If the enemy is too deep on the side, push the mid first, then go to the fog and cut off his way back."
         ],
         "mistakes": [
           "4v4 fight instead of clear the wave.",
@@ -1134,11 +1137,11 @@ const CONTENT_EN = {
         "when": "Mid/late, objective setup, splitpush, defense.",
         "success": "Movements consistent with the waves and the team. Enemy responds to pressure.",
         "how": [
-          "Synchronize the waves: they come in at once or one after the other.",
-          "Push the timing where the enemy will not respond to the wave and the dragon at the same time.",
-          "Delay the push if you don't have enough gold to spike and you'll still make it.",
-          "jungler wants action → the wave creates a pressure point elsewhere.",
-          "Line after allies: don't be too deep, not too far away (off-team)."
+          "Set the waves to come in all at once or one after the other. Enemy then has several problems at the same time.",
+          "Before the objective, crash the wave closer to the spawn timer, not a minute earlier. Pushing too early gives the enemy time to clear.",
+          "If you lack gold for a big spike and still make it, delay the reset/push to enter the fight with the item.",
+          "When the jungler wants action, the wave should create a pressure point elsewhere. The mere presence of a jungler without a wave often does not force anything.",
+          "Watch your distance from the team: too deep you die alone, too far away you don't influence the play."
         ],
         "mistakes": [
           "A lone push without a line of allies.",
@@ -1193,7 +1196,7 @@ const CONTENT_EN = {
     },
     "cheese_plays": {
       "label": "Cheese - ONLY when we lose",
-      "short": "Cheese only doesn't work as a macro. Fog play, deduction, incorrect moves.",
+      "short": "Cheese only doesn't work as a macro. Fog play, deduction, incorrect plays.",
       "details": {
         "what": "Cheese = playing incorrectly, unexpectedly. Only when we lose. If we win = the macro scheme will win. Cheese is a last resort.",
         "when": "Only when we lose and the scheme has failed. Last resort.",
@@ -1281,7 +1284,7 @@ const CONTENT_EN = {
       "label": "Timers - waves, levels, objectives",
       "short": "Cannon every 3. 2nd level = 7CS solo, 3rd level = 14. Dragon/Herald in the head.",
       "details": {
-        "what": "Waves are on specific timers. Levels, objectives, recall windows - everything can be predicted. Think 2 minutes before objective: are we playing? do we give back? what in return?",
+        "what": "Waves are on specific timers. Levels, objectives and recall windows can be predicted. Think 2 minutes before the objective: do we play, give back, or do we cross-map?",
         "when": "The whole game. Timer awareness.",
         "success": "You know before the wave whether you are playing under the level spike, reset, obj, freeze.",
         "how": [
@@ -1309,7 +1312,7 @@ const CONTENT_EN = {
         "when": "Each game in a new matchup, each 'uncertain' 1v1 fight.",
         "success": "After 5-10 games with a champion you feel the limits without thinking.",
         "how": [
-          "We have similar levels, items, no negative skill interactions (In Yasuo on Veigar), runes without diff, summoners have no effect - it's WORTH testing.",
+          "We have similar levels, items, no negative spell interactions (W Yasuo on Veigar), runes without diff, summoners have no effect - it's WORTH testing.",
           "After testing (3 games of the same matchup) = you feel the limits.",
           "To improve it: 2-3 champions and 1 line and stick to them.",
           "Every game is different - you have to FEEL the limits.",
@@ -1388,12 +1391,12 @@ const CONTENT_EN = {
       "label": "Smartcast dash is back",
       "short": "Every dash when CD up, on the way to the line.",
       "details": {
-        "what": "You ALWAYS use dash/MS spels when returning to lane, not just in combat. You come back 10-15 seconds faster × number of recalls = big savings.",
+        "what": "You ALWAYS use dash/MS spells when returning to lane, not only in combat. You come back 10-15 seconds faster × number of recalls = big savings.",
         "when": "Return to the line, between actions in jg, each movement >5s.",
         "success": "You come back faster, you have more CS, you are available to the team more often.",
         "how": [
           "Smartcasts without a pointer.",
-          "First dash right after leaving the base.",
+          "First dash right after leaving base.",
           "Each subsequent dash when the CD regenerates during the return.",
           "Holding spells 'for fight' = loss of 10s on recall."
         ],
@@ -1429,9 +1432,9 @@ const CONTENT_EN = {
         "when": "Every recall.",
         "success": "Auto-Habit - You're never waiting inside.",
         "how": [
-          "After arriving at the base → click on the end of the fountain (closest to the exit).",
+          "After appearing in the base → click on the end of the fountain (closest to the exit).",
           "The store opens with P regardless of the item.",
-          "Leaving the base = you are already prepared."
+          "Exit base = you are already prepared."
         ],
         "mistakes": [
           "Buying items in the fountain center."
@@ -1445,7 +1448,7 @@ const CONTENT_EN = {
         "what": "Recall under a tower is safer than in a bush when no one is in sight. Tower gives you a shield.",
         "when": "Standard recall when no one is in sight.",
         "whenNot": "Enemy mid disappeared recently - the bush is safer.",
-        "success": "Shorter way back, no facecheck deaths.",
+        "success": "Shorter way back, no facecheck death.",
         "how": [
           "Check the minimap (last 3s - where are all the enemies).",
           "TAB - check if enemy mid is visible.",
@@ -1760,7 +1763,7 @@ const CONTENT_EN = {
         "how": [
           "After the game you do NOT ask 'did it work?' You ask: 'Did I have enough information?'",
           "You didn't see enemy jg and gave up the trade - it's a good decision even if the replay shows that jg was top.",
-          "Decision vs. execution: a bad decision may work (enemy made a mistake), a good one may not work (you miss skill).",
+          "Decision vs execution: a bad decision may work (enemy made a mistake), a good one may not work (you miss spell).",
           "VOD review checklist: (1) what info did I have? (2) what COULD I infer? (3) statistically good?",
           "Don't justify a bad process with a good result."
         ],
@@ -1837,7 +1840,7 @@ const CONTENT_EN = {
     },
     "early_recall_tempo": {
       "label": "Earlier recall = tempo",
-      "short": "Don't stand next to an obvious target that will fail without you. Recall.",
+      "short": "Don't stand next to an obvious target that will fail without you. Make a recall.",
       "details": {
         "what": "Weaker players stand too long at the volume/tower which will fall anyway. They're losing momentum. Earlier recall = faster on the map = first on the next move.",
         "when": "Every moment '2 more AA' / '1 more ward'.",
@@ -1858,14 +1861,14 @@ const CONTENT_EN = {
     },
     "tempo_to_place": {
       "label": "tempo for a SPECIFIC place",
-      "short": "tempo is not about who gets off the base first. It's 'first come first WHERE it's happening'.",
+      "short": "tempo is not about who's on base first. It's 'first come first WHERE it's happening'.",
       "details": {
-        "what": "tempo does not always mean 'who left the base first'. What also matters is who will be first in a given place. A team can leave 5s later, but be closer to obj = there first.",
+        "what": "tempo doesn't always mean 'who's out of base first'. What also matters is who will be first in a given place. A team can leave 5s later, but be closer to obj = there first.",
         "when": "Every 'who goes first?' decision. Cross-map vs match.",
-        "success": "You choose targets where you go first, regardless of who left the base.",
+        "success": "You choose targets where you go first, regardless of who came off the base.",
         "how": [
           "When deciding: 'who will be first in PLACE X' (dragon/baron/wave/obj).",
-          "Your base closer to the dragon? You can tempo yourself even with a 5s delayed recall.",
+          "Is your base closer to the dragon? You can keep tempo with even 5s delayed recall.",
           "Enemy came out 8 seconds before you, but you have TP top → you are the first on the bot.",
           "Cross-map: collect places where YOU have the tempo, give up those where the enemy.",
           "Wave: If both teams hit the same mid wave, a few seconds don't matter."
@@ -1885,7 +1888,7 @@ const CONTENT_EN = {
         "when": "Any movement that uses tempo. Roam, invade, deep ward.",
         "success": "Your predictions are 70%+ accurate. Enemy appears where you expected.",
         "how": [
-          "Enemy died → death timer + reaching the base = full tempo for you.",
+          "Enemy died → death timer + base recovery = full tempo for you.",
           "Enemy started recall (disappeared safely): 8s recall + ~5s regen + access.",
           "Mentally imagine the range growing every second from where it disappeared.",
           "The more players you see = fewer opportunities for the invisible ones.",
@@ -1893,7 +1896,7 @@ const CONTENT_EN = {
         ],
         "mistakes": [
           "Assumption 'Enemy has withdrawn so he's gone for 30 seconds'.",
-          "No time regen count after recall.",
+          "No counting of regen time after recall.",
           "Trying to do 10 seconds of action in a 3 second window."
         ]
       }
@@ -1904,7 +1907,7 @@ const CONTENT_EN = {
       "details": {
         "what": "The map opens in layers. First T1 → second T1 (opens the map STRONGLY) → only then T2. Tunneling T2 after one T1 wastes momentum. T2 only valuable when free.",
         "when": "After destroying the first T1. The decision 'what next?'",
-        "success": "You take the second T1 → wide open map → dragons/baron/natural site.",
+        "success": "You take the second T1 → wide open map → dragons/baron/side natural.",
         "how": [
           "After T1, ask: 'which next T1 is real?'",
           "Mid T1 standing? Mid T1 is the most valuable (opens the map the most).",
@@ -1976,7 +1979,7 @@ const CONTENT_EN = {
           "The vision, recall and camp should also fit the team's 'line'."
         ],
         "mistakes": [
-          "Invade jg when the rest are at the base.",
+          "Invade jg while the rest are at the pool.",
           "Warding the side on which the team is NOT playing.",
           "Push mid when the team is rotting in defense."
         ]
@@ -1994,7 +1997,7 @@ const CONTENT_EN = {
           "Wave opposite enemy = enemy waits 30-40s for the next one → has a window.",
           "Enemy is already beating T2 on the third line - answer first, then 4-1.",
           "2-for-1 trade (we inhib, they T2) often acceptable.",
-          "Shift to does NOT have to be clean - you can recall and go back to another line."
+          "Shift to does NOT have to be clean - you can do a recall and go back to another line."
         ],
         "mistakes": [
           "4-1 started without preparing the third line.",
@@ -2012,7 +2015,7 @@ const CONTENT_EN = {
         "success": "Enemy loses campy/wave for a few minutes. Your team's level/item is going up.",
         "how": [
           "Push all lines deep + deep wards in enemy jg + taking camps.",
-          "Enemy in the base/own half = loses camps + reactive.",
+          "Enemy in base/own half = loses campy + reactive.",
           "DO NOT force risky T2/dragon. Hold the state.",
           "Wait for Baron / soul / enemy error.",
           "After winning the fight, you would already have T2/inhib. After losing, the enemy must push back - the value of the lost fight is lower."
@@ -2035,7 +2038,7 @@ const CONTENT_EN = {
         "how": [
           "Before each objective: count the factors on your fingers.",
           "Prio: mid+bot pushes? Mid+top?",
-          "Tempo: enemy in the base / outside the map / death timer?",
+          "Tempo: enemy in base / outside the map / death timer?",
           "Strength: team comp wins 5v5?",
           "Battle won: 2+ enemy down? Almost Free objective.",
           "Rotation: fed top goes under the dragon?"
@@ -2053,7 +2056,7 @@ const CONTENT_EN = {
       "details": {
         "what": "The purest objective is made with TWO pressure points at the same time. Mid+bot = dragon. Mid+top = Baron/Herald. Single prio without second factor = incomplete control.",
         "when": "Preparing the dragon, Herald, Baron.",
-        "success": "Enemy cannot return obj without losing waves. objective almost free.",
+        "success": "Enemy cannot return obj without losing several waves. objective almost free.",
         "how": [
           "Dragon: push mid + push bot → enemy mid/bot attached → you go down to the river.",
           "Baron: push mid + push top → enemy mid/top attached.",
@@ -2101,7 +2104,7 @@ const CONTENT_EN = {
           "Item spike: carry needs 500g for IE → you play against his farm.",
           "Shutdown: enemy 5/0 → the team needs to stop him; obj = his death.",
           "Fight: stronger 5v5 → the dragon setup is ONLY for the enemy to enter the river.",
-          "Catching a fed enemy in jg/recall.",
+          "Catching a fed enemy in jg / on recall.",
           "Small goal: maintain vision in enemy jg for 3 minutes."
         ],
         "mistakes": [
@@ -2355,7 +2358,7 @@ const CONTENT_EN = {
         "success": "You catch chases that were previously running away. Your CC goes because you didn't push yourself out of the range.",
         "how": [
           "TF chasing W for 3s until card is ready: no AA, run after him.",
-          "With cd on CC spell: don't lock yourself in AA. Run up, use CC, then dmg.",
+          "With CC spell cooldown: don't lock into AA. Run up, use CC, then dmg.",
           "Question before AA: 'Will this AA not push me out of range to a more important spell in 2s?'",
           "Exception: AA is finishing blow OR resets cd (Ezreal P, Vayne Q, Yasuo)."
         ],
@@ -2438,7 +2441,7 @@ const CONTENT_EN = {
         "when": "The whole game. Especially quiet moments.",
         "success": "The fight starts, you are already at a high pace - no warm-up.",
         "how": [
-          "Leaving the database: quick, short clicks - not one click 'I'm going to the top'.",
+          "Leaving base: quick, short clicks - not one click 'I'm going to the top'.",
           "Farming: APM no longer drops to 30 between AA. You click positioning, camera, TAB.",
           "Space, F1-F4, TAB between actions.",
           "Goal: 80-120+ average APM throughout the match, not 30 farm and 200 fight.",
@@ -2446,7 +2449,7 @@ const CONTENT_EN = {
         ],
         "mistakes": [
           "Slow farm, trying to get to 200 APM in combat → chaos.",
-          "Clicking important cooldowns into the 'for APM' (anti-pattern) void.",
+          "Clicking key cooldowns into the 'for APM' (anti-pattern) void.",
           "High APM without control - the character runs where you didn't want."
         ]
       }
@@ -2475,16 +2478,16 @@ const CONTENT_EN = {
     },
     "champion_face_direction": {
       "label": "The champion's face shows movement",
-      "short": "The character turns BEFORE the skill animation. Look at the face, not the bullet.",
+      "short": "The character turns BEFORE the spell animation. Look at the face, not the bullet.",
       "details": {
-        "what": "Champions always turn to face where they are going/casting the spell. The face gives away sooner than the bullet animation. Training: look at your opponent's face, don't wait for the skill to fly.",
+        "what": "Champions always turn to face where they are going/casting the spell. The face gives away sooner than the bullet animation. Training: look at your opponent's face, don't wait for the spell to fly.",
         "when": "Every moment of 1v1 / small scale combat.",
-        "success": "Dodge skills 0.2s earlier than before.",
+        "success": "You avoid spells 0.2s earlier than before.",
         "how": [
           "Enemy clicks behind him to escape → turns his back to you → chance to slow.",
           "Enemy turn towards you + stop = immediate spell. Be ready to dodge.",
           "Custom training: play alone vs. bot, look only at the face, not the bullet.",
-          "It also works for your own skills - if you see that the enemy is turning his face away from the projectile, he will manage to dodge it."
+          "It also works for your own spells - if you see that the enemy is turning his face away from the projectile, he will manage to dodge it."
         ],
         "mistakes": [
           "Just looking at the bullet after departure.",
@@ -2497,7 +2500,7 @@ const CONTENT_EN = {
       "label": "Terrain Elevation - Aim for your feet",
       "short": "You are lower → aim at the enemy's feet. Higher → up. Hitbox = base, not model.",
       "details": {
-        "what": "LoL has 3 dimensions (x, y, h). The river is lower, the jungle is higher, the base is highest. Skillshots thrown from a height difference look like they hit the model, but they hit the terrain. The hitbox is related to where the champion 'stands', not to every detail of the model.",
+        "what": "LoL has 3 dimensions (x, y, h). The river is lower, the jungle is higher, the bass is highest. Skillshots thrown from a height difference look like they hit the model, but they hit the terrain. The hitbox is related to where the champion 'stands', not to every detail of the model.",
         "when": "Each skillshot by the difference in terrain height.",
         "success": "Your skill shots 'finally started hitting' where they previously missed.",
         "how": [
@@ -2521,7 +2524,7 @@ const CONTENT_EN = {
       "details": {
         "what": "Difficult skillshots are much easier to hit when prepared with weaker CC. Slow → the target has less movement → it's easier to hit a stun. Predictions of where the enemy will go are the last choice (the weakest method).",
         "when": "Each combo with a difficult skillshot to hit.",
-        "success": "Your 'difficult' skills hit more often. You rely less on prediction.",
+        "success": "Your 'difficult' spells hit more often. You rely less on prediction.",
         "how": [
           "Lux: E (AoE slow + slight knock) → Q (stun line).",
           "Elise: red buff aa (slow) → cocoon stun.",
@@ -2537,7 +2540,7 @@ const CONTENT_EN = {
       }
     },
     "terrain_skillshot": {
-      "label": "Walls and chokepoints for skills",
+      "label": "Walls and chokepoints for spells",
       "short": "Chase before you throw. Force the enemy into the corridor / against the wall.",
       "details": {
         "what": "A good skillshot often starts with putting the enemy in a worse position, not with just aiming. Walls, narrow corridors, towers, jungle entries - all this limits enemy movement. Sometimes it's better not to throw and chase than to throw in open space.",
@@ -2603,7 +2606,7 @@ const CONTENT_EN = {
       "label": "Thinking in zones - a chessboard",
       "short": "Imagine fields around the wave. Eliminate the bad ones. Choose consciously from the rest.",
       "details": {
-        "what": "The optimal position on the line is not just one point. These are some possible areas. Imagine a checkerboard around the wave, eliminate bad fields. From the rest, choose consciously depending on your goal (aggression, defense, push, trade).",
+        "what": "The optimal position on the line is not just one point. These are some possible areas. Imagine a checkerboard around the wave, eliminate the bad squares. From the rest, choose consciously depending on your goal (aggression, defense, push, trade).",
         "when": "Every position on the line. Each position reset after trade.",
         "success": "Your position is always justified. I 'click randomly' less.",
         "how": [
@@ -2624,7 +2627,7 @@ const CONTENT_EN = {
       "label": "Melee also have spacing",
       "short": "Renekton vs. Darius. Garen vs Sett. Different mele ranges = AA advantage.",
       "details": {
-        "what": "Spacing is not just ranged vs ranged. Melee champions have different AA and spell ranges. Sett has a longer AA than Garen. Renekton has a longer Q than Darius. Making up for a shorter range: cooldowns, animation lock enemy, movement speed, input timing.",
+        "what": "Spacing is not just ranged vs ranged. Melee champions have different AA and spell ranges. Sett has a longer AA than Garen. Renekton has a longer Q than Darius. Making up for the shorter range: cooldowns, animation lock enemy, movement speed, input timing.",
         "when": "Every mele matchup. Every jg vs jg fight in fog.",
         "success": "You only trade when you have a range/cooldown advantage - never at an unfavorable moment.",
         "how": [
@@ -2711,7 +2714,7 @@ const CONTENT_EN = {
       "details": {
         "what": "By default, minions beat 1v1 and lose HP at the same rate. They all finish low at a similar time → you won't be able to reach 3 AA. Setup: add 1 AA to a specific minion SO that the HP is gone - then they fall one by one.",
         "when": "Freeze setup. Sustain matchup. Every lane where every CS counts.",
-        "whenNot": "Hard push (accelerating the wave). Under your own tower (the tower decides aggro).",
+        "whenNot": "Hard push (wave acceleration). Under your own tower (the tower decides aggro).",
         "success": "Last hit three casters in a row without a spell.",
         "how": [
           "Look at the 3 caster minions - all at 80 HP? Give AA one (bring it down to 40 HP).",
@@ -2752,7 +2755,7 @@ const CONTENT_EN = {
       "label": "Check enemy items when it comes out of fog",
       "short": "Enemy disappears → returns. ALWAYS see TAB: bought spike, control ward, pinka?",
       "details": {
-        "what": "Enemy exits fog of war after a recall/long move = he could have bought an item, he could have placed a pink, he could have placed a ward. Checking items ALWAYS when leaving fog = information before the fight.",
+        "what": "Enemy exits fog of war after a recall / long move = he could buy an item, he could put a pink, he could put a ward. Checking items ALWAYS when leaving fog = information before the fight.",
         "when": "Every enemy returning from fog. Every reset.",
         "success": "You know exactly what the enemy has. Your all-in/trades are based on real stats.",
         "how": [
@@ -2799,15 +2802,15 @@ const CONTENT_EN = {
         "when": "Top lane/mid vs Bone Plating fleece. Each trade decision.",
         "success": "Your all-ins hit in full dmg. Enemy all-ins absorbed by your BP.",
         "how": [
-          "Vs enemy with BP: 3 AA in distance canons = absorbed, but BP goes to cd 45s.",
-          "Or: 3 weak skills (Renekton's Q, AA, AA) → next burst combo without absorption.",
+          "Vs enemy with BP: 3 AA from a safe distance = absorbed, but BP goes to cd 45s.",
+          "Or: 3 weak spells (Renekton's Q, AA, AA) → next burst combo without absorption.",
           "Your BP is ready (check the icon): initiate a trade - the first 3 enemy hits are absorbed.",
           "Your BP on the fly: avoid trading for 45s, freeze defensively.",
           "Cooldown BP long → trading with recovered BP rarely happens in a short trade."
         ],
         "mistakes": [
           "All-in vs active BP - your burst absorbed.",
-          "No BP cooldown awareness (check the icon).",
+          "No awareness of BP cooldown (check the icon).",
           "Trade vs. own BP on cont."
         ]
       }
@@ -2880,13 +2883,13 @@ const CONTENT_EN = {
       "short": "Spell used = window. Move spacing, start trading, aggressive before return cd.",
       "details": {
         "what": "Spell enemy is a 'loaded weapon'. When he uses → he must reload. During this time, its effective range/threat decreases. This is the window for trade/aggression/push/objective.",
-        "when": "Any moment after using the key enemy spell.",
+        "when": "Any moment after using the enemy key spell.",
         "success": "You count the windows and enter carefully when the enemy has no weapons.",
         "how": [
           "Yasuo used Q3 (knock) → 5-10s window to trade without fear of knockup.",
           "Annie used R (Tibbers) → 90-120s window for fights with Annie's normal power.",
           "Lee Sin used ult on you → 90s without R, you can go back to obj without fear of 1-shot.",
-          "Knowledge: know the cooldowns of key spells. Lvl 11 R Annie ~80s; lvl 11 Q Riven ~7s; lvl 11 R Karthus ~110s.",
+          "Knowledge: know cooldowns key spells. Lvl 11 R Annie ~80s; lvl 11 Q Riven ~7s; lvl 11 R Karthus ~110s.",
           "Check context: ability haste (Ionian boots, Cosmic Insight) shortens."
         ],
         "mistakes": [
@@ -2907,13 +2910,13 @@ const CONTENT_EN = {
           "Cannon timer (season 15): wave 4, 7, 10, 13...",
           "JG gank under cannon wave: if the enemy runs away, he loses cannon = ~60g + XP.",
           "Cannon for dive setup: is a tower aggro tank, possibly a survival key.",
-          "Your recall: do not recall when the cannon enters (you will give up 60g). Better to stay.",
+          "Your recall: do not recall when the cannon comes in (you will give back 60g). Better to stay.",
           "Push under tower with cannon: cannon will break the plate itself without your dmg."
         ],
         "mistakes": [
           "Recall on cannon wave (give back 60g).",
           "Push without a cannon under the tower (you attack, the minion dies quickly).",
-          "No wave counting."
+          "No wave count."
         ]
       }
     },
@@ -2989,9 +2992,9 @@ const CONTENT_EN = {
         "when": "Every moment with 2 trinket stacks.",
         "success": "On average 6-10 wards in the game (vs 3-4 with lazy style).",
         "how": [
-          "Check stacks when recalling / leaving the base / before roaming.",
+          "Check stacks when recalling / leaving base / before roaming.",
           "Got 2 stacks? Bet one RIGHT NOW at the next opportunity.",
-          "First action after leaving the base: bush by the river / jg entrance = ward.",
+          "First action after leaving the base: bush by the river / entrance jg = ward.",
           "Don't wait 'for the perfect moment'. Small suboptimal ward > no betting.",
           "Exception: planned teamfight in 30 seconds, you want a defense stack."
         ],
@@ -3075,14 +3078,14 @@ const CONTENT_EN = {
         "when": "Once. After a major patch, check if anything has changed.",
         "success": "Everything on the list is set. You react faster, fewer misclicks.",
         "how": [
-          "Smartcast: default ON for all skills. Under Shift = normal cast (see range). Trinket for normal cast (ward precision).",
+          "Smartcast: default ON for all spells. Under Shift = normal cast (see range). Trinket for normal cast (ward precision).",
           "Target Champions Only: on a convenient key (e.g. ~ or `). SET TO TOGGLE, no hold.",
           "Attack Move: under A. Attack Move on Cursor: ON (target closer to the cursor, not the character).",
           "Auto-attack: OFF. Every AA results from your command.",
           "F-keys: F1-F4 = allies 1-4. Self under SPACE (not F5).",
           "Camera: Smooth OFF. Camera on Revive OFF. Locked Camera OFF (NEVER).",
           "Mouse speed: Windows speed = in-game speed (consistent).",
-          "Graphics: characters + spells MAX, environment LOW, screen shake OFF, FPS lock on monitor Hz.",
+          "Graphics: characters+spells MAX, environment LOW, screen shake OFF, FPS lock on monitor Hz.",
           "Sound: spells/SFX ON, music OFF.",
           "HUD: readable but minimal. Chat OFF or mute all (except pings).",
           "Show Mana Costs ON. Cooldowns in minutes:seconds (precision)."
@@ -3100,7 +3103,7 @@ const CONTENT_EN = {
       "short": "The system selects lobbies based on MMR, not on visible rank. LP/division is just a screen.",
       "details": {
         "what": "MMR (matchmaking rating) is a hidden value according to which the system selects who you play with. The visible rank/LP is just a presentation layer. Two people from different divisions can be in the same lobby if they have similar MMR.",
-        "when": "Every thought about promotion. Every 'why is the system giving me so much?'",
+        "when": "Every thought of promotion. Every 'why is the system giving me so much?'",
         "success": "You don't blame the system - you understand that it plays a large sample of games.",
         "how": [
           "Don't treat third-party 'MMR checkers' as revealed truth - the exact MMR is hidden, the tools only estimate.",
@@ -3135,7 +3138,7 @@ const CONTENT_EN = {
       }
     },
     "statistics_4v5": {
-      "label": "4 vs 5 unknowns - statistics are on your side",
+      "label": "4 vs. 5 unknowns - statistics are on your side",
       "short": "You stood. 4 randoms for you, 5 randoms for the enemy. Trolls/AFK are statistically more common among them.",
       "details": {
         "what": "In every game, you are the only constant on your side. There are 4 random allies on your side and 5 random players on the enemy side. Statistically, a troll/AFK/weak player is more likely to hit the enemy. As long as you don't generate these problems YOURSELF.",
@@ -3217,11 +3220,11 @@ const CONTENT_EN = {
     },
     "pre_game_physical": {
       "label": "Psychophysical condition before the game",
-      "short": "Sleep/eating/health/no obsessive thoughts. No base = don't play rank.",
+      "short": "Sleep/eating/health/no obsessive thoughts. No resources = don't play rank.",
       "details": {
         "what": "Decisions in the game require intellectual resources. Lack of sleep, hunger, pain, tilt → the brain uses resources for the basics, not enough for the game. The psychophysical state gives the greatest boost to concentration.",
         "when": "Every decision 'do I click ranked or not'.",
-        "success": "You enter the game with full resources, without using them for a stomach ache.",
+        "success": "You enter the game with full resources, without using them for a stomachache.",
         "how": [
           "Well-rested (7-9 hours depending on the person).",
           "Full but not overeaten (full stomach = sleepiness).",
@@ -3456,7 +3459,7 @@ const CONTENT_EN = {
         "when": "Every decision in the game. Every 'teach me how to play X'.",
         "success": "Your decisions have specific justification, not slogans.",
         "how": [
-          "The question 'how to play X?' → the answer starts with the conditions: champion / matchup / cooldowny / wave / jg / items.",
+          "The question 'how to play X?' → response starts with conditions: champion / matchup / cooldowns / wave / jg / items.",
           "'Soloq mantra' as a guide → trap.",
           "Every action = ask 'why HERE?'",
           "Critical Thinking: Why Does It Work? what are the assumptions behind this?",
@@ -3500,7 +3503,7 @@ const CONTENT_EN = {
         "how": [
           "Press mute all immediately in loading.",
           "If someone red is already in the lobby → dodge (dodge lesson).",
-          "Pings still work (cooldowny, danger, on my way).",
+          "Pings still work (cooldowns, danger, on my way).",
           "Also limit your writing - the balance is still negative.",
           "Chat OFF as goal (already existing 'chat_off')."
         ],
@@ -3557,7 +3560,7 @@ const CONTENT_EN = {
       "label": "Smurf doesn't have 100% WR",
       "short": "Smurf ~60-65% WR typically. Game to win. A lesson worth > 1 LP.",
       "details": {
-        "what": "Smurf affects the game more than AFK, but his winrate is not 100%. Most common smurfs: Diamond/Emerald lower MMR players with ~60% WR. Don't panic - it's a winnable game 35-40% of the time.",
+        "what": "Smurf affects the game more than AFK, but his winrate is not 100%. The most common smurfs are Diamond/Emerald players on lower MMR with ~60% WR. Don't panic - some of these games are still winnable.",
         "when": "Game with a smurf on one side.",
         "success": "Even after L you learn a lesson about how he built his advantage.",
         "how": [
@@ -3624,11 +3627,11 @@ const CONTENT_EN = {
         "when": "After every game. The first step of the routine.",
         "success": "You train consciously. You know after the session what went well.",
         "how": [
-          "1. Enter in the app: I completed (Y/N).",
-          "2. If partially: in what X% of situations.",
-          "3. What got in the way? (conscious analysis, not excuses).",
-          "4. After the session: 3-5 games with the goal achieved → this goal becomes a habit.",
-          "5. DON'T judge yourself by the outcome of the game. You won but didn't achieve your goal? Loss. You lost but you succeeded? Progress."
+          "Immediately after the game, before clicking the next turn, answer: Was the goal completed in most situations?",
+          "If the goal was partial, estimate the percentage: e.g. 'I followed the jungler on 12 out of 20 occasions'. This gives you a specific measurement, not a mood.",
+          "Write down one obstacle: no trigger, tilt, too difficult a goal, too many fights, bad matchup or simple forgetfulness.",
+          "Check the trend after the session. If you achieve the goal steadily for a few games, it begins to become a habit and you can choose another small element.",
+          "Don't judge training by the result of the game. Win without a goal = poor training. Loss with a completed goal = real progress."
         ],
         "mistakes": [
           "Omission of settlement 'because tilt'.",
@@ -3639,17 +3642,17 @@ const CONTENT_EN = {
     },
     "post_break_3_5": {
       "label": "3-5 minute break between games",
-      "short": "Get up from the computer. Physical reset. Less chance of tilltu in the next one.",
+      "short": "Get up from the computer. Physical reset. Less chance of tilt in next.",
       "details": {
         "what": "A short break after the game: emotional reset, less chance of hitting the same players, moment to settle the goal. Low cost, real profit.",
         "when": "After every game.",
         "success": "You enter the next game with a clear head.",
         "how": [
-          "Get up from the computer – physically.",
-          "Walk around the room, drink water.",
-          "Don't reach for your phone (adds distraction).",
-          "3-5 minutes is enough. 10+ distracts the session.",
-          "Higher MMR: more important (same lobbies more often)."
+          "After the final screen, physically stand up from the computer. Just sitting in the lobby doesn't reset your emotions.",
+          "Walk around the room, drink some water and relax your hands. This is supposed to be a short reset of the nervous system, not a new activity.",
+          "Don't reach for your phone or social media, because you add another stimulus instead of rest.",
+          "After 3-5 minutes, come back, settle the goal and only then decide whether you want to click on the next game.",
+          "The higher the MMR, the more important it is, because fast auto-queue is more likely to hit the same people with emotions from the previous game."
         ],
         "mistakes": [
           "Auto-queue immediately.",
@@ -3687,11 +3690,11 @@ const CONTENT_EN = {
         "when": "Every game.",
         "success": "Shorter but higher quality sessions.",
         "how": [
-          "After pressing 'Continue' → break.",
-          "DO NOT click 'Find Match' straight away.",
-          "Goal settlement + 3-5 min break.",
-          "ADDITIONALLY: if the last game had severe tox → a longer break (avoidance of this person).",
-          "Limit games per session - not 'one more' forever."
+          "After pressing 'Continue', stop. The next decision is not 'Find Match', but 'Am I ready for another game?'",
+          "First, set your training goal, then take a short break of 3-5 minutes.",
+          "If the previous game had strong tox, AFK or high tilt, extend the break so as not to enter the next lobby with the same state.",
+          "Set a session limit before you start, e.g. 3-5 games. The limit removes the 'one more' trap.",
+          "Click the queue only when your physical condition, emotions and training goal are ready."
         ],
         "mistakes": [
           "Spam 'Find Match' tilt → escalation.",
@@ -3702,13 +3705,13 @@ const CONTENT_EN = {
     },
     "post_universal_lessons": {
       "label": "Universal, not situational conclusions",
-      "short": "I didn't 'mess up' here. ONLY 'I used the cooldown incorrectly' / 'I didn't track JG'.",
+      "short": "I didn't 'mess up' here. ONLY 'I handled the cooldown incorrectly' / 'I didn't track JG'.",
       "details": {
         "what": "The conclusion of the review is to be of value to FUTURE games. 'I ruined this fight' = waste, the fight won't happen again. 'I entered the fight without JG vision' = universal, useful 100 times.",
         "when": "Every review. Every 'what went wrong'.",
         "success": "Conclusions applicable in many situations. Real progress.",
         "how": [
-          "Every mistake: try to reduce it to the BASICS of the game (wave / tempo / fog / cooldowns / spacing / position).",
+          "Any mistake: try to reduce it to the BASICS of the game (wave / tempo / fog / cooldowns / spacing / position).",
           "'Bad fight' → 'I went to max range with F flash CD'.",
           "'Bad rotation' → 'I didn't check the TAB of enemy items before moving'.",
           "The more universal the conclusion, the more it is worth.",
@@ -3746,7 +3749,7 @@ const CONTENT_EN = {
       "label": "Small champion pool (1-3)",
       "short": "Bronze-Plat: 1-2 picks. Higher: 3-4 max. Fewer variables = more focus.",
       "details": {
-        "what": "Small champion pool = slot for character maintenance, more resources for the game. Low elo: matchup is not important, you can choose 1 pick. Higher: 3-4 for counter picking, but no more.",
+        "what": "Small champion pool = slot for character maintenance and more resources for the game. In low elo the matchup is less important, so you can play 1-2 picks. Keep 3-4 picks above for counter picks, but no more.",
         "when": "Deciding what to play. Deciding whether to learn something new.",
         "success": "Each game focuses on the game, not on character handling.",
         "how": [
@@ -3792,11 +3795,11 @@ const CONTENT_EN = {
         "when": "Weekly plan. The decision 'to watch or play'.",
         "success": "Practice dominates. Knowledge implemented in the game.",
         "how": [
-          "Bronze-Gold: 10 games: 1 edu (~30 min edu per session).",
-          "Plat-Emerald: 8:1.",
-          "Diamond+: 5:1 (more details are worth analyzing).",
-          "Master+: 3:1 minimum (practice still dominates).",
-          "Edu = active viewing / VOD review / course. Background stream = doesn't count."
+          "Bronze-Gold: Aim for approximately 8-10 games per actively watched game, lesson or analysis.",
+          "Plat-Emerald: You can go closer to 8:1 as more details start to matter, but practice still dominates.",
+          "Diamond+: 5:1 is reasonable if the analysis is active and ends with a specific training goal.",
+          "Don't go below 3:1 without a strong reason. Theory itself without games is overloading and does not build automatisms.",
+          "Edu means active viewing, VOD review or a course with questions. Streaming in the background does not count as a workout."
         ],
         "mistakes": [
           "Every day 4 hours of stream + 1 game (1:4 ratio).",
@@ -3834,11 +3837,11 @@ const CONTENT_EN = {
         "when": "Every 'what am I training now'.",
         "success": "After 6 months, you have 10-15 established habits, not 50 superficially learned ones.",
         "how": [
-          "Selection: 1-3 items from review.",
-          "Training: 30-50 games with focus on them.",
-          "Consolidation signals: you remember automatically, fewer resources for it.",
-          "Only then: a new element.",
-          "DO NOT add another element after 5 games 'because it's easy'."
+          "After a course, review or coaching, choose 1-3 elements, not the entire list of things to improve.",
+          "Replace each element with a simple trigger: 'after recall I ask about the wave plan', 'before objective I check prio', 'after CS I look at the minimap'.",
+          "Play 30-50 games with the same training goal. This is a study block, not a one-time test.",
+          "Add a new element only when you remember the old one automatically and you don't feel the mental cost.",
+          "If it seems easy after 5 games, don't add money right away. Check if it also works in difficult games, after a tilt and in a losing matchup."
         ],
         "mistakes": [
           "10 items at a time following the course.",
@@ -3855,11 +3858,11 @@ const CONTENT_EN = {
         "when": "Habit training. Deciding what should be an automaton.",
         "success": "Your reminders work on their own. Conscious decisions.",
         "how": [
-          "You leave the database: trigger 'what do I do now?'. Answer = situational.",
-          "You return to the line after recall: trigger 'wave plan?'.",
-          "JG: each camp → trigger 'look at the X line' (rotates).",
-          "After death: trigger 'what's wrong?' no emotions.",
-          "Don't automate 'I'm always pushing' - it's not situational."
+          "Automate the question, not a ready-made answer. 'After a recall I ask about a wave plan' is good, 'after a recall I always push' is bad.",
+          "After exiting, the base trigger is: 'what am I doing now and on what timer?' The answer depends on the map.",
+          "After returning to the line, the trigger is: 'what is the wave plan: slow push, freeze, hard push or reset?'",
+          "After each camp, the jungler may have a trigger: 'which line am I checking with the camera now and why?'",
+          "After death, the trigger is: 'what universal error occurred here?' You answer without emotion, only after a moment."
         ],
         "mistakes": [
           "'Always X' machine (anti-pattern).",
@@ -3876,12 +3879,11 @@ const CONTENT_EN = {
         "when": "Every quiet moment of the game. Trigger autopilot.",
         "success": "You don't go on autopilot. Every action is conscious.",
         "how": [
-          "'What should I do now?'",
-          "'What's best for the game?'",
-          "'How can I win this game?'",
-          "'Why am I going to this place?'",
-          "'Plan for the next minute?'",
-          "Repeat every few moments. Every answer = active decision."
+          "In quiet moments, ask: 'what should I do now?' and force a specific response, e.g. wave, reset, ward, roam.",
+          "Before moving around the map, ask: 'why am I going to this place and what will I gain if the enemy answers correctly?'",
+          "Before objective, ask: 'what is the plan for the next minute: prio, vision, reset, fight or cross-map?'",
+          "When the game goes wrong, ask: 'what gives you the best chance of winning now?', not 'who is at fault?'",
+          "Asking without an answer doesn't help. Dialogue should end with a decision, even a simple one."
         ],
         "mistakes": [
           "Playing quietly in your head (autopilot).",
@@ -3919,16 +3921,15 @@ const CONTENT_EN = {
         "when": "Monthly/season: review and selection of main area.",
         "success": "Two cycles = significantly better 2 areas. The rest is pulled up.",
         "how": [
-          "1. Wave management (slow/freeze/hard push, sync with volume).",
-          "2. tempo (who comes first where, recall as tempo, cross-map).",
-          "3. Fog of war and vision (tracking, control wards, lazy ward, scan paradox).",
-          "4. Cooldowns and power spikes (track enemy, yours, item spike windows).",
-          "5. Collecting information (TAB, camera, minimap, deduction).",
-          "6. Light surrender (cast 4 CS instead of dying, recall on time, leave the wave).",
-          "7. Off-team (cohesion with the team, no solo attacks).",
-          "8. Mechanics (CS, skillshots, animations, kiting).",
-          "Self-assessment: rate yourself 1-10 in each. Lowest = focus.",
-          "30-50 games with a focus on this area."
+          "Rate 1-10 wave management: can you slow push, freeze, hard push and synchronize waves with objective?",
+          "Rate the tempo 1-10: do you know who will be first at the action, when to reset and when to cross-map?",
+          "Rate 1-10 fog/vision: do you track the enemy, place wards with the objective and do you not facecheck the occupied area?",
+          "Rate 1-10 cooldowns and power spikes: do you play differently when the enemy has no flash, ult, item or when you have a spike?",
+          "Rate 1-10 information gathering: minimap, TAB, F-key, jungler CS, debuffs and deduction.",
+          "Rate 1-10 Easy Commitment: Can you return 4 CS, do a recall on time, or pass an objective without vision?",
+          "Rate 1-10 off-team: are your moves consistent with the team, or do you invade/push without a cover?",
+          "Rate 1-10 mechanics: CS, skillshots, animations, kiting, spacing and input.",
+          "Select the lowest area as focus for 30-50 games. Don't fix all eight at once."
         ],
         "mistakes": [
           "Working on all 8 at once.",
@@ -3939,7 +3940,7 @@ const CONTENT_EN = {
     },
     "err_no_surrender": {
       "label": "Not surrendering has +EV",
-      "short": "Reversal of 2/100 'lost' games = +2 WR = division for the season. 0+ situation.",
+      "short": "Reversal of 2/100 'lost' games = +2 WR = division on the season. 0+ situation.",
       "details": {
         "what": "Surrender = certain defeat. Non-surrender = you will win some games. You only need to reverse a small percentage to make it mathematically worthwhile.",
         "when": "Let's 'give back' every moment.",
@@ -3963,7 +3964,7 @@ const CONTENT_EN = {
       "label": "High WR ≠ strong character",
       "short": "One-tricks, low pickrate, easy pick, no counterplay. WR is interpreted.",
       "details": {
-        "what": "A champion's winrate doesn't mean he's 'strong' - he says he WINS IN THIS SAMPLE. There may be various reasons: he is mainly played by OTPs, few picks so only specialists, easy to use, soloQ does not punish weaknesses.",
+        "what": "A champion's winrate doesn't say he's 'strong' - he says he WINS IN THIS SAMPLE. The reasons may be different: he is mainly played by OTPs, he has a low pickrate so specialists choose him, he is easy to use, or soloQ does not punish his weaknesses.",
         "when": "Every choice 'on patch'.",
         "success": "Your choices based on understanding not numbers.",
         "how": [
